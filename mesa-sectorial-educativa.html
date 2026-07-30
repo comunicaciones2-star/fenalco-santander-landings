@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mesa Sectorial de Instituciones Educativas y de Idiomas | Fenalco Santander</title>
+  <meta name="description" content="Capacita a los colaboradores de tu empresa con universidades e instituciones educativas afiliadas a Fenalco Santander. Tarifas preferenciales para afiliados y descuentos por grupos corporativos." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Mesa Sectorial de Instituciones Educativas y de Idiomas | Fenalco Santander" />
+  <meta property="og:description" content="Oferta educativa de universidades e instituciones afiliadas para capacitar a los equipos de las empresas de Bucaramanga y su área metropolitana." />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            fenalco: {
+              purple: '#280071',
+              'purple-deep': '#1d0054',
+              green: '#00CE7C',
+              'green-hover': '#00b369',
+              blue: '#009CDE',
+              gray: '#484954',
+            }
+          },
+          fontFamily: {
+            sans: ['Outfit', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+
+    /* Revelado al hacer scroll (se desactiva con prefers-reduced-motion) */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .7s cubic-bezier(0.16, 1, 0.3, 1), transform .7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body class="bg-white text-fenalco-gray font-sans antialiased">
+
+  <!-- ============ NAV ============ -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-gray-100">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 h-[72px] flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3 text-fenalco-purple" aria-label="Fenalco Santander">
+        <!-- Logo Fenalco Santander (texto hereda currentColor, isotipo verde) -->
+        <svg viewBox="0 0 414 127.1" class="h-9 w-auto" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+          <polygon fill="currentColor" points="179.5 43 179.5 85.4 186.4 85.4 186.4 67.3 200.8 67.3 200.8 60.6 186.4 60.6 186.4 49.7 204.7 49.7 204.7 43 179.5 43"/>
+          <path fill="currentColor" d="M206,70.5c0-8.8,6.1-15.5,15.3-15.5s15.6,7,14.9,17.1h-23.8c.2,4.5,3.8,8.1,9,8.1s6.2-1.3,7.5-4.2h6.9c-1.7,5.6-7,10-14.6,10s-15.3-6.6-15.3-15.5M212.7,67.5h16.5c-1-4.8-4.4-7-8.1-7s-7.6,2.4-8.5,7"/>
+          <path fill="currentColor" d="M243.1,55.6h6.6v4.1c1.9-3,5.2-4.7,9.1-4.7,6.9,0,11.4,4.9,11.4,12.5v18h-6.6v-16.9c0-4.8-2.4-7.6-6.2-7.6s-7.7,3.3-7.7,9.8v14.7h-6.6v-29.9h0Z"/>
+          <path fill="currentColor" d="M276.4,70.5c0-8.5,6.2-15.5,14.4-15.5s7.9,2.2,9.6,4.6v-4h6.6v29.9h-6.6v-4c-1.7,2.4-5.3,4.6-9.6,4.6-8.2,0-14.4-7-14.4-15.5M300.9,70.5c0-5.4-3.6-9.6-8.9-9.6s-8.9,4.2-8.9,9.6,3.6,9.6,8.9,9.6,8.9-4.2,8.9-9.6"/>
+          <rect fill="currentColor" x="315.8" y="40.6" width="6.6" height="44.8"/>
+          <path fill="currentColor" d="M329,70.5c0-8.6,6.6-15.5,15.6-15.5s13.6,4.9,15.2,11.5h-6.9c-1.2-3.3-4.1-5.6-8.2-5.6s-9,4-9,9.6,3.6,9.6,9,9.6,7-2.3,8.2-5.6h6.9c-1.6,6.6-7.3,11.5-15.2,11.5s-15.6-6.9-15.6-15.5"/>
+          <path fill="currentColor" d="M363.9,70.5c0-8.7,6.8-15.5,15.6-15.5s15.6,6.9,15.6,15.5-6.8,15.5-15.6,15.5-15.6-6.9-15.6-15.5M388.5,70.5c0-5.3-3.7-9.4-9-9.4s-9,4.1-9,9.4,3.7,9.4,9,9.4,9-4.1,9-9.4"/>
+          <path fill="#00CE7C" d="M39.1,31.1c-9.7,0-18.1-6.8-20.3-16.1h57.2c9.7,0,18.1,6.8,20.3,16.1h-57.2Z"/>
+          <path fill="#00CE7C" d="M161.4,31.1c9.7,0,18.1-6.8,20.3-16.1h-57.2c-9.7,0-18.1,6.8-20.3,16.1h57.2Z"/>
+          <path fill="#00CE7C" d="M67.6,57.1c-9.7,0-18.1-6.8-20.3-16.1h32.8c8.9,0,16.1,7.2,16.1,16.1h-28.6Z"/>
+          <path fill="#00CE7C" d="M120.3,40.9c-8.9,0-16.1,7.2-16.1,16.1v28.8h16.1v-28.8h12.5c9.7,0,18.1-6.8,20.3-16.1h-32.8Z"/>
+          <path fill="#00CE7C" d="M86.8,86.7c-5.2,0-9.5-4.2-9.5-9.4s4.2-9.5,9.5-9.5,9.4,4.2,9.4,9.5-4.2,9.4-9.4,9.4"/>
+          <g fill="currentColor">
+            <path d="M180,110.3l1.2-1.5c1,.9,2.2,1.5,3.7,1.5s2.1-.7,2.1-1.5-.8-1.3-2.6-1.7c-2.3-.5-4-1.2-4-3.4s1.7-3.4,4.1-3.4,3.2.6,4.3,1.6l-1.1,1.5c-1-.9-2.1-1.3-3.3-1.3s-1.9.7-1.9,1.5.8,1.3,2.6,1.7c2.4.5,3.9,1.3,3.9,3.4s-1.6,3.5-4.3,3.5-3.6-.7-4.9-1.8h.2Z"/>
+            <path d="M200,109.9h-5.5l-.9,2h-2.3l4.7-11.3h2.3l4.7,11.3h-2.3l-.9-2h.2ZM199.2,108.1l-2-4.8-2,4.8h4Z"/>
+            <path d="M206,100.6h2.1l6,8v-8h2v11.3h-2l-6-8v8h-2.1v-11.3Z"/>
+            <path d="M222.9,102.5h-3.6v-1.9h9.3v1.9h-3.6v9.5h-2v-9.5h0Z"/>
+            <path d="M238.4,109.9h-5.5l-.9,2h-2.3l4.7-11.3h2.3l4.7,11.3h-2.3l-.9-2h.2ZM237.6,108.1l-2-4.8-2,4.8h4Z"/>
+            <path d="M244.4,100.6h2.1l6,8v-8h2v11.3h-2l-6-8v8h-2.1v-11.3Z"/>
+            <path d="M258.4,100.6h4c3.7,0,6.4,2.3,6.4,5.7s-2.6,5.7-6.4,5.7h-4v-11.3h0ZM262.6,110c2.4,0,4.1-1.6,4.1-3.8s-1.7-3.8-4.1-3.8h-2.1v7.6s2.1,0,2.1,0Z"/>
+            <path d="M274.1,102.5v2.7h5.9v1.9h-5.9v3h6.5v1.9h-8.5v-11.3h8.5v1.9h-6.5Z"/>
+            <path d="M290.7,111.9l-2.7-3.8h-2.2v3.8h-2.1v-11.3h4.9c2.4,0,4.2,1.6,4.2,3.8s-1.1,3-2.7,3.5l2.8,4h-2.3.1ZM285.9,106.2h2.6c1.4,0,2.4-.7,2.4-1.9s-1-1.9-2.4-1.9h-2.6v3.7h0Z"/>
+          </g>
+        </svg>
+      </a>
+
+      <div class="hidden lg:flex items-center gap-8 text-sm font-medium">
+        <a href="#la-mesa" class="hover:text-fenalco-purple transition-colors">La Mesa</a>
+        <a href="#oferta" class="hover:text-fenalco-purple transition-colors">Oferta educativa</a>
+        <a href="#beneficios" class="hover:text-fenalco-purple transition-colors">Beneficios</a>
+        <a href="#instituciones" class="hover:text-fenalco-purple transition-colors">Instituciones</a>
+        <a href="#contacto" class="bg-fenalco-green hover:bg-fenalco-green-hover text-fenalco-purple-deep font-semibold px-5 py-2.5 rounded-full transition-all active:scale-[0.98]">
+          Solicitar oferta educativa
+        </a>
+      </div>
+
+      <!-- Menú móvil -->
+      <button id="menuBtn" class="lg:hidden p-2 text-fenalco-purple" aria-label="Abrir menú" aria-expanded="false">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/>
+        </svg>
+      </button>
+    </nav>
+    <div id="mobileMenu" class="hidden lg:hidden border-t border-gray-100 bg-white px-4 py-4 flex flex-col gap-3 text-sm font-medium">
+      <a href="#la-mesa" class="py-1.5">La Mesa</a>
+      <a href="#oferta" class="py-1.5">Oferta educativa</a>
+      <a href="#beneficios" class="py-1.5">Beneficios</a>
+      <a href="#instituciones" class="py-1.5">Instituciones</a>
+      <a href="#contacto" class="bg-fenalco-green text-fenalco-purple-deep font-semibold px-5 py-3 rounded-full text-center">Solicitar oferta educativa</a>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============ HERO ============ -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 pt-12 lg:pt-20 pb-16 lg:pb-24">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        <div class="lg:col-span-7">
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-fenalco-blue mb-5">
+            Mesa Sectorial de Instituciones Educativas y de Idiomas
+          </p>
+          <h1 class="text-4xl md:text-5xl font-bold tracking-tight leading-[1.08] text-fenalco-purple">
+            Capacita a tu equipo con las instituciones educativas de Santander
+          </h1>
+          <p class="mt-6 text-lg leading-relaxed max-w-[58ch]">
+            Universidades e instituciones afiliadas a Fenalco Santander crean oferta educativa para empresas, con tarifas preferenciales y descuentos corporativos.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-4">
+            <a href="#contacto" class="bg-fenalco-green hover:bg-fenalco-green-hover text-fenalco-purple-deep font-semibold px-7 py-3.5 rounded-full transition-all active:scale-[0.98]">
+              Solicitar oferta educativa
+            </a>
+            <a href="#beneficios" class="border-2 border-fenalco-purple text-fenalco-purple hover:bg-fenalco-purple hover:text-white font-semibold px-7 py-3.5 rounded-full transition-all active:scale-[0.98]">
+              Ver beneficios
+            </a>
+          </div>
+        </div>
+        <div class="lg:col-span-5 relative">
+          <!-- TODO: reemplazar por fotografía real (capacitación empresarial / aula), 960x1200 aprox -->
+          <img
+            src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=960&h=1140&q=80"
+            alt="Equipo de trabajo en una sesión de capacitación empresarial"
+            class="w-full aspect-[4/5] object-cover rounded-2xl shadow-xl shadow-fenalco-purple/10"
+            width="960" height="1140" fetchpriority="high"
+          />
+          <div class="hidden lg:block absolute -bottom-6 -left-6 w-40 h-40 rounded-2xl bg-fenalco-green/15 -z-10" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ QUÉ ES LA MESA ============ -->
+    <section id="la-mesa" class="bg-gray-50 border-y border-gray-100">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 py-20 lg:py-28 text-center reveal">
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-fenalco-purple">
+          Un gremio que conecta la educación con la empresa
+        </h2>
+        <p class="mt-6 text-lg leading-relaxed">
+          La Mesa Sectorial reúne a universidades, instituciones educativas y academias de idiomas de Bucaramanga y su área metropolitana, todas afiliadas a Fenalco Santander. Su propósito: construir una oferta de formación pensada para las empresas de la región y sus colaboradores.
+        </p>
+        <p class="mt-4 text-lg leading-relaxed">
+          Tu empresa define la necesidad. La Mesa articula a las instituciones indicadas y Fenalco acompaña todo el proceso.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ OFERTA EDUCATIVA (bento) ============ -->
+    <section id="oferta" class="max-w-7xl mx-auto px-4 sm:px-6 py-20 lg:py-28">
+      <div class="max-w-2xl reveal">
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-fenalco-purple">
+          Formación para cada área de tu empresa
+        </h2>
+        <p class="mt-4 text-lg leading-relaxed">
+          Programas diseñados por las instituciones de la Mesa, ajustables al tamaño y al sector de tu organización.
+        </p>
+      </div>
+
+      <div class="mt-12 grid grid-cols-1 md:grid-cols-6 gap-5 reveal">
+        <!-- Idiomas: celda grande con imagen -->
+        <div class="md:col-span-4 relative rounded-2xl overflow-hidden min-h-[320px] group">
+          <!-- TODO: reemplazar por fotografía real de clase de idiomas -->
+          <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1200&h=640&q=80"
+               alt="Clase de idiomas para equipos corporativos"
+               class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+          <div class="absolute inset-0 bg-gradient-to-t from-fenalco-purple-deep/90 via-fenalco-purple-deep/30 to-transparent"></div>
+          <div class="relative h-full flex flex-col justify-end p-7">
+            <h3 class="text-2xl font-semibold text-white">Idiomas para los negocios</h3>
+            <p class="mt-2 text-white/85 max-w-[48ch]">Inglés, portugués, francés y más, con academias especializadas en formación corporativa.</p>
+          </div>
+        </div>
+
+        <!-- Liderazgo -->
+        <div class="md:col-span-2 rounded-2xl bg-fenalco-purple text-white p-7 flex flex-col justify-end min-h-[320px]">
+          <h3 class="text-2xl font-semibold">Liderazgo y gerencia</h3>
+          <p class="mt-2 text-white/80">Habilidades directivas, trabajo en equipo y gestión del talento.</p>
+        </div>
+
+        <!-- Transformación digital -->
+        <div class="md:col-span-2 rounded-2xl bg-gray-50 border border-gray-100 p-7 flex flex-col justify-end min-h-[260px]">
+          <h3 class="text-2xl font-semibold text-fenalco-purple">Transformación digital</h3>
+          <p class="mt-2">Herramientas digitales, analítica de datos e inteligencia artificial aplicada al negocio.</p>
+        </div>
+
+        <!-- Diplomados: celda con imagen -->
+        <div class="md:col-span-2 relative rounded-2xl overflow-hidden min-h-[260px] group">
+          <!-- TODO: reemplazar por fotografía real de aula universitaria -->
+          <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&h=520&q=80"
+               alt="Sesión de diplomado en una universidad"
+               class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+          <div class="absolute inset-0 bg-gradient-to-t from-fenalco-purple-deep/90 via-fenalco-purple-deep/25 to-transparent"></div>
+          <div class="relative h-full flex flex-col justify-end p-7">
+            <h3 class="text-2xl font-semibold text-white">Diplomados y educación continua</h3>
+            <p class="mt-2 text-white/85">Certificaciones universitarias para fortalecer perfiles profesionales.</p>
+          </div>
+        </div>
+
+        <!-- A la medida -->
+        <div class="md:col-span-2 rounded-2xl bg-fenalco-green/10 border border-fenalco-green/30 p-7 flex flex-col justify-end min-h-[260px]">
+          <h3 class="text-2xl font-semibold text-fenalco-purple">Formación a la medida</h3>
+          <p class="mt-2">Programas cerrados, diseñados con tu empresa para una necesidad específica.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ BENEFICIOS ============ -->
+    <section id="beneficios" class="bg-gray-50 border-y border-gray-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-20 lg:py-28">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          <div class="lg:col-span-5 reveal">
+            <div class="lg:sticky lg:top-28">
+              <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-fenalco-purple">
+                Ser afiliado a Fenalco tiene ventajas concretas
+              </h2>
+              <p class="mt-4 text-lg leading-relaxed max-w-[48ch]">
+                Las empresas afiliadas acceden a condiciones que no encuentran contratando formación por su cuenta.
+              </p>
+              <a href="#contacto" class="mt-8 inline-block bg-fenalco-green hover:bg-fenalco-green-hover text-fenalco-purple-deep font-semibold px-7 py-3.5 rounded-full transition-all active:scale-[0.98]">
+                Solicitar oferta educativa
+              </a>
+            </div>
+          </div>
+          <div class="lg:col-span-7">
+            <div class="reveal border-t border-gray-200 py-8">
+              <h3 class="text-xl font-semibold text-fenalco-purple">Descuento por afiliación</h3>
+              <p class="mt-2 leading-relaxed max-w-[60ch]">Tarifas preferenciales en los programas de las instituciones de la Mesa, exclusivas para empresas afiliadas a Fenalco Santander.</p>
+            </div>
+            <div class="reveal border-t border-gray-200 py-8">
+              <h3 class="text-xl font-semibold text-fenalco-purple">Descuento por grupos corporativos</h3>
+              <p class="mt-2 leading-relaxed max-w-[60ch]">Entre más colaboradores inscribas, mejores condiciones: descuentos escalonados para grupos de una misma empresa.</p>
+            </div>
+            <div class="reveal border-t border-gray-200 py-8">
+              <h3 class="text-xl font-semibold text-fenalco-purple">Oferta construida desde el gremio</h3>
+              <p class="mt-2 leading-relaxed max-w-[60ch]">Los programas responden a necesidades reales del comercio y la empresa santandereana, no a un catálogo genérico.</p>
+            </div>
+            <div class="reveal border-t border-b border-gray-200 py-8">
+              <h3 class="text-xl font-semibold text-fenalco-purple">Acompañamiento de Fenalco Santander</h3>
+              <p class="mt-2 leading-relaxed max-w-[60ch]">El gremio articula la relación entre tu empresa y las instituciones, desde la solicitud hasta el cierre de la formación.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CÓMO FUNCIONA (timeline) ============ -->
+    <section class="max-w-3xl mx-auto px-4 sm:px-6 py-20 lg:py-28">
+      <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-fenalco-purple text-center reveal">
+        Así de simple funciona
+      </h2>
+
+      <ol class="mt-14 relative border-l-2 border-fenalco-green/40 ml-5 space-y-12">
+        <li class="reveal relative pl-10">
+          <span class="absolute -left-[21px] top-0 w-10 h-10 rounded-full bg-fenalco-green text-fenalco-purple-deep font-bold flex items-center justify-center">1</span>
+          <h3 class="text-xl font-semibold text-fenalco-purple">Cuéntanos la necesidad</h3>
+          <p class="mt-2 leading-relaxed">Nos dices qué área quieres fortalecer, cuántos colaboradores participarían y en qué modalidad prefieren formarse.</p>
+        </li>
+        <li class="reveal relative pl-10">
+          <span class="absolute -left-[21px] top-0 w-10 h-10 rounded-full bg-fenalco-green text-fenalco-purple-deep font-bold flex items-center justify-center">2</span>
+          <h3 class="text-xl font-semibold text-fenalco-purple">Recibes la propuesta</h3>
+          <p class="mt-2 leading-relaxed">La Mesa conecta tu solicitud con las instituciones indicadas y te presentamos opciones con los beneficios de afiliado ya aplicados.</p>
+        </li>
+        <li class="reveal relative pl-10">
+          <span class="absolute -left-[21px] top-0 w-10 h-10 rounded-full bg-fenalco-green text-fenalco-purple-deep font-bold flex items-center justify-center">3</span>
+          <h3 class="text-xl font-semibold text-fenalco-purple">Tu equipo se forma</h3>
+          <p class="mt-2 leading-relaxed">Los colaboradores inician su formación con la institución elegida y Fenalco acompaña el proceso hasta el final.</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ============ PARA INSTITUCIONES ============ -->
+    <section id="instituciones" class="bg-gray-50 border-y border-gray-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-20 lg:py-28">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+          <div class="order-2 lg:order-1 reveal">
+            <!-- TODO: reemplazar por fotografía real de campus o institución afiliada -->
+            <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1000&h=700&q=80"
+                 alt="Campus de una institución educativa de Bucaramanga"
+                 class="w-full aspect-[10/7] object-cover rounded-2xl" loading="lazy" />
+          </div>
+          <div class="order-1 lg:order-2 reveal">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-fenalco-purple">
+              ¿Tu institución educativa es afiliada?
+            </h2>
+            <p class="mt-4 text-lg leading-relaxed max-w-[52ch]">
+              Súmate a la Mesa Sectorial: lleva tu oferta académica a las empresas de la región, participa en la agenda gremial y crece junto a las demás instituciones del sector.
+            </p>
+            <a href="mailto:mesasectorial@fenalcosantander.com.co?subject=Quiero%20vincular%20mi%20instituci%C3%B3n%20a%20la%20Mesa%20Sectorial"
+               class="mt-8 inline-block border-2 border-fenalco-purple text-fenalco-purple hover:bg-fenalco-purple hover:text-white font-semibold px-7 py-3.5 rounded-full transition-all active:scale-[0.98]">
+              Vincular mi institución
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTACTO ============ -->
+    <section id="contacto" class="bg-fenalco-purple">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-20 lg:py-28">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+          <div class="text-white reveal">
+            <h2 class="text-3xl md:text-4xl font-bold tracking-tight">
+              Empecemos por tu necesidad de formación
+            </h2>
+            <p class="mt-4 text-lg leading-relaxed text-white/85 max-w-[52ch]">
+              Diligencia el formulario y el equipo de la Mesa Sectorial te contactará con una propuesta ajustada a tu empresa.
+            </p>
+            <div class="mt-10 space-y-4 text-white/85">
+              <!-- TODO: confirmar correo y teléfono oficiales de la Mesa Sectorial -->
+              <p class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-fenalco-green shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                mesasectorial@fenalcosantander.com.co
+              </p>
+              <p class="flex items-center gap-3">
+                <svg class="w-5 h-5 text-fenalco-green shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                Fenalco Santander, Bucaramanga
+              </p>
+            </div>
+          </div>
+
+          <form id="contactForm" class="bg-white rounded-2xl p-7 sm:p-9 shadow-2xl shadow-fenalco-purple-deep/40 reveal" novalidate>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div class="flex flex-col gap-2">
+                <label for="f-nombre" class="text-sm font-medium text-fenalco-gray">Nombre completo</label>
+                <input id="f-nombre" name="nombre" type="text" required autocomplete="name"
+                       class="border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-fenalco-blue/40 focus:border-fenalco-blue" />
+              </div>
+              <div class="flex flex-col gap-2">
+                <label for="f-empresa" class="text-sm font-medium text-fenalco-gray">Empresa</label>
+                <input id="f-empresa" name="empresa" type="text" required autocomplete="organization"
+                       class="border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-fenalco-blue/40 focus:border-fenalco-blue" />
+              </div>
+              <div class="flex flex-col gap-2">
+                <label for="f-correo" class="text-sm font-medium text-fenalco-gray">Correo electrónico</label>
+                <input id="f-correo" name="correo" type="email" required autocomplete="email"
+                       class="border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-fenalco-blue/40 focus:border-fenalco-blue" />
+              </div>
+              <div class="flex flex-col gap-2">
+                <label for="f-telefono" class="text-sm font-medium text-fenalco-gray">Teléfono</label>
+                <input id="f-telefono" name="telefono" type="tel" autocomplete="tel"
+                       class="border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-fenalco-blue/40 focus:border-fenalco-blue" />
+              </div>
+              <div class="sm:col-span-2 flex flex-col gap-2">
+                <label for="f-area" class="text-sm font-medium text-fenalco-gray">Área de formación de interés</label>
+                <select id="f-area" name="area"
+                        class="border border-gray-300 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-fenalco-blue/40 focus:border-fenalco-blue">
+                  <option>Idiomas</option>
+                  <option>Liderazgo y gerencia</option>
+                  <option>Transformación digital</option>
+                  <option>Diplomados y educación continua</option>
+                  <option>Formación a la medida</option>
+                  <option>Otra</option>
+                </select>
+              </div>
+              <div class="sm:col-span-2 flex flex-col gap-2">
+                <label for="f-mensaje" class="text-sm font-medium text-fenalco-gray">Cuéntanos tu necesidad</label>
+                <textarea id="f-mensaje" name="mensaje" rows="4"
+                          class="border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-fenalco-blue/40 focus:border-fenalco-blue resize-y"></textarea>
+                <p class="text-xs text-gray-500">Por ejemplo: cuántas personas, modalidad presencial o virtual, fechas tentativas.</p>
+              </div>
+            </div>
+            <p id="formError" class="hidden mt-4 text-sm text-red-600">Completa nombre, empresa y un correo válido para continuar.</p>
+            <button type="submit"
+                    class="mt-6 w-full bg-fenalco-green hover:bg-fenalco-green-hover text-fenalco-purple-deep font-semibold px-7 py-3.5 rounded-full transition-all active:scale-[0.98]">
+              Solicitar oferta educativa
+            </button>
+            <p class="mt-4 text-xs text-gray-500 leading-relaxed">
+              Al enviar autorizas el tratamiento de tus datos según la política de protección de datos de Fenalco Santander (Ley 1581 de 2012).
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="bg-fenalco-purple-deep text-white/70">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <svg viewBox="0 0 414 127.1" class="h-8 w-auto text-white" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fenalco Santander">
+        <polygon fill="currentColor" points="179.5 43 179.5 85.4 186.4 85.4 186.4 67.3 200.8 67.3 200.8 60.6 186.4 60.6 186.4 49.7 204.7 49.7 204.7 43 179.5 43"/>
+        <path fill="currentColor" d="M206,70.5c0-8.8,6.1-15.5,15.3-15.5s15.6,7,14.9,17.1h-23.8c.2,4.5,3.8,8.1,9,8.1s6.2-1.3,7.5-4.2h6.9c-1.7,5.6-7,10-14.6,10s-15.3-6.6-15.3-15.5M212.7,67.5h16.5c-1-4.8-4.4-7-8.1-7s-7.6,2.4-8.5,7"/>
+        <path fill="currentColor" d="M243.1,55.6h6.6v4.1c1.9-3,5.2-4.7,9.1-4.7,6.9,0,11.4,4.9,11.4,12.5v18h-6.6v-16.9c0-4.8-2.4-7.6-6.2-7.6s-7.7,3.3-7.7,9.8v14.7h-6.6v-29.9h0Z"/>
+        <path fill="currentColor" d="M276.4,70.5c0-8.5,6.2-15.5,14.4-15.5s7.9,2.2,9.6,4.6v-4h6.6v29.9h-6.6v-4c-1.7,2.4-5.3,4.6-9.6,4.6-8.2,0-14.4-7-14.4-15.5M300.9,70.5c0-5.4-3.6-9.6-8.9-9.6s-8.9,4.2-8.9,9.6,3.6,9.6,8.9,9.6,8.9-4.2,8.9-9.6"/>
+        <rect fill="currentColor" x="315.8" y="40.6" width="6.6" height="44.8"/>
+        <path fill="currentColor" d="M329,70.5c0-8.6,6.6-15.5,15.6-15.5s13.6,4.9,15.2,11.5h-6.9c-1.2-3.3-4.1-5.6-8.2-5.6s-9,4-9,9.6,3.6,9.6,9,9.6,7-2.3,8.2-5.6h6.9c-1.6,6.6-7.3,11.5-15.2,11.5s-15.6-6.9-15.6-15.5"/>
+        <path fill="currentColor" d="M363.9,70.5c0-8.7,6.8-15.5,15.6-15.5s15.6,6.9,15.6,15.5-6.8,15.5-15.6,15.5-15.6-6.9-15.6-15.5M388.5,70.5c0-5.3-3.7-9.4-9-9.4s-9,4.1-9,9.4,3.7,9.4,9,9.4,9-4.1,9-9.4"/>
+        <path fill="#00CE7C" d="M39.1,31.1c-9.7,0-18.1-6.8-20.3-16.1h57.2c9.7,0,18.1,6.8,20.3,16.1h-57.2Z"/>
+        <path fill="#00CE7C" d="M161.4,31.1c9.7,0,18.1-6.8,20.3-16.1h-57.2c-9.7,0-18.1,6.8-20.3,16.1h57.2Z"/>
+        <path fill="#00CE7C" d="M67.6,57.1c-9.7,0-18.1-6.8-20.3-16.1h32.8c8.9,0,16.1,7.2,16.1,16.1h-28.6Z"/>
+        <path fill="#00CE7C" d="M120.3,40.9c-8.9,0-16.1,7.2-16.1,16.1v28.8h16.1v-28.8h12.5c9.7,0,18.1-6.8,20.3-16.1h-32.8Z"/>
+        <path fill="#00CE7C" d="M86.8,86.7c-5.2,0-9.5-4.2-9.5-9.4s4.2-9.5,9.5-9.5,9.4,4.2,9.4,9.5-4.2,9.4-9.4,9.4"/>
+        <g fill="currentColor">
+          <path d="M180,110.3l1.2-1.5c1,.9,2.2,1.5,3.7,1.5s2.1-.7,2.1-1.5-.8-1.3-2.6-1.7c-2.3-.5-4-1.2-4-3.4s1.7-3.4,4.1-3.4,3.2.6,4.3,1.6l-1.1,1.5c-1-.9-2.1-1.3-3.3-1.3s-1.9.7-1.9,1.5.8,1.3,2.6,1.7c2.4.5,3.9,1.3,3.9,3.4s-1.6,3.5-4.3,3.5-3.6-.7-4.9-1.8h.2Z"/>
+          <path d="M200,109.9h-5.5l-.9,2h-2.3l4.7-11.3h2.3l4.7,11.3h-2.3l-.9-2h.2ZM199.2,108.1l-2-4.8-2,4.8h4Z"/>
+          <path d="M206,100.6h2.1l6,8v-8h2v11.3h-2l-6-8v8h-2.1v-11.3Z"/>
+          <path d="M222.9,102.5h-3.6v-1.9h9.3v1.9h-3.6v9.5h-2v-9.5h0Z"/>
+          <path d="M238.4,109.9h-5.5l-.9,2h-2.3l4.7-11.3h2.3l4.7,11.3h-2.3l-.9-2h.2ZM237.6,108.1l-2-4.8-2,4.8h4Z"/>
+          <path d="M244.4,100.6h2.1l6,8v-8h2v11.3h-2l-6-8v8h-2.1v-11.3Z"/>
+          <path d="M258.4,100.6h4c3.7,0,6.4,2.3,6.4,5.7s-2.6,5.7-6.4,5.7h-4v-11.3h0ZM262.6,110c2.4,0,4.1-1.6,4.1-3.8s-1.7-3.8-4.1-3.8h-2.1v7.6s2.1,0,2.1,0Z"/>
+          <path d="M274.1,102.5v2.7h5.9v1.9h-5.9v3h6.5v1.9h-8.5v-11.3h8.5v1.9h-6.5Z"/>
+          <path d="M290.7,111.9l-2.7-3.8h-2.2v3.8h-2.1v-11.3h4.9c2.4,0,4.2,1.6,4.2,3.8s-1.1,3-2.7,3.5l2.8,4h-2.3.1ZM285.9,106.2h2.6c1.4,0,2.4-.7,2.4-1.9s-1-1.9-2.4-1.9h-2.6v3.7h0Z"/>
+        </g>
+      </svg>
+      <p class="text-sm text-center sm:text-right">
+        Mesa Sectorial de Instituciones Educativas y de Idiomas<br />
+        Fenalco Santander · Bucaramanga, Colombia
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // Menú móvil
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuBtn.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('hidden') === false;
+      menuBtn.setAttribute('aria-expanded', String(open));
+    });
+    mobileMenu.querySelectorAll('a').forEach(a =>
+      a.addEventListener('click', () => mobileMenu.classList.add('hidden'))
+    );
+
+    // Revelado al hacer scroll
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduceMotion && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.15 });
+      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    } else {
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
+    }
+
+    // Formulario: arma un mailto con los datos (la página es estática, sin backend)
+    document.getElementById('contactForm').addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      const f = ev.target;
+      const nombre = f.nombre.value.trim();
+      const empresa = f.empresa.value.trim();
+      const correo = f.correo.value.trim();
+      const error = document.getElementById('formError');
+
+      if (!nombre || !empresa || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(correo)) {
+        error.classList.remove('hidden');
+        return;
+      }
+      error.classList.add('hidden');
+
+      const cuerpo = [
+        'Solicitud de oferta educativa, Mesa Sectorial de Instituciones Educativas y de Idiomas.',
+        '',
+        'Nombre: ' + nombre,
+        'Empresa: ' + empresa,
+        'Correo: ' + correo,
+        'Telefono: ' + f.telefono.value.trim(),
+        'Area de interes: ' + f.area.value,
+        '',
+        'Necesidad:',
+        f.mensaje.value.trim()
+      ].join('\n');
+
+      // TODO: confirmar correo oficial de la Mesa Sectorial
+      const destino = 'mesasectorial@fenalcosantander.com.co';
+      window.location.href = 'mailto:' + destino
+        + '?subject=' + encodeURIComponent('Solicitud de oferta educativa: ' + empresa)
+        + '&body=' + encodeURIComponent(cuerpo);
+    });
+  </script>
+</body>
+</html>
