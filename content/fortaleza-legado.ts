@@ -16,11 +16,17 @@ export interface HeroDato {
   readonly label: string;
 }
 
+export interface HeroReto {
+  readonly nombre: string;
+  readonly descripcion: string;
+}
+
 export interface HeroContent {
   readonly kicker: string;
   readonly titulo: string;
   readonly subtitulo: string;
   readonly parrafo: string;
+  readonly retos: readonly HeroReto[];
   readonly ctaPrimario: { readonly label: string; readonly href: string };
   readonly ctaSecundario: { readonly label: string; readonly href: string };
   readonly datos: readonly HeroDato[];
@@ -327,10 +333,19 @@ export const fortalezaLegadoContent: FortalezaLegadoContent = {
   hero: {
     kicker: 'PROYECTO EJECUTIVO · VANGELIS × FENALCO SANTANDER',
     titulo: 'Proyecto Fortaleza & Legado',
-    subtitulo:
-      'Dos proyectos, una misma decisión: que tu empresa resista hoy y sobreviva a su fundador.',
+    subtitulo: 'Dos desafíos que pueden definir el futuro de una empresa.',
     parrafo:
-      'Fortaleza protege y mejora tu EBITDA en 100 días. Legado convierte tu empresa en una institución que no depende de ti.',
+      'Fenalco Santander y Vangelis se unen para acompañar a los empresarios en dos de los retos más importantes de hoy: hacer empresas más rentables y construir empresas que puedan trascender.',
+    retos: [
+      {
+        nombre: 'FORTALEZA',
+        descripcion: 'Para empresas que necesitan recuperar o fortalecer su rentabilidad.',
+      },
+      {
+        nombre: 'LEGADO',
+        descripcion: 'Para empresas que quieren asegurar su continuidad y trascender en el tiempo.',
+      },
+    ],
     ctaPrimario: { label: 'Agenda tu diagnóstico', href: '#contacto' },
     ctaSecundario: { label: 'Ver el proyecto', href: '#video' },
     datos: [

@@ -33,6 +33,15 @@ export function Hero({ content }: HeroProps) {
           <p className="mt-6 text-lg text-white/90 md:text-xl">{content.subtitulo}</p>
           <p className="mt-4 text-base text-white/70">{content.parrafo}</p>
 
+          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {content.retos.map((reto) => (
+              <div key={reto.nombre} className="rounded-xl border border-white/10 bg-white/5 p-4 text-left">
+                <p className="font-display font-semibold tracking-wide text-lilac-400">{reto.nombre}</p>
+                <p className="mt-1 text-sm text-white/70">{reto.descripcion}</p>
+              </div>
+            ))}
+          </div>
+
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
             <Button href={content.ctaPrimario.href} ariaLabel={content.ctaPrimario.label}>
               {content.ctaPrimario.label}
