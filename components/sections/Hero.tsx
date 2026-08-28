@@ -50,7 +50,7 @@ export function Hero({ content }: HeroProps) {
           />
           <Image
             src="/images/emblema.png"
-            alt="Elemento visual del programa Fortaleza & Legado"
+            alt="Elemento visual del proyecto Fortaleza & Legado"
             width={1122}
             height={1402}
             priority

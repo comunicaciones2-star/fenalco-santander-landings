@@ -310,14 +310,14 @@ export const fortalezaLegadoContent: FortalezaLegadoContent = {
   },
 
   hero: {
-    kicker: 'PROGRAMA EJECUTIVO · VANGELIS × FENALCO SANTANDER',
+    kicker: 'PROYECTO EJECUTIVO · VANGELIS × FENALCO SANTANDER',
     titulo: 'Proyecto Fortaleza & Legado',
     subtitulo:
-      'Dos programas, una misma decisión: que tu empresa resista hoy y sobreviva a su fundador.',
+      'Dos proyectos, una misma decisión: que tu empresa resista hoy y sobreviva a su fundador.',
     parrafo:
       'Fortaleza protege y mejora tu EBITDA en 100 días. Legado convierte tu empresa en una institución que no depende de ti.',
     ctaPrimario: { label: 'Agenda tu diagnóstico', href: '#contacto' },
-    ctaSecundario: { label: 'Ver el programa', href: '#video' },
+    ctaSecundario: { label: 'Ver el proyecto', href: '#video' },
     datos: [
       { valor: '100 días', label: 'Metodología REM' },
       { valor: '12–18 meses', label: 'Sistema de sucesión' },
@@ -373,7 +373,7 @@ export const fortalezaLegadoContent: FortalezaLegadoContent = {
   },
 
   video: {
-    kicker: 'EL PROGRAMA EN 46 SEGUNDOS',
+    kicker: 'EL PROYECTO EN 46 SEGUNDOS',
     titulo: 'Míralo en menos de un minuto.',
     parrafo:
       'Una explicación corta de cómo Fortaleza protege tu margen y cómo Legado asegura la continuidad de tu empresa.',
@@ -390,19 +390,19 @@ export const fortalezaLegadoContent: FortalezaLegadoContent = {
   },
 
   programasSelector: {
-    kicker: 'DOS PROGRAMAS',
+    kicker: 'DOS PROYECTOS',
     titulo: 'Un problema distinto en cada etapa de la empresa.',
     tarjetas: [
       {
         nombre: 'Proyecto Fortaleza',
-        descripcion: 'Programa ejecutivo de 100 días para proteger y mejorar tu EBITDA.',
+        descripcion: 'Proyecto ejecutivo de 100 días para proteger y mejorar tu EBITDA.',
         etiqueta: 'PARA LA EMPRESA QUE ESTÁ BAJO PRESIÓN DE COSTOS',
         href: '#fortaleza',
       },
       {
         nombre: 'Proyecto Legado',
         descripcion:
-          'Programa de sucesión empresarial para que la empresa sobreviva a su fundador.',
+          'Proyecto de sucesión empresarial para que la empresa sobreviva a su fundador.',
         etiqueta: 'PARA LA EMPRESA FAMILIAR QUE ENFRENTA EL RELEVO',
         href: '#legado',
       },
@@ -413,7 +413,7 @@ export const fortalezaLegadoContent: FortalezaLegadoContent = {
     kicker: 'BLOQUE 1 · PROYECTO FORTALEZA',
     titulo: '¿Qué es Proyecto Fortaleza?',
     bajada:
-      'Programa de transformación empresarial en 100 días orientado a proteger y mejorar el EBITDA. Convierte presión económica en ventaja competitiva.',
+      'Proyecto de transformación empresarial en 100 días orientado a proteger y mejorar el EBITDA. Convierte presión económica en ventaja competitiva.',
     pilares: [
       { titulo: 'Proteger margen', descripcion: 'Defender la rentabilidad frente al shock de costos' },
       { titulo: 'Estabilizar caja', descripcion: 'Controlar el flujo sin destruir operaciones' },
@@ -551,7 +551,7 @@ export const fortalezaLegadoContent: FortalezaLegadoContent = {
   },
 
   resultadoFortaleza: {
-    kicker: 'RESULTADO FINAL DEL PROGRAMA',
+    kicker: 'RESULTADO FINAL DEL PROYECTO',
     titulo: 'Al finalizar, la empresa obtiene:',
     tarjetas: [
       {
@@ -579,7 +579,7 @@ export const fortalezaLegadoContent: FortalezaLegadoContent = {
   },
 
   legadoApertura: {
-    kicker: 'PROYECTO LEGADO · PROGRAMA DE SUCESIÓN EMPRESARIAL',
+    kicker: 'PROYECTO LEGADO · SUCESIÓN EMPRESARIAL',
     titulo:
       'El verdadero legado de un fundador no es la empresa que construyó. Es la empresa que logra sobrevivirle.',
     cifras: [
@@ -751,7 +751,7 @@ export const fortalezaLegadoContent: FortalezaLegadoContent = {
     kicker: 'ALCANCE Y MODALIDADES',
     titulo: 'Elige cómo empezar.',
     bajada:
-      'Puedes contratar una fase o el programa completo. La propuesta económica se construye según el tamaño y la complejidad de tu empresa.',
+      'Puedes contratar una fase o el proyecto completo. La propuesta económica se construye según el tamaño y la complejidad de tu empresa.',
     modalidades: [
       { modalidad: 'RADAR', alcance: 'Diagnóstico financiero y operacional', duracion: '28 días' },
       { modalidad: 'ESCUDO', alcance: 'Protección de margen y caja', duracion: '45 días' },
@@ -782,7 +782,7 @@ export const fortalezaLegadoContent: FortalezaLegadoContent = {
       cargo: 'Cargo',
       correo: 'Correo corporativo',
       celular: 'Celular (WhatsApp)',
-      programaInteres: 'Programa de interés',
+      programaInteres: 'Proyecto de interés',
       mensaje: 'Mensaje (opcional)',
       consentimiento:
         'Autorizo el tratamiento de mis datos personales conforme a la Ley 1581 de 2012.',
