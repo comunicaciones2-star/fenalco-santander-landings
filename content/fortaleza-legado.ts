@@ -8,6 +8,8 @@ export interface NavLink {
 export interface HeaderContent {
   readonly navLinks: readonly NavLink[];
   readonly ctaLabel: string;
+  /** Versión corta del CTA para móvil — el cobranding + label completo no cabe sin apretarse. */
+  readonly ctaLabelCorto: string;
   readonly ctaHref: string;
 }
 
@@ -327,6 +329,7 @@ export const fortalezaLegadoContent: FortalezaLegadoContent = {
       { label: 'Alcance', href: '#alcance' },
     ],
     ctaLabel: 'Agenda tu diagnóstico',
+    ctaLabelCorto: 'Agendar',
     ctaHref: '#contacto',
   },
 

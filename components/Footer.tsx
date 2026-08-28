@@ -10,22 +10,22 @@ export function Footer({ content }: FooterProps) {
   return (
     <footer className="bg-navy-800-textured py-12 text-white">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-6 text-center lg:px-10">
-        <div className="flex flex-wrap items-center justify-center gap-3 md:gap-5">
+        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
           <Image
             src="/logos/vangelis-blanco.svg"
             alt="Vangelis"
             width={165}
             height={40}
-            className="h-4 w-auto md:h-6 lg:h-10"
+            className="h-8 w-auto md:h-12 lg:h-20"
             style={{ width: 'auto' }}
           />
-          <span className="h-3 w-px bg-white/30 md:h-5 lg:h-10" aria-hidden="true" />
+          <span className="h-6 w-px bg-white/30 md:h-10 lg:h-16" aria-hidden="true" />
           <Image
             src="/logos/fs-logo-horizontal-blanco.svg"
             alt="Fenalco Santander"
             width={392}
             height={101}
-            className="h-3 w-auto md:h-5 lg:h-8"
+            className="h-6 w-auto md:h-10 lg:h-16"
             style={{ width: 'auto' }}
           />
         </div>

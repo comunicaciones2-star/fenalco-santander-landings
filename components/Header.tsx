@@ -61,7 +61,8 @@ export function Header({ content }: HeaderProps) {
           aria-label={content.ctaLabel}
           className="btn-cta shrink-0 whitespace-nowrap !px-3 !py-2 text-xs md:!px-6 md:!py-3 md:text-sm"
         >
-          {content.ctaLabel}
+          <span className="sm:hidden">{content.ctaLabelCorto}</span>
+          <span className="hidden sm:inline">{content.ctaLabel}</span>
         </Link>
       </div>
     </header>
