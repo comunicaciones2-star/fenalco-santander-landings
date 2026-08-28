@@ -21,6 +21,7 @@ export function EmpresasIniciadas({ content }: EmpresasIniciadasProps) {
             alt={empresa.nombre}
             width={empresa.width}
             height={empresa.height}
+            unoptimized
             className="h-8 w-auto opacity-80 md:h-9"
             style={{ width: 'auto' }}
           />

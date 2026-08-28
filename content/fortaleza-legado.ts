@@ -343,7 +343,7 @@ export const fortalezaLegadoContent: FortalezaLegadoContent = {
   empresasIniciadas: {
     kicker: 'Empresas que ya iniciaron el proyecto',
     empresas: [
-      { nombre: 'Carbolsas', logo: '/images/logo-carbolsas.png', width: 2746, height: 832 },
+      { nombre: 'Carbolsas', logo: '/images/logo-carbolsas.png', width: 1031, height: 277 },
       { nombre: 'Carlixplast', logo: '/images/logo-carlixplast.png', width: 1031, height: 277 },
     ],
   },
