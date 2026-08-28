@@ -35,7 +35,7 @@ async function sendViaResend(data: ContactoInput): Promise<void> {
         <li><strong>Cargo:</strong> ${data.cargo}</li>
         <li><strong>Correo:</strong> ${data.correo}</li>
         <li><strong>Celular:</strong> ${data.celular}</li>
-        <li><strong>Programa de interés:</strong> ${data.programaInteres}</li>
+        <li><strong>Proyecto de interés:</strong> ${data.programaInteres}</li>
         <li><strong>Mensaje:</strong> ${data.mensaje || '—'}</li>
       </ul>
     `,

@@ -20,17 +20,17 @@ const jetbrainsMono = JetBrains_Mono({
   variable: '--font-mono',
 });
 
-const SITE_URL = 'https://proyecto-fortaleza-legado.vercel.app';
+const SITE_URL = 'https://fortaleza-legado.fenalcosantander.com.co';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: 'Proyecto Fortaleza & Legado · Vangelis × Fenalco Santander',
   description:
-    'Programa ejecutivo de 100 días para proteger tu EBITDA y sistema de sucesión empresarial para que tu empresa sobreviva a su fundador.',
+    'Proyecto ejecutivo de 100 días para proteger tu EBITDA y sistema de sucesión empresarial para que tu empresa sobreviva a su fundador.',
   openGraph: {
     title: 'Proyecto Fortaleza & Legado · Vangelis × Fenalco Santander',
     description:
-      'Programa ejecutivo de 100 días para proteger tu EBITDA y sistema de sucesión empresarial para que tu empresa sobreviva a su fundador.',
+      'Proyecto ejecutivo de 100 días para proteger tu EBITDA y sistema de sucesión empresarial para que tu empresa sobreviva a su fundador.',
     url: SITE_URL,
     siteName: 'Proyecto Fortaleza & Legado',
     locale: 'es_CO',
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Proyecto Fortaleza & Legado · Vangelis × Fenalco Santander',
     description:
-      'Programa ejecutivo de 100 días para proteger tu EBITDA y sistema de sucesión empresarial para que tu empresa sobreviva a su fundador.',
+      'Proyecto ejecutivo de 100 días para proteger tu EBITDA y sistema de sucesión empresarial para que tu empresa sobreviva a su fundador.',
     images: ['/og-fortaleza-legado.png'],
   },
 };
@@ -55,7 +55,7 @@ const jsonLd = {
   '@type': 'Service',
   name: 'Proyecto Fortaleza & Legado',
   description:
-    'Programa ejecutivo de 100 días para proteger el EBITDA (Fortaleza) y sistema de sucesión empresarial (Legado) para empresas familiares y PYME.',
+    'Proyecto ejecutivo de 100 días para proteger el EBITDA (Fortaleza) y sistema de sucesión empresarial (Legado) para empresas familiares y PYME.',
   provider: {
     '@type': 'Organization',
     name: 'Vangelis Happiness Partners',
