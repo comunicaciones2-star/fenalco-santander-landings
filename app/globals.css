@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  /* Evita que el header fijo tape el inicio de una sección al saltar por
+     ancla (#fortaleza, #legado, #alcance, #contacto). */
+  scroll-padding-top: 6rem;
+}
+
+@layer base {
+  body {
+    @apply font-body text-white antialiased;
+    background-color: #0f0f2e;
+  }
+
+  ::selection {
+    background-color: theme('colors.lime.400');
+    color: theme('colors.ink.900');
+  }
+}
+
+@layer components {
+  .kicker {
+    @apply font-mono text-xs uppercase tracking-kicker text-lilac-400;
+  }
+
+  .rule {
+    @apply h-1 w-16 bg-lilac-400;
+  }
+
+  .btn-cta {
+    @apply inline-flex items-center justify-center rounded-full bg-lime-400 px-6 py-3 font-display font-semibold text-ink-900 transition-transform hover:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-400;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-full border border-white/30 px-6 py-3 font-display font-semibold text-white transition-colors hover:border-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white;
+  }
+
+  .btn-ghost-dark {
+    @apply inline-flex items-center justify-center rounded-full border border-ink-900/30 px-6 py-3 font-display font-semibold text-ink-900 transition-colors hover:border-ink-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink-900;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 640ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 640ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Texturas de fondo (regla: ningún fondo sólido plano) — un único lugar de definición,
+     consumido por components/ui/Section.tsx para las 4 variantes de fondo. */
+  .bg-navy-900-textured {
+    background-color: #0f0f2e;
+    background-image: radial-gradient(ellipse 800px 600px at 15% -10%, rgba(183, 159, 224, 0.12), transparent),
+      radial-gradient(ellipse 600px 500px at 100% 110%, rgba(181, 211, 52, 0.06), transparent),
+      linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.15));
+  }
+
+  .bg-navy-800-textured {
+    background-color: #1a1640;
+    background-image: radial-gradient(ellipse 800px 600px at 15% -10%, rgba(183, 159, 224, 0.14), transparent),
+      radial-gradient(ellipse 600px 500px at 100% 110%, rgba(181, 211, 52, 0.05), transparent),
+      linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.15));
+  }
+
+  .bg-cream-50-textured {
+    background-color: #f7f3f2;
+    background-image: radial-gradient(ellipse 700px 500px at 85% -10%, rgba(183, 159, 224, 0.06), transparent),
+      radial-gradient(ellipse 500px 400px at 0% 100%, rgba(124, 95, 191, 0.04), transparent);
+  }
+
+  .bg-cream-100-textured {
+    background-color: #efe8e7;
+    background-image: radial-gradient(ellipse 700px 500px at 85% -10%, rgba(183, 159, 224, 0.07), transparent),
+      radial-gradient(ellipse 500px 400px at 0% 100%, rgba(124, 95, 191, 0.05), transparent);
+  }
+
+  /* Timeline vertical (metodología REM en móvil, 5 errores de sucesión) */
+  .timeline-connector {
+    background-image: linear-gradient(to bottom, theme('colors.lilac.400' / 40%), theme('colors.lilac.400' / 10%));
+  }
+
+  /* Ken Burns sutil para imagen de contenido (no de fondo) — reutiliza el mismo
+     patrón is-visible que Reveal.tsx, no es un sistema de animación nuevo. */
+  .kenburns-in {
+    transform: scale(1.08);
+    transition: transform 8s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  .kenburns-in.is-visible {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .kenburns-in {
+    transform: none;
+    transition: none;
+  }
+}

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="16" fill="#0F0F2E" />
+  <text x="32" y="44" text-anchor="middle" font-family="'Baloo 2', system-ui, sans-serif" font-weight="700" font-size="34" fill="#B79FE0">B</text>
+  <circle cx="50" cy="16" r="5" fill="#B5D334" />
+</svg>
