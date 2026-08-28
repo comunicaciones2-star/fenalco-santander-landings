@@ -37,6 +37,7 @@ async function sendViaResend(data: ContactoInput): Promise<void> {
         <li><strong>Celular:</strong> ${data.celular}</li>
         <li><strong>Proyecto de interés:</strong> ${data.programaInteres}</li>
         <li><strong>Mensaje:</strong> ${data.mensaje || '—'}</li>
+        <li><strong>Autoriza comunicación comercial:</strong> ${data.autorizacionComercial ? 'Sí' : 'No'}</li>
       </ul>
     `,
   });
@@ -89,7 +90,7 @@ async function sendToFenalcoCrm(data: ContactoInput): Promise<void> {
       },
       consentimientos: [
         { clave: 'tratamiento_datos', aceptado: data.autorizacionDatos },
-        { clave: 'consentimiento_comercial', aceptado: false },
+        { clave: 'consentimiento_comercial', aceptado: data.autorizacionComercial },
       ],
     }),
   });

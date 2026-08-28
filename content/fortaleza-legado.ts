@@ -283,6 +283,7 @@ export interface ContactoContent {
     readonly programaInteres: string;
     readonly mensaje: string;
     readonly consentimiento: string;
+    readonly consentimientoComercial: string;
   };
   readonly opcionesPrograma: readonly OpcionPrograma[];
   readonly submitLabel: string;
@@ -827,6 +828,10 @@ export const fortalezaLegadoContent: FortalezaLegadoContent = {
       mensaje: 'Mensaje (opcional)',
       consentimiento:
         'Autorizo el tratamiento de mis datos personales conforme a la Ley 1581 de 2012.',
+      // Texto idéntico al campo `consentimiento_comercial` configurado en el Evento del CRM
+      // (proyecto-fortaleza-legado) — mantenerlos sincronizados si alguno cambia.
+      consentimientoComercial:
+        'Autorizo a Fenalco Santander a contactarme por correo electrónico, teléfono, WhatsApp, SMS u otros medios digitales para enviarme información sobre programas, eventos, consultorías, formación empresarial y servicios que puedan ser de mi interés.',
     },
     opcionesPrograma: [
       { value: 'fortaleza', label: 'Fortaleza' },

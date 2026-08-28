@@ -35,6 +35,7 @@ export function ContactForm({ content, defaultPrograma }: ContactFormProps) {
       programaInteres: String(form.get('programaInteres') ?? 'no-se'),
       mensaje: String(form.get('mensaje') ?? ''),
       autorizacionDatos: form.get('autorizacionDatos') === 'on',
+      autorizacionComercial: form.get('autorizacionComercial') === 'on',
       website: String(form.get('website') ?? ''),
       _ts: renderedAt.current ?? Date.now(),
     };
@@ -129,6 +130,18 @@ export function ContactForm({ content, defaultPrograma }: ContactFormProps) {
         />
         <label htmlFor="autorizacionDatos" className="text-sm text-white/80">
           {content.campos.consentimiento}
+        </label>
+      </div>
+
+      <div className="flex items-start gap-3 md:col-span-2">
+        <input
+          type="checkbox"
+          id="autorizacionComercial"
+          name="autorizacionComercial"
+          className="mt-1 h-4 w-4 shrink-0"
+        />
+        <label htmlFor="autorizacionComercial" className="text-sm text-white/80">
+          {content.campos.consentimientoComercial}
         </label>
       </div>
 

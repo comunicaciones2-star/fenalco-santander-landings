@@ -12,6 +12,9 @@ export const contactoSchema = z.object({
   autorizacionDatos: z.literal(true, {
     error: 'Debes autorizar el tratamiento de datos personales',
   }),
+  // Opt-in independiente del tratamiento de datos: autoriza contacto comercial/marketing.
+  // No es obligatorio para poder enviar el formulario.
+  autorizacionComercial: z.boolean().optional().default(false),
   // Honeypot: un bot suele rellenarlo. Debe llegar vacío en un envío legítimo.
   website: z.string().max(0).optional().or(z.literal('')),
   // Timestamp (ms) de cuándo se renderizó el formulario, para descartar envíos instantáneos.
