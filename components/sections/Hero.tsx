@@ -51,8 +51,8 @@ export function Hero({ content }: HeroProps) {
           <Image
             src="/images/emblema.png"
             alt="Elemento visual del proyecto Fortaleza & Legado"
-            width={1122}
-            height={1402}
+            width={455}
+            height={701}
             priority
             unoptimized
             className="mx-auto h-auto w-full max-w-[260px] object-contain md:max-w-[300px]"

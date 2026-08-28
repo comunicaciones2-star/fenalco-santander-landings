@@ -2,6 +2,7 @@ import { fortalezaLegadoContent as content } from '@/content/fortaleza-legado';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Hero } from '@/components/sections/Hero';
+import { EmpresasIniciadas } from '@/components/sections/EmpresasIniciadas';
 import { Problema } from '@/components/sections/Problema';
 import { Dolores } from '@/components/sections/Dolores';
 import { VideoSection } from '@/components/sections/VideoSection';
@@ -32,6 +33,7 @@ export default async function Home({ searchParams }: HomeProps) {
       <Header content={content.header} />
       <main>
         <Hero content={content.hero} />
+        <EmpresasIniciadas content={content.empresasIniciadas} />
         <Problema content={content.problema} />
         <Dolores content={content.dolores} />
         <VideoSection content={content.video} />

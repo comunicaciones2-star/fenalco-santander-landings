@@ -26,6 +26,20 @@ export interface HeroContent {
   readonly datos: readonly HeroDato[];
 }
 
+export interface EmpresaLogo {
+  readonly nombre: string;
+  readonly logo: string;
+  /** Ancho real del archivo (px) — evita forzar un aspecto equivocado. */
+  readonly width: number;
+  /** Alto real del archivo (px). */
+  readonly height: number;
+}
+
+export interface EmpresasIniciadasContent {
+  readonly kicker: string;
+  readonly empresas: readonly EmpresaLogo[];
+}
+
 export interface ProblemaColumna {
   readonly titulo: string;
   readonly descripcion: string;
@@ -277,6 +291,7 @@ export interface FooterContent {
 export interface FortalezaLegadoContent {
   readonly header: HeaderContent;
   readonly hero: HeroContent;
+  readonly empresasIniciadas: EmpresasIniciadasContent;
   readonly problema: ProblemaContent;
   readonly dolores: DoloresContent;
   readonly video: VideoContent;
@@ -322,6 +337,14 @@ export const fortalezaLegadoContent: FortalezaLegadoContent = {
       { valor: '100 días', label: 'Metodología REM' },
       { valor: '12–18 meses', label: 'Sistema de sucesión' },
       { valor: '70%', label: 'de las empresas familiares no llegan a la 2ª generación' },
+    ],
+  },
+
+  empresasIniciadas: {
+    kicker: 'Empresas que ya iniciaron el proyecto',
+    empresas: [
+      { nombre: 'Carbolsas', logo: '/images/logo-carbolsas.png', width: 2746, height: 832 },
+      { nombre: 'Carlixplast', logo: '/images/logo-carlixplast.png', width: 1031, height: 277 },
     ],
   },
 
