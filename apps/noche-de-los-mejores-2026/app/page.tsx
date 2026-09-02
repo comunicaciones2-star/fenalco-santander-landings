@@ -3,6 +3,7 @@ import { Footer } from '@/components/Footer';
 import { Hero } from '@/components/blocks/Hero';
 import { Countdown } from '@/components/blocks/Countdown';
 import { Narrativa } from '@/components/blocks/Narrativa';
+import { ReviveNDLM2025 } from '@/components/blocks/ReviveNDLM2025';
 import { Categorias } from '@/components/blocks/Categorias';
 import { Pasos } from '@/components/blocks/Pasos';
 import { Formulario } from '@/components/blocks/Formulario';
@@ -23,6 +24,7 @@ export default function Home() {
         <Hero />
         <Countdown />
         <Narrativa />
+        <ReviveNDLM2025 />
         <Categorias />
         <Pasos />
         <Formulario />

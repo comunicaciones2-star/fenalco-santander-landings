@@ -59,7 +59,7 @@ export const config: EventConfig = {
   slug: 'noche-de-los-mejores-2026',
   nombre: 'La Noche de los Mejores',
   edicion: '2026',
-  tagline: 'El poder de quienes transforman el comercio en legado.',
+  tagline: 'Fenalco Santander — Reconocimiento a la pujanza santandereana.',
   tipo: 'gala',
 
   fecha: {
@@ -70,7 +70,7 @@ export const config: EventConfig = {
 
   sede: {
     nombre: 'Centro de Convenciones Neomundo — Gran Salón',
-    direccion: '', // TODO PENDIENTE: dirección exacta de Neomundo
+    direccion: 'Calle 89 Transversal Oriental Metropolitana #69, barrio El Tejar, Bucaramanga, Santander, Colombia',
     ciudad: 'Bucaramanga',
     notas: 'Código de vestuario: blanco. Información sujeta a cambios.',
   },
@@ -78,12 +78,12 @@ export const config: EventConfig = {
   cta: {
     principal: { label: 'Postúlate', href: '#postulacion', tipo: 'ancla' },
     secundario: { label: 'Quiero patrocinar', href: '#patrocinio' },
-    whatsapp: '', // TODO PENDIENTE: contacto comercial definitivo
+    whatsapp: 'https://wa.me/573228491525',
   },
 
   hero: {
     titulo: 'La Noche de los Mejores 2026',
-    subtitulo: 'Los comerciantes construyeron Venecia. Los empresarios construyen Santander.',
+    subtitulo: 'Reconocimiento a la pujanza santandereana.',
     media: {
       tipo: 'imagen',
       src: '/hero/ndlm-hero-mercurio-negro.png',
@@ -95,6 +95,7 @@ export const config: EventConfig = {
     'hero',
     'countdown',
     'narrativa',
+    'reviveNDLM2025',
     'categorias',
     'pasos',
     'formulario',
@@ -114,19 +115,56 @@ export const config: EventConfig = {
     whatsapp: 'https://wa.me/573228491525',
   },
 
+  // Nombres EXACTOS — deben coincidir carácter por carácter con el <select> de
+  // categoriaPostulacion en Formulario.tsx (que los deriva de este mismo array,
+  // ver categoria.nombre como value/key) y con CATEGORIAS_NOMBRE_PERSONAL en
+  // lib/schemas/registro.ts, que compara por igualdad de string exacta contra
+  // 'Mujer Insignia Empresarial' y 'Toda una Vida Dedicada al Fomento
+  // Empresarial' para activar el campo Cédula obligatorio. Ninguna de las dos
+  // cambió de nombre en esta actualización — solo "Apoyo Gremial" pasó a
+  // "Apoyo y Gestión Gremial" (no es una de las 2 categorías con cédula).
   categorias: [
-    { nombre: 'Mercurio de Oro', descripcion: '' },
-    { nombre: 'Reconocimiento a la Santandereanidad', descripcion: '' },
-    { nombre: 'Toda una Vida Dedicada al Fomento Empresarial', descripcion: '' },
-    { nombre: 'Mujer Insignia Empresarial', descripcion: '' },
-    { nombre: 'Innovación Tecnológica', descripcion: '' },
-    { nombre: 'Fidelidad Fenalquista', descripcion: '' },
-    { nombre: 'Emprendimiento Destacado', descripcion: '' },
-    { nombre: 'Responsabilidad Social Empresarial', descripcion: '' },
-    { nombre: 'Apoyo Gremial', descripcion: '' },
-    { nombre: 'Mérito Empresarial del Comercio', descripcion: '' },
+    {
+      nombre: 'Mercurio de Oro',
+      descripcion: 'Máxima condecoración que Fenalco Santander otorga a una organización destacada por su permanencia en el mercado, desarrollo comercial y social, considerada insignia del comercio santandereano a nivel regional, nacional e internacional.',
+    },
+    {
+      nombre: 'Reconocimiento a la Santandereanidad',
+      descripcion: 'Personalidad ilustre que se ha destacado por enaltecer con su trabajo y dedicación las banderas del departamento de Santander, contribuyendo de manera invaluable en el desarrollo y crecimiento regional, nacional e internacional.',
+    },
+    {
+      nombre: 'Toda una Vida Dedicada al Fomento Empresarial',
+      descripcion: 'Reconocemos a una personalidad ilustre del departamento, su compromiso, consagración y entrega a la labor empresarial durante años, promoviendo el desarrollo del departamento de Santander.',
+    },
+    {
+      nombre: 'Mujer Insignia Empresarial',
+      descripcion: 'Homenaje a aquellas mujeres ilustres del departamento que sobresalen por su liderazgo, perseverancia, compromiso y tenacidad en pro del desarrollo y fortalecimiento de Santander.',
+    },
+    {
+      nombre: 'Innovación Tecnológica',
+      descripcion: 'Empresa que a lo largo de su trayectoria ha obtenido reconocimiento por su destacada labor, ofreciendo servicios adecuados y responsables, incursionando en áreas de tecnología con el fin de mejorar la calidad de vida y el desarrollo social de la región.',
+    },
+    {
+      nombre: 'Fidelidad Fenalquista',
+      descripcion: 'Homenaje a una organización que durante muchos años ha pertenecido como miembro y afiliado activo, mostrando un compromiso constante con el gremio y contribuyendo al fortalecimiento del comercio en la región.',
+    },
+    {
+      nombre: 'Emprendimiento Destacado',
+      descripcion: 'Reconocimiento a la iniciativa, el emprendimiento, el compromiso y la innovación de aquellos nuevos empresarios santandereanos que se han destacado en el comercio organizado a nivel regional.',
+    },
+    {
+      nombre: 'Responsabilidad Social Empresarial',
+      descripcion: 'Reconocimiento al compromiso con la comunidad santandereana, el liderazgo y la destacada gestión en programas que beneficien a la sociedad y el medio ambiente, generando una contribución al departamento.',
+    },
+    {
+      nombre: 'Apoyo y Gestión Gremial',
+      descripcion: 'Reconocimiento a las empresas que han brindado un respaldo significativo al fortalecimiento del sector comercial y empresarial, promoviendo el crecimiento y desarrollo del gremio en la región.',
+    },
+    {
+      nombre: 'Mérito Empresarial del Comercio',
+      descripcion: 'Reconocimiento que se otorga a aquellas entidades que, a lo largo de los años, han demostrado una destacada trayectoria y liderazgo en el sector comercial, convirtiéndose en referentes para las nuevas generaciones de santandereanos. Estas empresas han desarrollado su actividad comercial de manera organizada, seria, eficiente y responsable, destacándose por su compromiso con el comercio formal y su capacidad para expandirse tanto a nivel regional como nacional.',
+    },
   ],
-  // TODO PENDIENTE: descripción y requisitos de cada categoría.
 
   formulario: {
     campos: [
@@ -156,7 +194,7 @@ export const config: EventConfig = {
   seo: {
     title: 'La Noche de los Mejores 2026 | Fenalco Santander',
     description:
-      'Convocatoria abierta a los reconocimientos que exaltan la excelencia, la trayectoria y el liderazgo empresarial en Santander. 26 de noviembre, Centro de Convenciones Neomundo, Bucaramanga.',
+      'Noche de gala que busca exaltar la labor de empresarios santandereanos a través de una gala de premiación y relacionamiento empresarial.',
     ogImage: '/og.jpg',
     canonical: 'https://nochedelosmejores.fenalcosantander.com.co',
   },
