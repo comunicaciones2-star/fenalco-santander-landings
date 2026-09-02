@@ -97,8 +97,8 @@ export function MaterialUploadForm({ token, modalidad, nit }: MaterialUploadForm
 }
 
 function AvisoGuardado({ estado }: { estado: EstadoGuardado }) {
-  if (estado === 'guardando') return <p className="mt-2 text-xs text-ink/50">Guardando en el CRM…</p>;
-  if (estado === 'guardado') return <p className="mt-2 text-xs text-accent">Guardado correctamente.</p>;
+  if (estado === 'guardando') return <p className="mt-2 text-sm text-ink/70">Guardando en el CRM…</p>;
+  if (estado === 'guardado') return <p className="mt-2 text-sm text-accent-text">Guardado correctamente.</p>;
   if (estado === 'error')
     return (
       <p role="alert" className="mt-2 text-xs text-borgona">

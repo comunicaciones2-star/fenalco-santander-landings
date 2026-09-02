@@ -51,47 +51,33 @@ function Unidad({ valor, etiqueta }: { readonly valor: number; readonly etiqueta
       <span className="font-display text-3xl tabular-nums tracking-tight sm:text-4xl">
         {String(valor).padStart(2, '0')}
       </span>
-      <span className="text-[11px] text-current/60">{etiqueta}</span>
+      <span className="text-sm text-current/70">{etiqueta}</span>
     </div>
   );
 }
 
-interface CountdownProps {
-  /** Fila compacta para insertar dentro del Hero, sin envolver en <Section>. */
-  readonly compact?: boolean;
-}
-
-export function Countdown({ compact = false }: CountdownProps) {
+// Antes existía un modo `compact` para insertar una segunda fila del contador
+// dentro del Hero, además de esta sección — mostraba el mismo tiempo restante
+// dos veces seguidas en la página. Se eliminó (ver Hero.tsx): esta sección,
+// con el badge "Convocatoria abierta", es el único contador de la landing.
+export function Countdown() {
   const tiempo = useCountdown();
   const valores = tiempo ?? { dias: 0, horas: 0, minutos: 0, segundos: 0 };
-
-  const fila = (
-    <div className="flex items-center gap-5 sm:gap-8" aria-live="off">
-      <Unidad valor={valores.dias} etiqueta="Días" />
-      <span className="text-accent/50">·</span>
-      <Unidad valor={valores.horas} etiqueta="Horas" />
-      <span className="text-accent/50">·</span>
-      <Unidad valor={valores.minutos} etiqueta="Min" />
-      <span className="text-accent/50">·</span>
-      <Unidad valor={valores.segundos} etiqueta="Seg" />
-    </div>
-  );
-
-  if (compact) {
-    return (
-      <div className="mt-2">
-        <p className="mb-3 text-sm text-surface-light/50">Faltan</p>
-        {fila}
-      </div>
-    );
-  }
 
   return (
     <Section id="countdown" bg="light-alt">
       <Reveal className="flex flex-col items-center gap-6 text-center">
         <Badge>Convocatoria abierta</Badge>
-        {fila}
-        <p className="max-w-md text-sm text-ink/60">{config.fecha.textoDisplay}</p>
+        <div className="flex items-center gap-5 sm:gap-8" aria-live="off">
+          <Unidad valor={valores.dias} etiqueta="Días" />
+          <span className="text-accent/50">·</span>
+          <Unidad valor={valores.horas} etiqueta="Horas" />
+          <span className="text-accent/50">·</span>
+          <Unidad valor={valores.minutos} etiqueta="Min" />
+          <span className="text-accent/50">·</span>
+          <Unidad valor={valores.segundos} etiqueta="Seg" />
+        </div>
+        <p className="max-w-md text-sm text-ink/70">{config.fecha.textoDisplay}</p>
       </Reveal>
     </Section>
   );

@@ -16,7 +16,7 @@ export function Sede() {
         {config.sede.direccion ? (
           <p className="text-ink/70">{config.sede.direccion}</p>
         ) : (
-          <p className="text-sm text-ink/50">Dirección: sujeto a cambios.</p>
+          <p className="text-sm text-ink/70">Dirección: sujeto a cambios.</p>
         )}
 
         <p className="mt-6 font-display text-lg">{config.fecha.textoDisplay}</p>

@@ -32,7 +32,10 @@ html {
   }
 
   .input-field {
-    @apply w-full border border-ink/20 bg-white px-4 py-2.5 text-ink placeholder:text-ink/40 focus:border-accent focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
+    /* placeholder:text-ink/70 (no /40): a /40 el texto de ayuda daba ~2.6:1 de
+       contraste sobre fondo blanco, por debajo del mínimo WCAG AA (4.5:1) —
+       mismo criterio aplicado a todo el texto secundario de la landing. */
+    @apply w-full border border-ink/20 bg-white px-4 py-2.5 text-ink placeholder:text-ink/70 focus:border-accent focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
   }
 
   .reveal {

@@ -38,12 +38,12 @@ export function Footer() {
           </Link>
         </nav>
 
-        <p className="max-w-md text-[11px] leading-relaxed text-surface-light/45">
+        <p className="max-w-md text-sm leading-relaxed text-surface-light/70">
           Tus datos personales se tratan conforme a la Ley 1581 de 2012 y demás normas concordantes.
           {' '}{config.sede.notas}
         </p>
 
-        <p className="text-[11px] text-surface-light/40">© {anio} Fenalco Santander</p>
+        <p className="text-sm text-surface-light/70">© {anio} Fenalco Santander</p>
       </div>
     </footer>
   );

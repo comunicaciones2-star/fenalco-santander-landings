@@ -262,7 +262,7 @@ export function Formulario() {
                   required
                   className="input-field"
                 />
-                <p className="mt-1.5 text-xs text-ink/50">
+                <p className="mt-1.5 text-sm text-ink/70">
                   Esta categoría se otorga a nombre personal. Necesitamos tu cédula para el acta de
                   premiación.
                 </p>
@@ -288,7 +288,7 @@ export function Formulario() {
                   El logotipo es obligatorio para figurar en el material promocional. El video de
                   postulación es opcional, pero fortalece la sustentación ante el jurado.
                 </p>
-                <p className="text-xs text-ink/50">
+                <p className="text-sm text-ink/70">
                   Especificaciones · Logotipo: vectorial .ai, .eps, .pdf o .png con fondo transparente en
                   alta resolución. Video: vertical 1080 x 1920 px, máximo 1 minuto.
                 </p>
@@ -307,7 +307,7 @@ export function Formulario() {
                     onCleared={() => setLogoInfo(null)}
                   />
                   {!nit.trim() && (
-                    <p className="mt-1.5 text-xs text-ink/50">Ingresa el NIT para habilitar la carga</p>
+                    <p className="mt-1.5 text-sm text-ink/70">Ingresa el NIT para habilitar la carga</p>
                   )}
                 </div>
 
@@ -332,7 +332,7 @@ export function Formulario() {
                     Enlace alterno al video
                   </label>
                   <input id="videoUrl" name="videoUrl" type="url" className="input-field" />
-                  <p className="mt-1.5 text-xs text-ink/50">
+                  <p className="mt-1.5 text-sm text-ink/70">
                     Si el archivo pesa demasiado o la carga falla, pega aquí el enlace (Drive, WeTransfer).
                     Verifica que tenga permiso de acceso público.
                   </p>

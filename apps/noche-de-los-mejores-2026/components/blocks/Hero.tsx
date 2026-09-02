@@ -2,7 +2,6 @@ import Image from 'next/image';
 import { config } from '@/content/event.config';
 import { Button } from '@/components/ui/Button';
 import { CompassRose } from '@/components/ui/CompassRose';
-import { Countdown } from '@/components/blocks/Countdown';
 
 export function Hero() {
   return (
@@ -38,8 +37,6 @@ export function Hero() {
               <p className="font-display text-base">{config.sede.nombre}</p>
             </div>
           </div>
-
-          {config.fecha.mostrarCountdown && <Countdown compact />}
         </div>
 
         <div className="order-1 lg:order-2">

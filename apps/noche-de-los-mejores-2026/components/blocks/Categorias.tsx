@@ -20,10 +20,13 @@ export function Categorias() {
           <Reveal
             key={categoria.nombre}
             delay={(index % 5) * 60}
-            className="flex items-baseline gap-4 border-b border-ink/10 py-5"
+            className="flex items-start gap-4 border-b border-ink/10 py-5"
           >
             <span className="font-display text-sm text-accent">{String(index + 1).padStart(2, '0')}</span>
-            <span className="font-display text-lg leading-snug">{categoria.nombre}</span>
+            <div className="flex flex-col gap-1.5">
+              <span className="font-display text-lg leading-snug">{categoria.nombre}</span>
+              <p className="text-sm leading-relaxed text-ink/70">{categoria.descripcion}</p>
+            </div>
           </Reveal>
         ))}
       </div>

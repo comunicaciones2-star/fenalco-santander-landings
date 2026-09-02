@@ -268,7 +268,7 @@ export function FileUpload({ tipo, modalidad, nit, onUploaded, onCleared, requir
             type="button"
             onClick={reset}
             disabled={disabled}
-            className="shrink-0 text-sm font-semibold uppercase tracking-[0.08em] text-accent hover:text-borgona focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="shrink-0 text-sm font-semibold uppercase tracking-[0.08em] text-accent-text hover:text-borgona focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             Reemplazar
           </button>
@@ -303,7 +303,7 @@ export function FileUpload({ tipo, modalidad, nit, onUploaded, onCleared, requir
                 {etiqueta} {required ? '*' : '(opcional)'}
               </p>
               <p className="text-xs text-ink/60">Arrastra el archivo aquí o haz clic para seleccionarlo</p>
-              <p className="text-xs text-ink/40">{ayuda}</p>
+              <p className="text-sm text-ink/70">{ayuda}</p>
             </>
           )}
 
@@ -312,7 +312,7 @@ export function FileUpload({ tipo, modalidad, nit, onUploaded, onCleared, requir
               <p role="alert" className="text-sm text-borgona">
                 {error}
               </p>
-              <p className="text-xs text-ink/50">Haz clic para intentar de nuevo</p>
+              <p className="text-sm text-ink/70">Haz clic para intentar de nuevo</p>
             </>
           )}
         </div>

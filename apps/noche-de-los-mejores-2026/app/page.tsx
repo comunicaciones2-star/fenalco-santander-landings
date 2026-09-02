@@ -1,5 +1,6 @@
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { config } from '@/content/event.config';
 import { Hero } from '@/components/blocks/Hero';
 import { Countdown } from '@/components/blocks/Countdown';
 import { Narrativa } from '@/components/blocks/Narrativa';
@@ -22,7 +23,7 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <Countdown />
+        {config.fecha.mostrarCountdown && <Countdown />}
         <Narrativa />
         <ReviveNDLM2025 />
         <Categorias />

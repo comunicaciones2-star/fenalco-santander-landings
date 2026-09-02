@@ -10,6 +10,7 @@ export interface Theme {
     surfaceLightAlt: string;
     ink: string;
     accent: string;
+    accentText: string;
     accentSoft: string;
     borgona: string;
     cta: string;
@@ -28,7 +29,13 @@ export const nocheTheme: Theme = {
     surfaceLight: '#F2EDE3', // blanco hueso — fondo dominante
     surfaceLightAlt: '#E8E1D3',
     ink: '#141310',
-    accent: '#C7A45D', // oro viejo / champán
+    accent: '#C7A45D', // oro viejo / champán — botones, bordes, elementos decorativos
+    // Mismo matiz y saturación que `accent` (H 40° S 49%), oscurecido a L 32% —
+    // "accent" puro da 2.02:1 sobre surfaceLight, muy por debajo de WCAG AA
+    // (4.5:1). Variante SOLO para texto legible sobre fondo claro (nunca para
+    // bordes/decoración, que siguen usando `accent`) — da 5.17:1 sobre
+    // surfaceLight. No reemplaza a `accent`, lo complementa.
+    accentText: '#795F2A',
     accentSoft: '#E3D3B4', // mezcla 35% accent sobre surfaceLight
     borgona: '#541F28', // acento opcional y escaso — nunca color de sección
     cta: '#C7A45D',

@@ -13,6 +13,7 @@ export default {
         'surface-light-alt': nocheTheme.colors.surfaceLightAlt,
         ink: nocheTheme.colors.ink,
         accent: nocheTheme.colors.accent,
+        'accent-text': nocheTheme.colors.accentText,
         'accent-soft': nocheTheme.colors.accentSoft,
         borgona: nocheTheme.colors.borgona,
         cta: nocheTheme.colors.cta,

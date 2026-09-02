@@ -58,7 +58,7 @@ export default async function MaterialPage({ params }: { params: Promise<{ token
                 El logotipo es obligatorio para figurar en el material promocional. El video de
                 postulación es opcional, pero fortalece la sustentación ante el jurado.
               </p>
-              <p className="text-xs text-ink/50">
+              <p className="text-sm text-ink/70">
                 Especificaciones · Logotipo: vectorial .ai, .eps, .pdf o .png con fondo transparente
                 en alta resolución. Video: vertical 1080 x 1920 px, máximo 1 minuto.
               </p>
