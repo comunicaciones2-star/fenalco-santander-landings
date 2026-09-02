@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore, type ChangeEvent, type FormEvent } from 'react';
 import { config } from '@/content/event.config';
-import { registroSchema } from '@/lib/schemas/registro';
+import { registroSchema, CATEGORIAS_NOMBRE_PERSONAL } from '@/lib/schemas/registro';
 import { useTrackingParams } from '@/hooks/useTrackingParams';
 import { Section } from '@/components/ui/Section';
 import { SectionTitle } from '@/components/ui/SectionTitle';
@@ -56,6 +56,8 @@ export function Formulario() {
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [nit, setNit] = useState('');
+  const [categoriaPostulacion, setCategoriaPostulacion] = useState('');
+  const requiereCedula = (CATEGORIAS_NOMBRE_PERSONAL as readonly string[]).includes(categoriaPostulacion);
   const [logoInfo, setLogoInfo] = useState<LogoInfo | null>(null);
   const [videoInfo, setVideoInfo] = useState<VideoInfo | null>(null);
   const renderedAt = useRef<number | null>(null);
@@ -103,6 +105,7 @@ export function Formulario() {
       esAfiliado: String(form.get('esAfiliado') ?? ''),
       modalidad,
       categoriaPostulacion: String(form.get('categoriaPostulacion') ?? ''),
+      cedula: String(form.get('cedula') ?? ''),
       mensaje: String(form.get('mensaje') ?? ''),
       aceptaHabeasData: form.get('aceptaHabeasData') === 'on',
       aceptaUsoMaterial: form.get('aceptaUsoMaterial') === 'on',
@@ -203,7 +206,7 @@ export function Formulario() {
             <Field label="Correo electrónico" name="email" type="email" required autoComplete="email" />
             <Field label="Celular" name="telefono" type="tel" required autoComplete="tel" />
             <Field label="Empresa" name="empresa" required autoComplete="organization" />
-            <Field label="NIT" name="nit" onChange={(e) => setNit(e.target.value)} />
+            <Field label="NIT" name="nit" required onChange={(e) => setNit(e.target.value)} />
             <Field label="Cargo" name="cargo" required autoComplete="organization-title" />
             <Field label="Sector" name="sector" />
             <Field label="Ciudad" name="ciudad" autoComplete="address-level2" />
@@ -232,6 +235,7 @@ export function Formulario() {
                   required
                   defaultValue=""
                   className="input-field"
+                  onChange={(e) => setCategoriaPostulacion(e.target.value)}
                 >
                   <option value="" disabled>
                     Selecciona una categoría
@@ -242,6 +246,26 @@ export function Formulario() {
                     </option>
                   ))}
                 </select>
+              </div>
+            )}
+
+            {modalidad === 'postulacion' && requiereCedula && (
+              <div>
+                <label htmlFor="cedula" className="mb-1.5 block text-sm font-medium">
+                  Cédula<span className="text-borgona"> *</span>
+                </label>
+                <input
+                  id="cedula"
+                  name="cedula"
+                  type="text"
+                  inputMode="numeric"
+                  required
+                  className="input-field"
+                />
+                <p className="mt-1.5 text-xs text-ink/50">
+                  Esta categoría se otorga a nombre personal. Necesitamos tu cédula para el acta de
+                  premiación.
+                </p>
               </div>
             )}
 
@@ -380,6 +404,7 @@ function Field({ label, name, type = 'text', required, autoComplete, onChange }:
     <div>
       <label htmlFor={name} className="mb-1.5 block text-sm font-medium">
         {label}
+        {required && <span className="text-borgona"> *</span>}
       </label>
       <input
         id={name}

@@ -132,11 +132,15 @@ async function sendPostulacionACrm(data: RegistroInput, material: Material): Pro
       email: data.email,
       telefono: data.telefono,
       empresa: data.empresa,
-      nit: data.nit || undefined,
       cargo: data.cargo,
+      cedula: data.cedula || undefined,
       origen: 'landing',
       material,
       respuestas: {
+        // nit va aquí (mapaA:'' en camposFormulario), NO top-level: el modelo
+        // Inscrito no tiene campo `nit` propio, así que se guarda como
+        // respuesta libre — mismo patrón que categoriaPostulacion.
+        nit: data.nit,
         sector: data.sector,
         ciudad: data.ciudad,
         esAfiliado: data.esAfiliado === 'si' ? 'Si' : 'No',
@@ -178,7 +182,7 @@ async function sendPatrocinioACrm(data: RegistroInput, material: Material): Prom
     body: JSON.stringify({
       esEmpresa: true,
       razonSocial: data.empresa,
-      nit: data.nit || undefined,
+      nit: data.nit,
       contactoNombre: data.nombre,
       contactoApellido: data.apellido,
       contactoCargo: data.cargo,

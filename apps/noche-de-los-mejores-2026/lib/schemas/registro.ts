@@ -8,19 +8,42 @@ function normalizarNit(nit: string): string {
   return nit.includes('-') ? soloDigitos.slice(0, -1) : soloDigitos;
 }
 
+// Categorías que se otorgan a nombre de una persona (no de la empresa): en la
+// premiación se nombra también a la persona, así que estas exigen cédula.
+// Los valores deben coincidir EXACTO con content/event.config.ts → categorias[].nombre.
+export const CATEGORIAS_NOMBRE_PERSONAL = [
+  'Mujer Insignia Empresarial',
+  'Toda una Vida Dedicada al Fomento Empresarial',
+] as const;
+
 export const registroSchema = z.object({
   nombre: z.string().trim().min(2, 'Ingresa tu nombre').max(120),
   apellido: z.string().trim().min(2, 'Ingresa tu apellido').max(120),
   email: z.string().trim().email('Ingresa un correo válido'),
   telefono: z.string().trim().min(7, 'Ingresa un número de celular válido').max(20),
   empresa: z.string().trim().min(2, 'Ingresa el nombre de tu empresa').max(160),
-  nit: z.string().trim().max(20).optional().or(z.literal('')).transform((v) => (v ? normalizarNit(v) : '')),
+  nit: z
+    .string()
+    .trim()
+    .min(1, 'Ingresa el NIT de tu empresa')
+    .max(20)
+    .transform(normalizarNit)
+    .refine((v) => v.length >= 5, 'Ingresa un NIT válido'),
   cargo: z.string().trim().min(2, 'Ingresa tu cargo').max(120),
   sector: z.string().trim().max(120).optional().or(z.literal('')),
   ciudad: z.string().trim().max(120).optional().or(z.literal('')),
   esAfiliado: z.enum(['si', 'no'], { error: 'Indica si tu empresa está afiliada a Fenalco' }),
   modalidad: z.enum(['postulacion', 'patrocinio'], { error: 'Selecciona una modalidad' }),
   categoriaPostulacion: z.string().trim().max(160).optional().or(z.literal('')),
+  // Solo obligatoria cuando categoriaPostulacion es una categoría a nombre personal
+  // (ver superRefine abajo). Se normaliza a solo dígitos, igual que el NIT.
+  cedula: z
+    .string()
+    .trim()
+    .max(15)
+    .optional()
+    .or(z.literal(''))
+    .transform((v) => (v ? v.replace(/\D/g, '') : '')),
   mensaje: z.string().trim().max(2000).optional().or(z.literal('')),
   aceptaHabeasData: z.literal(true, {
     error: 'Debes autorizar el tratamiento de datos personales',
@@ -49,9 +72,28 @@ export const registroSchema = z.object({
   utm_medium: z.string().trim().max(160).optional().or(z.literal('')),
   utm_campaign: z.string().trim().max(160).optional().or(z.literal('')),
   utm_content: z.string().trim().max(160).optional().or(z.literal('')),
-}).refine((data) => data.modalidad !== 'postulacion' || data.categoriaPostulacion, {
-  message: 'Selecciona la categoría a la que te postulas',
-  path: ['categoriaPostulacion'],
+}).superRefine((data, ctx) => {
+  if (data.modalidad !== 'postulacion') return;
+
+  if (!data.categoriaPostulacion) {
+    ctx.addIssue({
+      code: 'custom',
+      message: 'Selecciona la categoría a la que te postulas',
+      path: ['categoriaPostulacion'],
+    });
+    return;
+  }
+
+  const esCategoriaPersonal = (CATEGORIAS_NOMBRE_PERSONAL as readonly string[]).includes(
+    data.categoriaPostulacion,
+  );
+  if (esCategoriaPersonal && data.cedula.length < 5) {
+    ctx.addIssue({
+      code: 'custom',
+      message: 'Esta categoría se otorga a nombre personal: ingresa tu cédula',
+      path: ['cedula'],
+    });
+  }
 });
 
 export type RegistroInput = z.infer<typeof registroSchema>;
