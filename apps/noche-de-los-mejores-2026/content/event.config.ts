@@ -70,7 +70,7 @@ export const config: EventConfig = {
 
   sede: {
     nombre: 'Centro de Convenciones Neomundo — Gran Salón',
-    direccion: 'Calle 89 Transversal Oriental Metropolitana #69, barrio El Tejar, Bucaramanga, Santander, Colombia',
+    direccion: 'Calle 89 Transversal Oriental Metropolitana #69',
     ciudad: 'Bucaramanga',
     notas: 'Código de vestuario: blanco. Información sujeta a cambios.',
   },

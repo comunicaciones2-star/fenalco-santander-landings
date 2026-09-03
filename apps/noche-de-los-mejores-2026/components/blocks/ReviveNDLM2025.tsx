@@ -12,7 +12,7 @@ export function ReviveNDLM2025() {
   return (
     <Section id="revive-ndlm-2025" bg="light-alt">
       <Reveal className="mx-auto max-w-2xl text-center">
-        <SectionTitle>Revive NDLM 2025</SectionTitle>
+        <SectionTitle>Revive la Noche de los Mejores 2025</SectionTitle>
         <Rule className="mx-auto my-6" />
         <p className="text-ink/70">
           Revive los mejores momentos de NDLM 2025: una gala donde celebramos la pujanza
@@ -30,7 +30,7 @@ export function ReviveNDLM2025() {
         <div className="relative aspect-video w-full overflow-hidden border border-accent/25">
           <iframe
             src="https://www.youtube.com/embed/uBbtgaiuIOE"
-            title="Revive NDLM 2025"
+            title="Revive la Noche de los Mejores 2025"
             className="absolute inset-0 h-full w-full"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerPolicy="strict-origin-when-cross-origin"
