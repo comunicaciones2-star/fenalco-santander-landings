@@ -145,6 +145,13 @@ async function sendPostulacionACrm(data: RegistroInput, material: Material): Pro
         ciudad: data.ciudad,
         esAfiliado: data.esAfiliado === 'si' ? 'Si' : 'No',
         categoriaPostulacion: data.categoriaPostulacion,
+        // 4 preguntas del jurado (sustentación) — mismo patrón que nit/categoriaPostulacion:
+        // sin campo propio en Inscrito, van como respuesta libre.
+        aniosFundacion: data.aniosFundacion,
+        paginaWeb: data.paginaWeb,
+        numeroEmpleados: data.numeroEmpleados,
+        recibioPremioAnterior: data.recibioPremioAnterior,
+        detallePremioAnterior: data.detallePremioAnterior,
         mensaje: data.mensaje,
         utm_source: data.utm_source,
         utm_medium: data.utm_medium,

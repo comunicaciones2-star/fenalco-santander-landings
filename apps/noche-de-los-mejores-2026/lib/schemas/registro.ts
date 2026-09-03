@@ -44,6 +44,20 @@ export const registroSchema = z.object({
     .optional()
     .or(z.literal(''))
     .transform((v) => (v ? v.replace(/\D/g, '') : '')),
+  // 4 preguntas para el jurado (sustentación) — obligatorias para las 10 categorías,
+  // incluidas las 2 a nombre personal (el premio sigue siendo sobre la trayectoria
+  // dentro de una organización). Solo aplican a postulación, nunca a patrocinio —
+  // por eso quedan .optional() aquí y la obligatoriedad real vive en el superRefine
+  // de abajo, mismo patrón que categoriaPostulacion/cedula.
+  aniosFundacion: z.string().trim().max(50).optional().or(z.literal('')),
+  // Sin z.url(): a propósito no se bloquea el envío por un formato imperfecto
+  // (ej. sin "https://"), solo se exige que no esté vacío — decisión explícita.
+  paginaWeb: z.string().trim().max(300).optional().or(z.literal('')),
+  numeroEmpleados: z.string().trim().max(20).optional().or(z.literal('')),
+  recibioPremioAnterior: z.enum(['si', 'no']).optional(),
+  // Una sola respuesta libre (categoría + año en el mismo texto, ej. "Mercurio de
+  // Oro, 2023") — obligatorio solo si recibioPremioAnterior === 'si', ver superRefine.
+  detallePremioAnterior: z.string().trim().max(300).optional().or(z.literal('')),
   mensaje: z.string().trim().max(2000).optional().or(z.literal('')),
   aceptaHabeasData: z.literal(true, {
     error: 'Debes autorizar el tratamiento de datos personales',
@@ -92,6 +106,42 @@ export const registroSchema = z.object({
       code: 'custom',
       message: 'Esta categoría se otorga a nombre personal: ingresa tu cédula',
       path: ['cedula'],
+    });
+  }
+
+  // 4 preguntas del jurado — obligatorias para las 10 categorías por igual.
+  if (!data.aniosFundacion) {
+    ctx.addIssue({
+      code: 'custom',
+      message: 'Indica cuántos años tiene de fundada la empresa',
+      path: ['aniosFundacion'],
+    });
+  }
+  if (!data.paginaWeb) {
+    ctx.addIssue({
+      code: 'custom',
+      message: 'Ingresa la página web de tu empresa',
+      path: ['paginaWeb'],
+    });
+  }
+  if (!data.numeroEmpleados) {
+    ctx.addIssue({
+      code: 'custom',
+      message: 'Indica el número de empleados generados por la empresa',
+      path: ['numeroEmpleados'],
+    });
+  }
+  if (!data.recibioPremioAnterior) {
+    ctx.addIssue({
+      code: 'custom',
+      message: 'Indica si ha recibido un premio en ediciones pasadas de La Noche de los Mejores',
+      path: ['recibioPremioAnterior'],
+    });
+  } else if (data.recibioPremioAnterior === 'si' && !data.detallePremioAnterior) {
+    ctx.addIssue({
+      code: 'custom',
+      message: 'Indica en qué categoría y en qué año',
+      path: ['detallePremioAnterior'],
     });
   }
 });

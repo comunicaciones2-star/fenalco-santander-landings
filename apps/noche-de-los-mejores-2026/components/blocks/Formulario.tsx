@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, useSyncExternalStore, type ChangeEvent, type FormEvent } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore, type ChangeEvent, type FormEvent, type InputHTMLAttributes } from 'react';
 import { config } from '@/content/event.config';
 import { registroSchema, CATEGORIAS_NOMBRE_PERSONAL } from '@/lib/schemas/registro';
 import { useTrackingParams } from '@/hooks/useTrackingParams';
@@ -58,6 +58,7 @@ export function Formulario() {
   const [nit, setNit] = useState('');
   const [categoriaPostulacion, setCategoriaPostulacion] = useState('');
   const requiereCedula = (CATEGORIAS_NOMBRE_PERSONAL as readonly string[]).includes(categoriaPostulacion);
+  const [recibioPremioAnterior, setRecibioPremioAnterior] = useState('');
   const [logoInfo, setLogoInfo] = useState<LogoInfo | null>(null);
   const [videoInfo, setVideoInfo] = useState<VideoInfo | null>(null);
   const renderedAt = useRef<number | null>(null);
@@ -106,6 +107,14 @@ export function Formulario() {
       modalidad,
       categoriaPostulacion: String(form.get('categoriaPostulacion') ?? ''),
       cedula: String(form.get('cedula') ?? ''),
+      aniosFundacion: String(form.get('aniosFundacion') ?? ''),
+      paginaWeb: String(form.get('paginaWeb') ?? ''),
+      numeroEmpleados: String(form.get('numeroEmpleados') ?? ''),
+      // '' -> undefined: recibioPremioAnterior es z.enum(['si','no']).optional(), y un
+      // '' literal fallaría la validación de enum antes de llegar al mensaje custom
+      // del superRefine ("indica si...").
+      recibioPremioAnterior: String(form.get('recibioPremioAnterior') ?? '') || undefined,
+      detallePremioAnterior: String(form.get('detallePremioAnterior') ?? ''),
       mensaje: String(form.get('mensaje') ?? ''),
       aceptaHabeasData: form.get('aceptaHabeasData') === 'on',
       aceptaUsoMaterial: form.get('aceptaUsoMaterial') === 'on',
@@ -269,6 +278,53 @@ export function Formulario() {
               </div>
             )}
 
+            {/* Preguntas del jurado para la sustentación — obligatorias en las 10
+                categorías por igual, independiente de cuál se haya elegido arriba. */}
+            {modalidad === 'postulacion' && (
+              <>
+                <Field label="¿Cuántos años tiene de fundada la empresa?" name="aniosFundacion" required inputMode="numeric" />
+                <Field label="Página web" name="paginaWeb" required placeholder="https://tuempresa.com" />
+                <Field label="Número de empleados generados por la empresa" name="numeroEmpleados" required inputMode="numeric" />
+
+                <div>
+                  <label htmlFor="recibioPremioAnterior" className="mb-1.5 block text-sm font-medium">
+                    ¿Ha recibido un premio anteriormente en ediciones pasadas de La Noche de los Mejores?
+                    <span className="text-borgona"> *</span>
+                  </label>
+                  <select
+                    id="recibioPremioAnterior"
+                    name="recibioPremioAnterior"
+                    required
+                    defaultValue=""
+                    className="input-field"
+                    onChange={(e) => setRecibioPremioAnterior(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Selecciona una opción
+                    </option>
+                    <option value="si">Sí</option>
+                    <option value="no">No</option>
+                  </select>
+                </div>
+
+                {recibioPremioAnterior === 'si' && (
+                  <div className="md:col-span-2">
+                    <label htmlFor="detallePremioAnterior" className="mb-1.5 block text-sm font-medium">
+                      ¿En qué categoría y en qué año?<span className="text-borgona"> *</span>
+                    </label>
+                    <input
+                      id="detallePremioAnterior"
+                      name="detallePremioAnterior"
+                      type="text"
+                      required
+                      placeholder="Ej. Mercurio de Oro, 2023"
+                      className="input-field"
+                    />
+                  </div>
+                )}
+              </>
+            )}
+
             <div className="md:col-span-2">
               <label htmlFor="mensaje" className="mb-1.5 block text-sm font-medium">
                 Mensaje (opcional)
@@ -396,10 +452,12 @@ interface FieldProps {
   readonly type?: string;
   readonly required?: boolean;
   readonly autoComplete?: string;
+  readonly inputMode?: InputHTMLAttributes<HTMLInputElement>['inputMode'];
+  readonly placeholder?: string;
   readonly onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-function Field({ label, name, type = 'text', required, autoComplete, onChange }: FieldProps) {
+function Field({ label, name, type = 'text', required, autoComplete, inputMode, placeholder, onChange }: FieldProps) {
   return (
     <div>
       <label htmlFor={name} className="mb-1.5 block text-sm font-medium">
@@ -412,6 +470,8 @@ function Field({ label, name, type = 'text', required, autoComplete, onChange }:
         type={type}
         required={required}
         autoComplete={autoComplete}
+        inputMode={inputMode}
+        placeholder={placeholder}
         onChange={onChange}
         className="input-field"
       />
