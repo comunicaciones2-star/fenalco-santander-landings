@@ -105,6 +105,7 @@ export function Galeria() {
   const [isDragging, setIsDragging] = useState(false);
   const prefersReducedMotion = useRef(false);
   const thumbRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const thumbTrackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     prefersReducedMotion.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -124,12 +125,17 @@ export function Galeria() {
     return () => clearInterval(id);
   }, [isPaused]);
 
-  // Mantener el thumbnail activo visible al navegar
+  // Mantener el thumbnail activo visible al navegar — scroll solo dentro
+  // del propio contenedor, nunca de la página (scrollIntoView afecta ancestros).
   useEffect(() => {
-    thumbRefs.current[index]?.scrollIntoView({
+    const track = thumbTrackRef.current;
+    const btn = thumbRefs.current[index];
+    if (!track || !btn) return;
+    const target = btn.offsetLeft - (track.clientWidth - btn.offsetWidth) / 2;
+    const max = track.scrollWidth - track.clientWidth;
+    track.scrollTo({
+      left: Math.max(0, Math.min(target, max)),
       behavior: prefersReducedMotion.current ? 'auto' : 'smooth',
-      inline: 'center',
-      block: 'nearest',
     });
   }, [index]);
 
@@ -254,6 +260,7 @@ export function Galeria() {
 
       {/* Thumbnails */}
       <div
+        ref={thumbTrackRef}
         role="tablist"
         aria-label="Seleccionar foto"
         className="mt-4 flex gap-3 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
