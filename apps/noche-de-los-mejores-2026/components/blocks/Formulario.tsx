@@ -62,10 +62,20 @@ export function Formulario() {
   const [logoInfo, setLogoInfo] = useState<LogoInfo | null>(null);
   const [videoInfo, setVideoInfo] = useState<VideoInfo | null>(null);
   const renderedAt = useRef<number | null>(null);
+  const successRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
     renderedAt.current = Date.now();
   }, []);
+
+  // La confirmación reemplaza un formulario largo por un mensaje corto; sin este
+  // scroll, la posición en píxeles del usuario cae sobre las secciones de más
+  // abajo (Sede, FAQ) y el mensaje de éxito queda fuera de vista.
+  useEffect(() => {
+    if (status === 'success') {
+      successRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [status]);
 
   const handleLogoUploaded = (key: string, meta: Record<string, unknown>) => {
     setLogoInfo({
@@ -178,7 +188,12 @@ export function Formulario() {
 
       <Reveal className="mx-auto mt-12 max-w-3xl">
         {status === 'success' ? (
-          <p role="status" aria-live="polite" className="border border-accent/30 bg-surface-light-alt p-8 text-center font-display text-lg">
+          <p
+            ref={successRef}
+            role="status"
+            aria-live="polite"
+            className="scroll-mt-28 border border-accent/30 bg-surface-light-alt p-8 text-center font-display text-lg"
+          >
             {config.formulario.mensajeExito}
           </p>
         ) : (
