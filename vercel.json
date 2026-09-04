@@ -5,6 +5,14 @@
     {
       "source": "/junta/:path*",
       "destination": "https://fenalco-crm-sfmo.onrender.com/junta/:path*"
+    },
+    {
+      "source": "/admin/junta/:path*",
+      "destination": "https://fenalco-crm-sfmo.onrender.com/admin/junta/:path*"
+    },
+    {
+      "source": "/api/junta/:path*",
+      "destination": "https://fenalco-crm-sfmo.onrender.com/api/junta/:path*"
     }
   ]
 }
