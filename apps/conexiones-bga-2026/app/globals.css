@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-padding-top: 5.5rem;
+}
+
+@layer base {
+  body {
+    @apply font-sans text-ink antialiased;
+    background-color: #ffffff;
+  }
+
+  ::selection {
+    background-color: theme('colors.yellow');
+    color: theme('colors.navy');
+  }
+}
+
+@layer components {
+  .skip-link {
+    @apply fixed left-4 top-4 z-[100] -translate-y-24 rounded-md bg-navy px-4 py-2.5 text-sm font-medium text-white transition-transform focus:translate-y-0;
+  }
+
+  .btn-cta {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-green px-7 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-green-dark active:bg-green-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .btn-ghost {
+    /* border-color en CSS plano, no @apply border-white/NN: esa combinación de
+       utilidad de opacidad de color no se compila de forma fiable en este
+       pipeline de Tailwind/Turbopack (confirmado en el CSS de build limpio). */
+    @apply inline-flex items-center justify-center gap-2 rounded-full border px-7 py-3.5 text-sm font-semibold text-white transition-colors hover:border-yellow hover:text-yellow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow disabled:cursor-not-allowed disabled:opacity-60;
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .btn-inverse {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-green transition-colors hover:bg-yellow hover:text-navy focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .btn-ghost-dark {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border px-7 py-3.5 text-sm font-semibold text-navy transition-colors hover:border-green hover:text-green focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green disabled:cursor-not-allowed disabled:opacity-60;
+    border-color: rgba(27, 58, 75, 0.25);
+  }
+
+  .input-field {
+    @apply w-full rounded-md border bg-white px-4 py-2.5 text-ink placeholder:text-ink-soft focus:border-green focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green;
+    border-color: rgba(19, 35, 32, 0.2);
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 640ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 640ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Texturas de fondo — únicas superficies con degradado, siempre derivadas de los
+     colores de marca y sin reemplazar el protagonismo del blanco. */
+  .bg-surface-navy {
+    background-color: #1b3a4b;
+    background-image: radial-gradient(ellipse 900px 600px at 85% -10%, rgba(141, 198, 63, 0.12), transparent),
+      radial-gradient(ellipse 700px 500px at 0% 110%, rgba(14, 122, 60, 0.35), transparent);
+  }
+
+  .bg-surface-green {
+    background-color: #0e7a3c;
+    background-image: radial-gradient(ellipse 900px 600px at 90% -10%, rgba(245, 197, 24, 0.1), transparent),
+      radial-gradient(ellipse 700px 500px at 0% 110%, rgba(27, 58, 75, 0.35), transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
