@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { config } from '@/content/conexiones';
 import { submitLead, type InterestType, type LeadPayload } from '@/lib/leads';
 import { Section } from '@/components/ui/Section';
@@ -13,10 +13,24 @@ type FormStatus = 'idle' | 'sending' | 'success' | 'error';
 export function LeadForm() {
   const { formulario } = config;
   const [status, setStatus] = useState<FormStatus>('idle');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const renderedAt = useRef<number | null>(null);
+  const successRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    renderedAt.current = Date.now();
+  }, []);
+
+  useEffect(() => {
+    if (status === 'success') {
+      successRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [status]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setStatus('sending');
+    setErrorMessage(null);
 
     const form = new FormData(event.currentTarget);
     const payload: LeadPayload = {
@@ -25,15 +39,24 @@ export function LeadForm() {
       role: String(form.get('role') ?? '').trim() || undefined,
       email: String(form.get('email') ?? '').trim(),
       phone: String(form.get('phone') ?? '').trim() || undefined,
+      nit: String(form.get('nit') ?? '').trim(),
+      affiliated: String(form.get('affiliated') ?? '') as 'si' | 'no',
       interestType: String(form.get('interestType') ?? '') as InterestType,
       privacyAccepted: form.get('privacyAccepted') === 'on',
+      website: String(form.get('website') ?? ''),
+      _ts: renderedAt.current ?? Date.now(),
     };
 
-    try {
-      const result = await submitLead(payload);
-      setStatus(result.ok ? 'success' : 'error');
-    } catch {
+    const result = await submitLead(payload);
+    if (result.ok) {
+      setStatus('success');
+    } else {
       setStatus('error');
+      setErrorMessage(
+        result.error === 'too_fast' || result.error === 'rate_limited'
+          ? 'Intenta de nuevo en unos segundos.'
+          : 'No pudimos procesar tu solicitud. Intenta de nuevo en unos minutos.',
+      );
     }
   };
 
@@ -48,21 +71,42 @@ export function LeadForm() {
       <Reveal delay={80} className="mt-10">
         {status === 'success' ? (
           <p
+            ref={successRef}
             role="status"
             aria-live="polite"
-            className="rounded-lg border border-green/30 bg-green/5 p-8 text-center text-base font-medium text-navy"
+            className="scroll-mt-28 rounded-lg border border-green/30 bg-green/5 p-8 text-center text-base font-medium text-navy"
           >
-            {formulario.mensajeDemo}
+            {formulario.mensajeExito}
           </p>
         ) : (
           <form onSubmit={handleSubmit} noValidate className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            {/* Honeypot: oculto por CSS, no display:none, para no delatarse ante bots simples. */}
+            <div className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+              <label htmlFor="website">Sitio web</label>
+              <input type="text" id="website" name="website" tabIndex={-1} autoComplete="off" />
+            </div>
+
             <Field label="Nombre" name="name" required autoComplete="name" />
             <Field label="Empresa" name="company" required autoComplete="organization" />
+            <Field label="NIT" name="nit" required />
             <Field label="Cargo" name="role" autoComplete="organization-title" />
             <Field label="Correo electrónico" name="email" type="email" required autoComplete="email" />
-            <Field label="Teléfono / WhatsApp" name="phone" type="tel" autoComplete="tel" className="sm:col-span-2" />
+            <Field label="Teléfono / WhatsApp" name="phone" type="tel" autoComplete="tel" />
 
-            <div className="sm:col-span-2">
+            <div>
+              <label htmlFor="affiliated" className="mb-1.5 block text-sm font-medium text-navy">
+                ¿Tu empresa está afiliada a Fenalco?<span className="text-green"> *</span>
+              </label>
+              <select id="affiliated" name="affiliated" required defaultValue="" className="input-field">
+                <option value="" disabled>
+                  Selecciona una opción
+                </option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+
+            <div>
               <label htmlFor="interestType" className="mb-1.5 block text-sm font-medium text-navy">
                 Tipo de interés<span className="text-green"> *</span>
               </label>
@@ -91,9 +135,9 @@ export function LeadForm() {
               </label>
             </div>
 
-            {status === 'error' && (
+            {status === 'error' && errorMessage && (
               <p role="alert" className="border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700 sm:col-span-2">
-                No pudimos procesar tu solicitud. Intenta de nuevo en unos minutos.
+                {errorMessage}
               </p>
             )}
 

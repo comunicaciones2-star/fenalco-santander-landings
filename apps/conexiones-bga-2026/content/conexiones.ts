@@ -34,7 +34,12 @@ export interface Panelista {
 }
 
 export const config = {
-  slug: 'conexiones-bga-2026',
+  // OJO: "conexiones-bga-2026" NO se usa aquí a propósito — en el CRM de Fenalco
+  // (fenalco-crm / NEXO) ese slug ya pertenece a otro evento (la reunión interna
+  // de Socialización, 10 sep). Este `slug` es solo identificador interno de esta
+  // landing (analytics); el slug real del evento en el CRM es
+  // CRM_EVENT_SLUG=conexiones-bga-evento-2026 (ver .env.example y lib/leads.ts).
+  slug: 'conexiones-bga-landing-2026',
   nombre: 'CONEXIONES BGA',
   edicion: '2.ª Edición',
   descriptor: 'Innovación, Relacionamiento Empresarial y Emprendimiento',
@@ -278,7 +283,7 @@ export const config = {
       { id: 'alianza', label: 'Alianza institucional' },
       { id: 'comercial', label: 'Información comercial' },
     ],
-    mensajeDemo: 'Formulario en modo demostración. La integración de envío se habilitará posteriormente.',
+    mensajeExito: 'Recibimos tu solicitud. El equipo de Fenalco Santander te contactará pronto.',
   },
 
   seo: {
@@ -287,7 +292,7 @@ export const config = {
     ogImage: '/brand/conexiones-bga-lockup.png',
   },
 
-  analytics: { campaign: 'conexiones-bga-2026' },
+  analytics: { campaign: 'conexiones-bga-landing-2026' },
 } as const;
 
 export type ConexionesConfig = typeof config;
