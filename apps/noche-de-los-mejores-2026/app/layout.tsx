@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Bodoni_Moda, Archivo } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import { config } from '@/content/event.config';
 import './globals.css';
 
@@ -70,6 +71,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es-CO" className={`${bodoniModa.variable} ${archivo.variable}`}>
       <body>
         {children}
+        <Analytics />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
