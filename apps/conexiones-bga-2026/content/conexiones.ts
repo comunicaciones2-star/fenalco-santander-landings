@@ -67,7 +67,7 @@ export const config = {
   ] as readonly NavItem[],
 
   cta: {
-    principal: { label: 'Quiero participar', href: '#contacto' } as CtaLink,
+    principal: { label: 'Quiero participar', href: '/inscripcion' } as CtaLink,
     secundario: { label: 'Conoce las oportunidades comerciales', href: '#oportunidad' } as CtaLink,
   },
 
@@ -272,10 +272,13 @@ export const config = {
     commercialUrl: undefined as string | undefined,
   },
 
-  formulario: {
+  formularioComercial: {
     id: 'contacto',
-    titulo: 'Solicita información',
-    intro: 'Cuéntanos qué te interesa y el equipo de Fenalco Santander te contactará.',
+    eyebrow: 'PATROCINIO Y VINCULACIÓN',
+    titulo: 'Vincula tu marca a CONEXIONES BGA',
+    intro:
+      'Cuéntanos qué modalidad te interesa y el equipo comercial de Fenalco Santander te contactará con la propuesta.',
+    cta: 'Solicitar propuesta',
     tiposInteres: [
       { id: 'participar', label: 'Participar en el evento' },
       { id: 'patrocinio', label: 'Patrocinio' },
@@ -284,6 +287,22 @@ export const config = {
       { id: 'comercial', label: 'Información comercial' },
     ],
     mensajeExito: 'Recibimos tu solicitud. El equipo de Fenalco Santander te contactará pronto.',
+  },
+
+  formularioInscripcion: {
+    id: 'inscripcion-form',
+    eyebrow: 'INSCRIPCIÓN',
+    titulo: 'Asegura tu lugar en CONEXIONES BGA',
+    intro:
+      'El aforo del Gran Salón es limitado y el ingreso es exclusivo para asistentes registrados. Completa el formulario y recibirás tu confirmación por correo electrónico.',
+    bullets: [
+      'Acceso a la rueda de negocios y a la agenda académica',
+      'Contacto directo con empresas, marcas e instituciones de la región',
+      'Sin costo — cupos limitados por aforo',
+    ],
+    cta: 'Confirmar mi inscripción',
+    microcopy:
+      'Al enviar recibirás un correo de confirmación con tu código de ingreso. Preséntalo el 8 de octubre en el registro.',
   },
 
   seo: {

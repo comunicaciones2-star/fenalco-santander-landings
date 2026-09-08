@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { Check } from 'lucide-react';
 import { config } from '@/content/conexiones';
 import { submitLead, type InterestType, type LeadPayload } from '@/lib/leads';
 import { Section } from '@/components/ui/Section';
@@ -9,13 +10,21 @@ import { Kicker } from '@/components/ui/Kicker';
 import { Reveal } from '@/components/ui/Reveal';
 
 type FormStatus = 'idle' | 'sending' | 'success' | 'error';
+type LeadFormVariant = 'commercial' | 'inscripcion';
 
-export function LeadForm() {
-  const { formulario } = config;
+interface LeadFormProps {
+  readonly variant?: LeadFormVariant;
+}
+
+export function LeadForm({ variant = 'commercial' }: LeadFormProps) {
+  const isInscripcion = variant === 'inscripcion';
+  const content = isInscripcion ? config.formularioInscripcion : config.formularioComercial;
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [submittedName, setSubmittedName] = useState('');
+  const [submittedEmail, setSubmittedEmail] = useState('');
   const renderedAt = useRef<number | null>(null);
-  const successRef = useRef<HTMLParagraphElement>(null);
+  const successRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     renderedAt.current = Date.now();
@@ -41,7 +50,9 @@ export function LeadForm() {
       phone: String(form.get('phone') ?? '').trim() || undefined,
       nit: String(form.get('nit') ?? '').trim(),
       affiliated: String(form.get('affiliated') ?? '') as 'si' | 'no',
-      interestType: String(form.get('interestType') ?? '') as InterestType,
+      interestType: isInscripcion
+        ? 'participar'
+        : (String(form.get('interestType') ?? '') as InterestType),
       privacyAccepted: form.get('privacyAccepted') === 'on',
       website: String(form.get('website') ?? ''),
       _ts: renderedAt.current ?? Date.now(),
@@ -49,6 +60,8 @@ export function LeadForm() {
 
     const result = await submitLead(payload);
     if (result.ok) {
+      setSubmittedName(payload.name);
+      setSubmittedEmail(payload.email);
       setStatus('success');
     } else {
       setStatus('error');
@@ -61,23 +74,44 @@ export function LeadForm() {
   };
 
   return (
-    <Section id={formulario.id} bg="white" narrow>
+    <Section id={content.id} bg="white" narrow>
       <Reveal className="text-center">
-        <Kicker>Contacto</Kicker>
-        <SectionTitle className="mt-3">{formulario.titulo}</SectionTitle>
-        <p className="mt-4 text-ink-soft">{formulario.intro}</p>
+        <Kicker>{content.eyebrow}</Kicker>
+        <SectionTitle className="mt-3">{content.titulo}</SectionTitle>
+        <p className="mt-4 text-ink-soft">{content.intro}</p>
+        {isInscripcion && (
+          <ul className="mt-6 space-y-3 text-left text-sm text-ink-soft md:text-base">
+            {config.formularioInscripcion.bullets.map((item) => (
+              <li key={item} className="flex items-start gap-2.5">
+                <Check size={17} className="mt-0.5 shrink-0 text-green" aria-hidden="true" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </Reveal>
 
       <Reveal delay={80} className="mt-10">
         {status === 'success' ? (
-          <p
+          <div
             ref={successRef}
             role="status"
             aria-live="polite"
             className="scroll-mt-28 rounded-lg border border-green/30 bg-green/5 p-8 text-center text-base font-medium text-navy"
           >
-            {formulario.mensajeExito}
-          </p>
+            {isInscripcion ? (
+              <>
+                <p className="text-lg font-bold">¡Listo, {submittedName}! Tu lugar está reservado.</p>
+                <p className="mt-3 text-base font-normal text-ink-soft">
+                  Enviamos la confirmación a {submittedEmail}. Si no la ves en unos minutos, revisa tu carpeta de
+                  spam o promociones.
+                </p>
+                <p className="mt-4 font-semibold">Jueves 8 de octubre · 9:00 a. m. · Gran Salón, Neomundo.</p>
+              </>
+            ) : (
+              <p>{config.formularioComercial.mensajeExito}</p>
+            )}
+          </div>
         ) : (
           <form onSubmit={handleSubmit} noValidate className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             {/* Honeypot: oculto por CSS, no display:none, para no delatarse ante bots simples. */}
@@ -106,21 +140,23 @@ export function LeadForm() {
               </select>
             </div>
 
-            <div>
-              <label htmlFor="interestType" className="mb-1.5 block text-sm font-medium text-navy">
-                Tipo de interés<span className="text-green"> *</span>
-              </label>
-              <select id="interestType" name="interestType" required defaultValue="" className="input-field">
-                <option value="" disabled>
-                  Selecciona una opción
-                </option>
-                {formulario.tiposInteres.map((opcion) => (
-                  <option key={opcion.id} value={opcion.id}>
-                    {opcion.label}
+            {!isInscripcion && (
+              <div>
+                <label htmlFor="interestType" className="mb-1.5 block text-sm font-medium text-navy">
+                  Tipo de interés<span className="text-green"> *</span>
+                </label>
+                <select id="interestType" name="interestType" required defaultValue="" className="input-field">
+                  <option value="" disabled>
+                    Selecciona una opción
                   </option>
-                ))}
-              </select>
-            </div>
+                  {config.formularioComercial.tiposInteres.map((opcion) => (
+                    <option key={opcion.id} value={opcion.id}>
+                      {opcion.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             <div className="flex items-start gap-3 sm:col-span-2">
               <input
@@ -142,8 +178,11 @@ export function LeadForm() {
             )}
 
             <button type="submit" disabled={status === 'sending'} className="btn-cta mt-2 sm:col-span-2">
-              {status === 'sending' ? 'Enviando…' : 'Enviar solicitud'}
+              {status === 'sending' ? 'Enviando…' : content.cta}
             </button>
+            {isInscripcion && (
+              <p className="sm:col-span-2 -mt-1 text-center text-sm text-ink-soft">{config.formularioInscripcion.microcopy}</p>
+            )}
           </form>
         )}
       </Reveal>
