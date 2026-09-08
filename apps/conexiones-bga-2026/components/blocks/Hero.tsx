@@ -1,5 +1,7 @@
-import Image from 'next/image';
-import { CalendarDays, MapPin } from 'lucide-react';
+'use client';
+
+import { useRef, useState } from 'react';
+import { CalendarDays, MapPin, Volume2, VolumeX } from 'lucide-react';
 import { config } from '@/content/conexiones';
 import { Button } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
@@ -10,6 +12,32 @@ import { DotMotif } from '@/components/ui/DotMotif';
 // empresarial con un velo verde/navy de marca, esquina curva grande y el isotipo
 // desbordando el límite entre panel blanco y foto generan profundidad por composición.
 export function Hero() {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [isMuted, setIsMuted] = useState(true);
+
+  const handleToggleAudio = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const nextMuted = !isMuted;
+    video.muted = nextMuted;
+    if (!nextMuted) video.volume = 1;
+
+    const playPromise = video.play();
+    if (playPromise) {
+      void playPromise
+        .then(() => setIsMuted(nextMuted))
+        .catch((error: unknown) => {
+          console.error('No se pudo cambiar el audio del video del hero.', error);
+          video.muted = true;
+          setIsMuted(true);
+        });
+      return;
+    }
+
+    setIsMuted(nextMuted);
+  };
+
   return (
     <section className="relative overflow-hidden bg-white">
       <div className="mx-auto grid max-w-content grid-cols-1 lg:grid-cols-[1.05fr_0.95fr]">
@@ -57,15 +85,20 @@ export function Hero() {
         </div>
 
         <div className="relative isolate min-h-[320px] overflow-hidden bg-surface-green lg:rounded-bl-[110px]">
-          <Image
-            src="/images/hero-networking.png"
-            alt="Empresarios conversando en un espacio corporativo durante un encuentro de networking"
-            fill
-            priority
-            sizes="(min-width: 1024px) 45vw, 100vw"
+          <video
+            ref={videoRef}
+            aria-hidden="true"
+            autoPlay
+            loop
+            muted={isMuted}
+            playsInline
+            preload="metadata"
+            poster="/images/hero-networking.png"
             className="object-cover"
-            style={{ objectPosition: '68% 38%' }}
-          />
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectPosition: '68% 38%' }}
+          >
+            <source src="/videos/01vd-conexiones-bga-2026.mp4" type="video/mp4" />
+          </video>
           <div
             aria-hidden="true"
             className="absolute inset-0 bg-gradient-to-t from-navy/85 via-green/55 to-green/20"
@@ -77,11 +110,15 @@ export function Hero() {
             flip
             className="absolute -bottom-20 -left-20 h-48 w-48 opacity-20 sm:h-56 sm:w-56"
           />
-          <div className="absolute bottom-6 left-6 right-6 md:bottom-10 md:left-10 md:right-10">
-            <span className="inline-flex items-center rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-white">
-              {config.descriptor}
-            </span>
-          </div>
+          <button
+            type="button"
+            onClick={handleToggleAudio}
+            className="absolute left-6 top-6 z-20 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-navy shadow-lg transition hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-navy/40"
+            aria-label={isMuted ? 'Activar sonido del video' : 'Silenciar video'}
+          >
+            {isMuted ? <Volume2 size={16} aria-hidden="true" /> : <VolumeX size={16} aria-hidden="true" />}
+            {isMuted ? 'Activar sonido' : 'Silenciar'}
+          </button>
         </div>
       </div>
     </section>

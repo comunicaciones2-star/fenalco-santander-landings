@@ -45,7 +45,7 @@ export function Diferenciadores() {
 
       <Reveal className="mt-14 border-t border-ink/10 pt-10">
         <p className="mb-6 text-xs font-semibold uppercase tracking-[0.14em] text-ink-soft">Aliados institucionales</p>
-        <InstitutionalPartners />
+        <InstitutionalPartners zoom={2} />
       </Reveal>
     </Section>
   );

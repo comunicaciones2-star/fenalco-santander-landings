@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { config } from '@/content/conexiones';
 import { InstitutionalPartners } from '@/components/blocks/InstitutionalPartners';
@@ -11,15 +10,10 @@ export function Footer() {
   return (
     <footer className="bg-surface-alt py-14 text-ink">
       <div className="mx-auto flex max-w-content flex-col items-center gap-8 px-6 text-center lg:px-10">
-        <Image
-          src="/brand/conexiones-bga-logo-vertical-claro.svg"
-          alt={`${config.nombre} — ${config.edicion}`}
-          width={378}
-          height={310}
-          className="h-16 w-auto"
-        />
-
-        <InstitutionalPartners align="center" />
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-soft">
+          Aliados institucionales
+        </p>
+        <InstitutionalPartners align="center" context="footer" />
 
         <nav aria-label="Navegación del pie de página" className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-ink-soft">
           {config.nav.map((item) => (
