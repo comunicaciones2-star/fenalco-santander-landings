@@ -3,10 +3,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { config } from '@/content/conexiones';
 
 export function Header() {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -18,6 +20,10 @@ export function Header() {
   }, []);
 
   const closeMenu = () => setIsMenuOpen(false);
+  const resolveSectionHref = (href: string) => {
+    if (!href.startsWith('#')) return href;
+    return pathname === '/' ? href : `/${href}`;
+  };
 
   return (
     <header
@@ -26,7 +32,7 @@ export function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-content items-center justify-between gap-3 px-6 py-3 lg:px-10">
-        <Link href="#top" aria-label={`${config.nombre} — inicio`} className="shrink-0">
+        <Link href="/" aria-label={`${config.nombre} — inicio`} className="shrink-0">
           <Image
             src="/brand/conexiones-bga-logo-horizontal-claro.svg"
             alt={`${config.nombre} — ${config.edicion}`}
@@ -42,7 +48,7 @@ export function Header() {
           {config.nav.map((item) => (
             <Link
               key={item.href}
-              href={item.href}
+              href={resolveSectionHref(item.href)}
               className="text-sm font-medium text-ink transition-colors hover:text-green focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green"
             >
               {item.label}
@@ -71,7 +77,7 @@ export function Header() {
           {config.nav.map((item) => (
             <Link
               key={item.href}
-              href={item.href}
+              href={resolveSectionHref(item.href)}
               onClick={closeMenu}
               className="rounded-md px-2 py-3 text-base font-medium text-ink hover:bg-surface-alt"
             >
