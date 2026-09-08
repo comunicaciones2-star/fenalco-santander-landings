@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Baloo_2, Inter, JetBrains_Mono } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 
 const baloo2 = Baloo_2({
@@ -71,6 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es-CO" className={`${baloo2.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
       <body>
         {children}
+        <Analytics />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
