@@ -183,28 +183,28 @@ export function Formulario() {
   };
 
   return (
-    <Section id="postulacion" bg="light">
+    <Section id="postulacion" bg="primary">
       <Reveal className="mx-auto max-w-2xl text-center">
         <SectionTitle>Postúlate</SectionTitle>
         <Rule className="mx-auto my-6" />
-        <p className="text-ink/70">
+        <p className="text-text-secondary">
           Haz parte de los reconocimientos que exaltan la excelencia, la trayectoria y el liderazgo
           empresarial en Santander.
         </p>
       </Reveal>
 
-      <Reveal className="mx-auto mt-12 max-w-3xl">
+      <Reveal className="mx-auto mt-12 max-w-[920px]">
         {status === 'success' ? (
           <p
             ref={successRef}
             role="status"
             aria-live="polite"
-            className="scroll-mt-28 border border-accent/30 bg-surface-light-alt p-8 text-center font-display text-lg"
+            className="scroll-mt-28 border border-gold/30 bg-surface-elevated p-8 text-center font-display text-lg"
           >
             {config.formulario.mensajeExito}
           </p>
         ) : (
-          <form onSubmit={handleSubmit} noValidate className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          <form onSubmit={handleSubmit} noValidate className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {/* Honeypot: oculto por CSS, no display:none, para no delatarse ante bots simples. */}
             <div className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
               <label htmlFor="website">Sitio web</label>
@@ -223,7 +223,7 @@ export function Formulario() {
                         value={opcion.id}
                         checked={modalidad === opcion.id}
                         onChange={() => setModalidadManual(opcion.id as Modalidad)}
-                        className="h-4 w-4 accent-cta"
+                        className="h-4 w-4 accent-gold"
                       />
                       {opcion.label}
                     </label>
@@ -251,7 +251,7 @@ export function Formulario() {
                 <Field label="Ciudad" name="ciudad" autoComplete="address-level2" />
 
                 <div>
-                  <label htmlFor="esAfiliado" className="mb-1.5 block text-sm font-medium">
+                  <label htmlFor="esAfiliado" className="mb-2 block text-base font-medium">
                     ¿Tu empresa está afiliada a Fenalco?
                   </label>
                   <select id="esAfiliado" name="esAfiliado" required defaultValue="" className="input-field">
@@ -267,7 +267,7 @@ export function Formulario() {
 
             {modalidad === 'postulacion' && (
               <div>
-                <label htmlFor="categoriaPostulacion" className="mb-1.5 block text-sm font-medium">
+                <label htmlFor="categoriaPostulacion" className="mb-2 block text-base font-medium">
                   Categoría a la que te postulas
                 </label>
                 <select
@@ -292,8 +292,8 @@ export function Formulario() {
 
             {modalidad === 'postulacion' && requiereCedula && (
               <div>
-                <label htmlFor="cedula" className="mb-1.5 block text-sm font-medium">
-                  Cédula<span className="text-borgona"> *</span>
+                <label htmlFor="cedula" className="mb-2 block text-base font-medium">
+                  Cédula<span className="text-error"> *</span>
                 </label>
                 <input
                   id="cedula"
@@ -303,7 +303,7 @@ export function Formulario() {
                   required
                   className="input-field"
                 />
-                <p className="mt-1.5 text-sm text-ink/70">
+                <p className="mt-1.5 text-sm text-text-secondary">
                   Esta categoría se otorga a nombre personal. Necesitamos tu cédula para el acta de
                   premiación.
                 </p>
@@ -319,9 +319,9 @@ export function Formulario() {
                 <Field label="Número de empleados generados por la empresa" name="numeroEmpleados" required inputMode="numeric" />
 
                 <div>
-                  <label htmlFor="recibioPremioAnterior" className="mb-1.5 block text-sm font-medium">
+                  <label htmlFor="recibioPremioAnterior" className="mb-2 block text-base font-medium">
                     ¿Ha recibido un premio anteriormente en ediciones pasadas de La Noche de los Mejores?
-                    <span className="text-borgona"> *</span>
+                    <span className="text-error"> *</span>
                   </label>
                   <select
                     id="recibioPremioAnterior"
@@ -341,8 +341,8 @@ export function Formulario() {
 
                 {recibioPremioAnterior === 'si' && (
                   <div className="md:col-span-2">
-                    <label htmlFor="detallePremioAnterior" className="mb-1.5 block text-sm font-medium">
-                      ¿En qué categoría y en qué año?<span className="text-borgona"> *</span>
+                    <label htmlFor="detallePremioAnterior" className="mb-2 block text-base font-medium">
+                      ¿En qué categoría y en qué año?<span className="text-error"> *</span>
                     </label>
                     <input
                       id="detallePremioAnterior"
@@ -358,17 +358,17 @@ export function Formulario() {
             )}
 
             <div className="md:col-span-2">
-              <label htmlFor="mensaje" className="mb-1.5 block text-sm font-medium">
+              <label htmlFor="mensaje" className="mb-2 block text-base font-medium">
                 {modalidad === 'interes' ? '¿Por qué quieres asistir? (opcional)' : 'Mensaje (opcional)'}
               </label>
               <textarea id="mensaje" name="mensaje" rows={3} className="input-field" />
             </div>
 
             {requiereDatosComerciales && (
-              <div className="bg-surface-light p-6 md:col-span-2 md:p-8">
+              <div className="border-t border-gold/20 pt-6 md:col-span-2">
                 <Rule className="w-6" />
                 <h3 className="mt-4 font-display text-xl">Material promocional</h3>
-                <div className="mt-3 space-y-3 text-sm leading-relaxed text-ink/70">
+                <div className="mt-3 space-y-3 text-sm leading-relaxed text-text-secondary">
                   <p>
                     Los postulantes y patrocinadores que no entreguen su logotipo no podrán aparecer en las
                     piezas de comunicación, redes sociales ni impactos de marca del evento.
@@ -377,7 +377,7 @@ export function Formulario() {
                     El logotipo es obligatorio para figurar en el material promocional. El video de
                     postulación es opcional, pero fortalece la sustentación ante el jurado.
                   </p>
-                  <p className="text-sm text-ink/70">
+                  <p className="text-sm text-text-secondary">
                     Especificaciones · Logotipo: vectorial .ai, .eps, .pdf o .png con fondo transparente en
                     alta resolución. Video: vertical 1080 x 1920 px, máximo 1 minuto.
                   </p>
@@ -392,11 +392,12 @@ export function Formulario() {
                       nit={nit}
                       required
                       disabled={!nit.trim()}
+                      variant="dark"
                       onUploaded={handleLogoUploaded}
                       onCleared={() => setLogoInfo(null)}
                     />
                     {!nit.trim() && (
-                      <p className="mt-1.5 text-sm text-ink/70">Ingresa el NIT para habilitar la carga</p>
+                      <p className="mt-1.5 text-sm text-text-secondary">Ingresa el NIT para habilitar la carga</p>
                     )}
                   </div>
 
@@ -408,6 +409,7 @@ export function Formulario() {
                         modalidad={toModalidadArchivo(modalidad)}
                         nit={nit}
                         disabled={!nit.trim()}
+                        variant="dark"
                         onUploaded={handleVideoUploaded}
                         onCleared={() => setVideoInfo(null)}
                       />
@@ -417,11 +419,11 @@ export function Formulario() {
 
                 {modalidad === 'postulacion' && (
                   <div className="mt-5">
-                    <label htmlFor="videoUrl" className="mb-1.5 block text-sm font-medium">
+                    <label htmlFor="videoUrl" className="mb-2 block text-base font-medium">
                       Enlace alterno al video
                     </label>
                     <input id="videoUrl" name="videoUrl" type="url" className="input-field" />
-                    <p className="mt-1.5 text-sm text-ink/70">
+                    <p className="mt-1.5 text-sm text-text-secondary">
                       Si el archivo pesa demasiado o la carga falla, pega aquí el enlace (Drive, WeTransfer).
                       Verifica que tenga permiso de acceso público.
                     </p>
@@ -436,9 +438,9 @@ export function Formulario() {
                 id="aceptaHabeasData"
                 name="aceptaHabeasData"
                 required
-                className="mt-1 h-4 w-4 shrink-0 accent-cta"
+                className="mt-1 h-4 w-4 shrink-0 accent-gold"
               />
-              <label htmlFor="aceptaHabeasData" className="text-sm text-ink/75">
+              <label htmlFor="aceptaHabeasData" className="text-sm text-text-secondary">
                 Autorizo el tratamiento de mis datos personales conforme a la Ley 1581 de 2012.
               </label>
             </div>
@@ -450,9 +452,9 @@ export function Formulario() {
                   id="aceptaUsoMaterial"
                   name="aceptaUsoMaterial"
                   required
-                  className="mt-1 h-4 w-4 shrink-0 accent-cta"
+                  className="mt-1 h-4 w-4 shrink-0 accent-gold"
                 />
-                <label htmlFor="aceptaUsoMaterial" className="text-sm text-ink/75">
+                <label htmlFor="aceptaUsoMaterial" className="text-sm text-text-secondary">
                   Autorizo a Fenalco Santander a usar el logotipo, el material audiovisual y la información
                   de mi empresa en piezas de comunicación, material impreso, digital y redes sociales
                   asociadas a La Noche de los Mejores 2026, y declaro que cuento con los derechos sobre el
@@ -462,7 +464,7 @@ export function Formulario() {
             )}
 
             {status === 'error' && errorMessage && (
-              <p role="alert" className="border border-borgona/40 bg-borgona/5 px-4 py-3 text-sm text-borgona md:col-span-2">
+              <p role="alert" className="border border-error/40 bg-error/10 px-4 py-3 text-sm text-error md:col-span-2">
                 {errorMessage}
               </p>
             )}
@@ -471,7 +473,7 @@ export function Formulario() {
               type="submit"
               disabled={status === 'sending'}
               aria-label={config.formulario.modalidades.find((m) => m.id === modalidad)?.label ?? 'Enviar'}
-              className="btn-cta mt-2 disabled:opacity-60 md:col-span-2"
+              className="btn-cta-gold mt-2 disabled:opacity-60 md:col-span-2"
             >
               {status === 'sending' ? 'Enviando…' : config.formulario.modalidades.find((m) => m.id === modalidad)?.label}
             </button>
@@ -496,9 +498,9 @@ interface FieldProps {
 function Field({ label, name, type = 'text', required, autoComplete, inputMode, placeholder, onChange }: FieldProps) {
   return (
     <div>
-      <label htmlFor={name} className="mb-1.5 block text-sm font-medium">
+      <label htmlFor={name} className="mb-2 block text-base font-medium">
         {label}
-        {required && <span className="text-borgona"> *</span>}
+        {required && <span className="text-error"> *</span>}
       </label>
       <input
         id={name}

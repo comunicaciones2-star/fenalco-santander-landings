@@ -28,26 +28,31 @@ const BENEFICIOS = [
 
 export function Patrocinio() {
   return (
-    <Section id="patrocinio" bg="light-alt">
+    <Section id="patrocinio" bg="secondary">
       <Reveal className="mx-auto max-w-2xl text-center">
         <SectionTitle>Quiero patrocinar</SectionTitle>
         <Rule className="mx-auto my-6" />
-        <p className="text-ink/70">
+        <p className="text-lg text-text-secondary">
           Vincula tu marca a la gala que reconoce a quienes construyen el comercio de Santander.
         </p>
       </Reveal>
 
-      <div className="mx-auto mt-14 grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-2">
+      <div className="mx-auto mt-16 grid max-w-4xl grid-cols-1 gap-x-16 gap-y-10 sm:grid-cols-2">
         {BENEFICIOS.map((beneficio, index) => (
-          <Reveal key={beneficio.titulo} delay={index * 70} className="border-t border-accent/30 pt-5">
-            <h3 className="font-display text-lg">{beneficio.titulo}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-ink/65">{beneficio.descripcion}</p>
+          <Reveal key={beneficio.titulo} delay={index * 70} className="border-t border-gold/30 pt-6">
+            <h3 className="font-display text-2xl">{beneficio.titulo}</h3>
+            <p className="mt-2 text-base leading-relaxed text-text-secondary">{beneficio.descripcion}</p>
           </Reveal>
         ))}
       </div>
 
-      <Reveal className="mt-12 flex justify-center">
-        <Button href="#postulacion" variant="ghost-dark" ariaLabel="Ir al formulario de contacto comercial">
+      <Reveal className="mt-14 flex justify-center">
+        <Button
+          href="#postulacion"
+          variant="ghost-dark"
+          ariaLabel="Ir al formulario de contacto comercial"
+          className="!px-9 !py-4 !text-base"
+        >
           Quiero patrocinar
         </Button>
       </Reveal>

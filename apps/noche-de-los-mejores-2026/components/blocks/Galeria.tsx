@@ -172,10 +172,10 @@ export function Galeria() {
   const current = SLIDES[index];
 
   return (
-    <Section id="galeria" bg="dark">
+    <Section id="galeria" bg="secondary">
       <div className="mb-10 flex items-end justify-between gap-6">
         <div>
-          <p className="font-display text-sm italic text-accent">Edición 2025</p>
+          <p className="font-display text-sm italic text-gold">Edición 2025</p>
           <h2 className="mt-2 font-display text-3xl text-surface-light sm:text-4xl">
             Así se vivió la última Noche
           </h2>
@@ -187,16 +187,16 @@ export function Galeria() {
 
       {/* Marco veneciano — slide principal */}
       <div
-        className="group relative overflow-hidden border border-accent/40 bg-black/40 shadow-[0_0_0_1px_rgba(199,164,93,0.08)]"
+        className="group relative overflow-hidden border border-gold/40 bg-black/40 shadow-[0_0_0_1px_rgba(199,164,93,0.08)]"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
         onKeyDown={onKeyDown}
         tabIndex={0}
       >
-        <span className="pointer-events-none absolute left-3 top-3 z-10 h-6 w-6 border-l border-t border-accent/70" />
-        <span className="pointer-events-none absolute right-3 top-3 z-10 h-6 w-6 border-r border-t border-accent/70" />
-        <span className="pointer-events-none absolute bottom-3 left-3 z-10 h-6 w-6 border-b border-l border-accent/70" />
-        <span className="pointer-events-none absolute bottom-3 right-3 z-10 h-6 w-6 border-b border-r border-accent/70" />
+        <span className="pointer-events-none absolute left-3 top-3 z-10 h-6 w-6 border-l border-t border-gold/70" />
+        <span className="pointer-events-none absolute right-3 top-3 z-10 h-6 w-6 border-r border-t border-gold/70" />
+        <span className="pointer-events-none absolute bottom-3 left-3 z-10 h-6 w-6 border-b border-l border-gold/70" />
+        <span className="pointer-events-none absolute bottom-3 right-3 z-10 h-6 w-6 border-b border-r border-gold/70" />
 
         <div
           onPointerDown={onPointerDown}
@@ -231,7 +231,7 @@ export function Galeria() {
 
         {/* Leyenda */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 p-6 sm:p-8">
-          <p className="font-display text-xs uppercase tracking-[0.15em] text-accent">{current.eyebrow}</p>
+          <p className="font-display text-xs uppercase tracking-[0.15em] text-gold">{current.eyebrow}</p>
           <p className="mt-1 max-w-xl font-display text-lg text-surface-light sm:text-xl">{current.caption}</p>
         </div>
 
@@ -240,7 +240,7 @@ export function Galeria() {
           type="button"
           aria-label="Anterior"
           onClick={prev}
-          className="absolute left-3 top-1/2 z-10 -translate-y-1/2 border border-surface-light/20 bg-black/40 p-2 text-surface-light opacity-0 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100 hover:border-accent focus-visible:opacity-100"
+          className="absolute left-3 top-1/2 z-10 -translate-y-1/2 border border-surface-light/20 bg-black/40 p-2 text-surface-light opacity-0 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100 hover:border-gold focus-visible:opacity-100"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
@@ -250,7 +250,7 @@ export function Galeria() {
           type="button"
           aria-label="Siguiente"
           onClick={next}
-          className="absolute right-3 top-1/2 z-10 -translate-y-1/2 border border-surface-light/20 bg-black/40 p-2 text-surface-light opacity-0 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100 hover:border-accent focus-visible:opacity-100"
+          className="absolute right-3 top-1/2 z-10 -translate-y-1/2 border border-surface-light/20 bg-black/40 p-2 text-surface-light opacity-0 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100 hover:border-gold focus-visible:opacity-100"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
@@ -277,11 +277,11 @@ export function Galeria() {
             aria-label={`Ir a la imagen ${i + 1}: ${slide.eyebrow}`}
             onClick={() => goTo(i)}
             className={`relative h-16 w-24 shrink-0 overflow-hidden border transition-all duration-200 sm:h-20 sm:w-28 ${
-              i === index ? 'border-accent opacity-100' : 'border-surface-light/10 opacity-50 hover:opacity-80'
+              i === index ? 'border-gold opacity-100' : 'border-surface-light/10 opacity-50 hover:opacity-80'
             }`}
           >
             <Image src={slide.src} alt="" fill sizes="112px" className="object-cover" draggable={false} />
-            {i === index && <span className="absolute inset-0 ring-1 ring-inset ring-accent" />}
+            {i === index && <span className="absolute inset-0 ring-1 ring-inset ring-gold" />}
           </button>
         ))}
       </div>

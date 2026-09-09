@@ -13,7 +13,42 @@ interface FileUploadProps {
   readonly onCleared: () => void;
   readonly required?: boolean;
   readonly disabled?: boolean;
+  /** 'light' (por defecto): usado por app/material/[token]/** (página clara, fuera
+   * de alcance del rediseño 2026). 'dark': usado por Formulario.tsx en la landing,
+   * ya migrada al sistema "Venecia Celestial". */
+  readonly variant?: 'light' | 'dark';
 }
+
+const VARIANT_CLASSES = {
+  // LEGACY — app/material/[token]/** vía MaterialUploadForm.tsx. No tocar.
+  light: {
+    surface: 'bg-surface-light',
+    text: 'text-ink',
+    textMuted: 'text-ink/70',
+    textFaint: 'text-ink/60',
+    track: 'bg-ink/10',
+    replace: 'text-accent-text hover:text-borgona',
+    error: 'text-borgona',
+    border: 'border-accent/40',
+    hoverBorder: 'hover:border-accent',
+    outline: 'focus-visible:outline-accent',
+    fill: 'bg-accent',
+  },
+  // Sistema 2026 — Formulario.tsx. Tokens gold propios, nunca accent legacy.
+  dark: {
+    surface: 'bg-surface-elevated',
+    text: 'text-ivory',
+    textMuted: 'text-text-secondary',
+    textFaint: 'text-text-secondary',
+    track: 'bg-ivory/10',
+    replace: 'text-gold hover:text-error',
+    error: 'text-error',
+    border: 'border-gold/40',
+    hoverBorder: 'hover:border-gold',
+    outline: 'focus-visible:outline-gold',
+    fill: 'bg-gold',
+  },
+} as const;
 
 // Algunos navegadores/SO no reportan un MIME útil para .ai/.eps (file.type llega vacío),
 // así que el contentType enviado al presign —y usado como header del PUT— se resuelve
@@ -87,7 +122,17 @@ function validarVideo(file: File): Promise<ResultadoValidacionVideo> {
   });
 }
 
-export function FileUpload({ tipo, modalidad, nit, onUploaded, onCleared, required, disabled }: FileUploadProps) {
+export function FileUpload({
+  tipo,
+  modalidad,
+  nit,
+  onUploaded,
+  onCleared,
+  required,
+  disabled,
+  variant = 'light',
+}: FileUploadProps) {
+  const v = VARIANT_CLASSES[variant];
   const [estado, setEstado] = useState<Estado>('vacio');
   const [nombreArchivo, setNombreArchivo] = useState<string | null>(null);
   const [progreso, setProgreso] = useState(0);
@@ -262,13 +307,13 @@ export function FileUpload({ tipo, modalidad, nit, onUploaded, onCleared, requir
       />
 
       {estado === 'cargado' ? (
-        <div className="flex items-center justify-between gap-4 border border-accent/40 bg-surface-light px-4 py-3 font-body">
-          <span className="truncate text-sm text-ink">{nombreArchivo}</span>
+        <div className={`flex items-center justify-between gap-4 border ${v.border} ${v.surface} px-4 py-3 font-body`}>
+          <span className={`truncate text-sm ${v.text}`}>{nombreArchivo}</span>
           <button
             type="button"
             onClick={reset}
             disabled={disabled}
-            className="shrink-0 text-sm font-semibold uppercase tracking-[0.08em] text-accent-text hover:text-borgona focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className={`shrink-0 text-sm font-semibold uppercase tracking-[0.08em] ${v.replace} focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${v.outline}`}
           >
             Reemplazar
           </button>
@@ -282,37 +327,37 @@ export function FileUpload({ tipo, modalidad, nit, onUploaded, onCleared, requir
           onDrop={handleDrop}
           onClick={abrirSelector}
           onKeyDown={handleKeyDown}
-          className={`flex flex-col items-center justify-center gap-2 border border-dashed border-accent/40 bg-surface-light px-4 py-8 text-center font-body transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
-            bloqueado ? 'cursor-not-allowed opacity-60' : 'cursor-pointer hover:border-accent'
+          className={`flex flex-col items-center justify-center gap-2 border border-dashed ${v.border} ${v.surface} px-4 py-8 text-center font-body transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${v.outline} ${
+            bloqueado ? 'cursor-not-allowed opacity-60' : `cursor-pointer ${v.hoverBorder}`
           }`}
         >
-          {estado === 'validando' && <p className="text-sm text-ink/70">Validando archivo…</p>}
+          {estado === 'validando' && <p className={`text-sm ${v.textMuted}`}>Validando archivo…</p>}
 
           {estado === 'subiendo' && (
             <div className="w-full max-w-xs">
-              <p className="mb-2 text-sm text-ink/70">Subiendo… {progreso}%</p>
-              <div className="h-1.5 w-full bg-ink/10">
-                <div className="h-1.5 bg-accent transition-all" style={{ width: `${progreso}%` }} />
+              <p className={`mb-2 text-sm ${v.textMuted}`}>Subiendo… {progreso}%</p>
+              <div className={`h-1.5 w-full ${v.track}`}>
+                <div className={`h-1.5 ${v.fill} transition-all`} style={{ width: `${progreso}%` }} />
               </div>
             </div>
           )}
 
           {estado === 'vacio' && (
             <>
-              <p className="text-sm font-semibold uppercase tracking-[0.08em] text-ink">
+              <p className={`text-sm font-semibold uppercase tracking-[0.08em] ${v.text}`}>
                 {etiqueta} {required ? '*' : '(opcional)'}
               </p>
-              <p className="text-xs text-ink/60">Arrastra el archivo aquí o haz clic para seleccionarlo</p>
-              <p className="text-sm text-ink/70">{ayuda}</p>
+              <p className={`text-xs ${v.textFaint}`}>Arrastra el archivo aquí o haz clic para seleccionarlo</p>
+              <p className={`text-sm ${v.textMuted}`}>{ayuda}</p>
             </>
           )}
 
           {estado === 'error' && (
             <>
-              <p role="alert" className="text-sm text-borgona">
+              <p role="alert" className={`text-sm ${v.error}`}>
                 {error}
               </p>
-              <p className="text-sm text-ink/70">Haz clic para intentar de nuevo</p>
+              <p className={`text-sm ${v.textMuted}`}>Haz clic para intentar de nuevo</p>
             </>
           )}
         </div>

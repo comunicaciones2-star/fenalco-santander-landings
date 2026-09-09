@@ -5,13 +5,13 @@ interface BadgeProps {
   readonly className?: string;
 }
 
-// Insignia borgoña — eco directo de "Convocatoria abierta" en el arte de campaña
-// oficial. Uso escaso: es el único lugar donde borgona funciona como color de
-// superficie, nunca como color de sección (regla de theme.ts).
+// Insignia dorada sobre fondo oscuro — el borgoña del arte de campaña anterior
+// desaparece como color decorativo (brief 2026 §11); queda solo borde + texto
+// dorado sobre un panel muy sutil, nunca un bloque de color sólido.
 export function Badge({ children, className = '' }: BadgeProps) {
   return (
     <span
-      className={`inline-flex items-center border border-accent/40 bg-borgona px-4 py-1.5 font-display text-sm text-surface-light ${className}`}
+      className={`inline-flex items-center border border-gold/50 bg-surface-elevated/60 px-4 py-1.5 font-display text-sm text-gold ${className}`}
     >
       {children}
     </span>

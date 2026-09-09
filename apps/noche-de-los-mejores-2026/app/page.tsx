@@ -21,7 +21,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main>
+      <main className="bg-surface-primary">
         <Hero />
         {config.fecha.mostrarCountdown && <Countdown />}
         <Narrativa />

@@ -17,8 +17,8 @@ export function Header() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors ${
-        isScrolled ? 'bg-surface-dark/90 backdrop-blur-md' : 'bg-transparent'
+      className={`fixed inset-x-0 top-0 z-50 border-b transition-colors ${
+        isScrolled ? 'border-gold/10 bg-surface-primary/90 backdrop-blur-md' : 'border-transparent bg-transparent'
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-6 py-3 lg:px-10">
@@ -38,14 +38,14 @@ export function Header() {
           <Link
             href={config.cta.secundario.href}
             aria-label={config.cta.secundario.label}
-            className="hidden text-xs font-semibold uppercase tracking-[0.08em] text-surface-light/80 transition-colors hover:text-accent sm:inline"
+            className="hidden text-xs font-semibold uppercase tracking-[0.08em] text-surface-light/80 transition-colors hover:text-gold sm:inline"
           >
             {config.cta.secundario.label}
           </Link>
           <Link
             href={config.cta.principal.href}
             aria-label={config.cta.principal.label}
-            className="btn-cta !px-4 !py-2.5 text-xs md:!px-6 md:!py-3 md:text-sm"
+            className="btn-cta-gold !px-4 !py-2.5 text-xs md:!px-6 md:!py-3 md:text-sm"
           >
             {config.cta.principal.label}
           </Link>

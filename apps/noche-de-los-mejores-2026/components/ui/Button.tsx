@@ -12,7 +12,7 @@ interface ButtonProps {
 }
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
-  primary: 'btn-cta',
+  primary: 'btn-cta-gold',
   ghost: 'btn-ghost',
   'ghost-dark': 'btn-ghost-dark',
 };

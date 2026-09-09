@@ -10,7 +10,7 @@ export function Footer() {
   const anio = new Date().getFullYear();
 
   return (
-    <footer className="bg-surface-dark py-14 text-surface-light">
+    <footer className="bg-surface-primary py-14 text-surface-light">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-6 text-center lg:px-10">
         <Image
           src="/logos/fs-logo-horizontal-blanco.svg"
@@ -24,16 +24,16 @@ export function Footer() {
         <p className="max-w-xl font-display text-sm italic text-surface-light/70">{config.tagline}</p>
 
         <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-surface-light/60">
-          <Link href={config.cta.principal.href} className="hover:text-accent">
+          <Link href={config.cta.principal.href} className="hover:text-gold">
             {config.cta.principal.label}
           </Link>
-          <Link href={config.cta.secundario.href} className="hover:text-accent">
+          <Link href={config.cta.secundario.href} className="hover:text-gold">
             {config.cta.secundario.label}
           </Link>
-          <Link href="#faq" className="hover:text-accent">
+          <Link href="#faq" className="hover:text-gold">
             Preguntas frecuentes
           </Link>
-          <Link href={POLITICA_DATOS_HREF} className="hover:text-accent" target="_blank" rel="noopener noreferrer">
+          <Link href={POLITICA_DATOS_HREF} className="hover:text-gold" target="_blank" rel="noopener noreferrer">
             Política de tratamiento de datos
           </Link>
         </nav>

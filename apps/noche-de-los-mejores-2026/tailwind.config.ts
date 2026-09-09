@@ -6,9 +6,9 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Legacy — usados hoy por app/material/[token]/** y el hover de .btn-cta
         'surface-dark': nocheTheme.colors.surfaceDark,
         'surface-dark-alt': nocheTheme.colors.surfaceDarkAlt,
-        'border-dark': nocheTheme.colors.borderDark,
         'surface-light': nocheTheme.colors.surfaceLight,
         'surface-light-alt': nocheTheme.colors.surfaceLightAlt,
         ink: nocheTheme.colors.ink,
@@ -18,6 +18,17 @@ export default {
         borgona: nocheTheme.colors.borgona,
         cta: nocheTheme.colors.cta,
         'cta-ink': nocheTheme.colors.ctaInk,
+        // Sistema 2026 "Venecia Celestial" — landing pública (nunca legacy)
+        'surface-primary': nocheTheme.colors.bgPrimary,
+        'surface-secondary': nocheTheme.colors.bgSecondary,
+        'surface-elevated': nocheTheme.colors.bgElevated,
+        gold: nocheTheme.colors.gold,
+        'gold-light': nocheTheme.colors.goldLight,
+        'gold-dark': nocheTheme.colors.goldDark,
+        ivory: nocheTheme.colors.ivory,
+        'text-secondary': nocheTheme.colors.textSecondary,
+        'blue-celestial': nocheTheme.colors.blueCelestial,
+        error: nocheTheme.colors.error,
       },
       fontFamily: {
         display: ['var(--font-display)', 'Georgia', 'serif'],

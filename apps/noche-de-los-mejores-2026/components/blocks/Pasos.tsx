@@ -30,21 +30,27 @@ const PASOS = [
 
 export function Pasos() {
   return (
-    <Section id="pasos" bg="light-alt">
+    <Section id="pasos" bg="secondary">
       <Reveal className="mx-auto max-w-2xl text-center">
         <SectionTitle>Cómo postularte</SectionTitle>
         <Rule className="mx-auto my-6" />
-        <p className="text-ink/70">Fechas de cierre y anuncio de ganadores: sujeto a cambios.</p>
+        <p className="text-text-secondary">Fechas de cierre y anuncio de ganadores: sujeto a cambios.</p>
       </Reveal>
 
-      <div className="mx-auto mt-14 grid max-w-5xl grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-        {PASOS.map((paso, index) => (
-          <Reveal key={paso.numero} delay={index * 80} className="flex flex-col gap-3">
-            <span className="font-display text-3xl text-accent">{paso.numero}</span>
-            <h3 className="font-display text-xl">{paso.titulo}</h3>
-            <p className="text-sm leading-relaxed text-ink/65">{paso.descripcion}</p>
-          </Reveal>
-        ))}
+      <div className="relative mx-auto mt-16 max-w-6xl">
+        {/* Línea conectora — solo desktop, donde el timeline es horizontal.
+            Alineada al centro vertical del número (font 3rem/line-height 1 ≈ 24px). */}
+        <div className="pointer-events-none absolute inset-x-0 top-6 hidden h-px bg-gold/25 lg:block" aria-hidden="true" />
+
+        <div className="relative grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
+          {PASOS.map((paso, index) => (
+            <Reveal key={paso.numero} delay={index * 80} className="flex flex-col gap-3">
+              <span className="bg-surface-secondary pr-3 font-display text-5xl text-gold lg:w-fit">{paso.numero}</span>
+              <h3 className="font-display text-2xl">{paso.titulo}</h3>
+              <p className="text-base leading-relaxed text-text-secondary">{paso.descripcion}</p>
+            </Reveal>
+          ))}
+        </div>
       </div>
     </Section>
   );

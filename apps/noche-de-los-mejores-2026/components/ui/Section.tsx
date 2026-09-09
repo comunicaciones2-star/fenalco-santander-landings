@@ -2,7 +2,8 @@ import type { ReactNode } from 'react';
 
 interface SectionProps {
   readonly id?: string;
-  readonly bg: 'dark' | 'darker' | 'light' | 'light-alt';
+  /** Sistema 2026 "Venecia Celestial": negro azulado → azul noche → azul profundo. */
+  readonly bg: 'primary' | 'secondary' | 'elevated';
   readonly className?: string;
   readonly children: ReactNode;
   /** Capa de fondo full-bleed (textura, ornamento), detrás del contenido. */
@@ -10,10 +11,9 @@ interface SectionProps {
 }
 
 const BG_CLASSES: Record<SectionProps['bg'], string> = {
-  dark: 'bg-surface-dark text-surface-light',
-  darker: 'bg-surface-dark-alt text-surface-light',
-  light: 'bg-surface-light text-ink',
-  'light-alt': 'bg-surface-light-alt text-ink',
+  primary: 'bg-surface-primary text-ivory',
+  secondary: 'bg-surface-secondary text-ivory',
+  elevated: 'bg-surface-elevated text-ivory',
 };
 
 export function Section({ id, bg, className = '', children, background }: SectionProps) {

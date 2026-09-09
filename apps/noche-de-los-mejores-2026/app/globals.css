@@ -19,23 +19,35 @@ html {
 }
 
 @layer components {
+  /* LEGACY — compartida con app/material/[token]/page.tsx (línea `className="btn-cta"`
+     directa, fuera del componente Button.tsx). NO tocar sus colores: sigue en
+     `cta`/`accent-soft` legacy. La landing pública usa `.btn-cta-gold` (abajo). */
   .btn-cta {
     @apply inline-flex items-center justify-center gap-2 bg-cta px-7 py-3.5 font-body text-sm font-semibold uppercase tracking-[0.08em] text-cta-ink transition-colors hover:bg-accent-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
   }
 
+  /* Sistema 2026 — landing pública. Mismo rol visual que .btn-cta, tokens NDLM
+     propios (gold/gold-light), nunca compartidos con app/material/**. Único
+     consumidor: Button.tsx variant="primary" (Hero, CtaFinal, Patrocinio) +
+     Header.tsx + Contacto.tsx + botón submit de Formulario.tsx. */
+  .btn-cta-gold {
+    @apply inline-flex items-center justify-center gap-2 bg-gold px-7 py-3.5 font-body text-sm font-semibold uppercase tracking-[0.08em] text-surface-primary transition-colors hover:bg-gold-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold;
+  }
+
+  /* Landing-exclusiva (Button.tsx variant="ghost", Hero + CtaFinal). */
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 border border-surface-light/40 px-7 py-3.5 font-body text-sm font-semibold uppercase tracking-[0.08em] text-surface-light transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
+    @apply inline-flex items-center justify-center gap-2 border border-surface-light/40 px-7 py-3.5 font-body text-sm font-semibold uppercase tracking-[0.08em] text-surface-light transition-colors hover:border-gold hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold;
   }
 
+  /* Único consumidor: Patrocinio.tsx (variant="ghost-dark" de Button.tsx). */
   .btn-ghost-dark {
-    @apply inline-flex items-center justify-center gap-2 border border-ink/30 px-7 py-3.5 font-body text-sm font-semibold uppercase tracking-[0.08em] text-ink transition-colors hover:border-borgona hover:text-borgona focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-borgona;
+    @apply inline-flex items-center justify-center gap-2 border border-ivory/30 px-7 py-3.5 font-body text-sm font-semibold uppercase tracking-[0.08em] text-ivory transition-colors hover:border-gold hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold;
   }
 
+  /* Único consumidor: Formulario.tsx. placeholder:text-text-secondary da
+     >4.5:1 sobre surface-elevated, mismo criterio de contraste de siempre. */
   .input-field {
-    /* placeholder:text-ink/70 (no /40): a /40 el texto de ayuda daba ~2.6:1 de
-       contraste sobre fondo blanco, por debajo del mínimo WCAG AA (4.5:1) —
-       mismo criterio aplicado a todo el texto secundario de la landing. */
-    @apply w-full border border-ink/20 bg-white px-4 py-2.5 text-ink placeholder:text-ink/70 focus:border-accent focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
+    @apply w-full border border-gold/25 bg-surface-elevated px-4 py-3 text-base text-ivory placeholder:text-text-secondary focus:border-gold focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold;
   }
 
   .reveal {
@@ -71,6 +83,17 @@ html {
   .bg-surface-light-alt {
     background-color: #e8e1d3;
     background-image: radial-gradient(ellipse 800px 500px at 10% 110%, rgba(199, 164, 93, 0.07), transparent);
+  }
+
+  /* Nebulosa 2026 — banda atmosférica azul, resuelta en CSS puro (brief §7: sin
+     raster salvo que CSS no alcance calidad suficiente). Difuminado vía filter:
+     blur en vez de bordes duros de gradiente, para que lea "atmósfera", no
+     "mancha". pointer-events:none se aplica en el elemento que consume la
+     clase (siempre marcado aria-hidden ahí). */
+  .bg-nebula {
+    background-image: radial-gradient(ellipse 55% 140% at 72% 15%, rgba(44, 74, 115, 0.55), transparent 60%),
+      radial-gradient(ellipse 40% 110% at 88% 38%, rgba(44, 74, 115, 0.35), transparent 65%);
+    filter: blur(48px);
   }
 }
 

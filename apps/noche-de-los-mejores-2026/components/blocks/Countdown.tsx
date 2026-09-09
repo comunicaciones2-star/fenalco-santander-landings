@@ -45,13 +45,17 @@ function useCountdown(): TimeLeft | null {
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }
 
-function Unidad({ valor, etiqueta }: { readonly valor: number; readonly etiqueta: string }) {
+// Bordes en vez de separadores "·": un <span> extra por separador no encaja en
+// un grid de 4 columnas iguales (que es lo que garantiza que 4 unidades nunca
+// desborden un viewport de 375px — grid-cols-4 siempre reparte el ancho
+// disponible en partes iguales, a diferencia de flex con gaps fijos).
+function Unidad({ valor, etiqueta, primero }: { readonly valor: number; readonly etiqueta: string; readonly primero: boolean }) {
   return (
-    <div className="flex flex-col items-center gap-1">
-      <span className="font-display text-3xl tabular-nums tracking-tight sm:text-4xl">
+    <div className={`flex flex-col items-center gap-2 px-2 ${primero ? '' : 'border-l border-gold/20'}`}>
+      <span className="font-display text-[clamp(2rem,7vw,4.5rem)] tabular-nums leading-none tracking-tight">
         {String(valor).padStart(2, '0')}
       </span>
-      <span className="text-sm text-current/70">{etiqueta}</span>
+      <span className="text-xs uppercase tracking-[0.1em] text-current/70 sm:text-sm">{etiqueta}</span>
     </div>
   );
 }
@@ -65,19 +69,16 @@ export function Countdown() {
   const valores = tiempo ?? { dias: 0, horas: 0, minutos: 0, segundos: 0 };
 
   return (
-    <Section id="countdown" bg="light-alt">
-      <Reveal className="flex flex-col items-center gap-6 text-center">
+    <Section id="countdown" bg="secondary">
+      <Reveal className="flex flex-col items-center gap-8 text-center">
         <Badge>Convocatoria abierta</Badge>
-        <div className="flex items-center gap-5 sm:gap-8" aria-live="off">
-          <Unidad valor={valores.dias} etiqueta="Días" />
-          <span className="text-accent/50">·</span>
-          <Unidad valor={valores.horas} etiqueta="Horas" />
-          <span className="text-accent/50">·</span>
-          <Unidad valor={valores.minutos} etiqueta="Min" />
-          <span className="text-accent/50">·</span>
-          <Unidad valor={valores.segundos} etiqueta="Seg" />
+        <div className="grid w-full max-w-3xl grid-cols-4" aria-live="off">
+          <Unidad valor={valores.dias} etiqueta="Días" primero />
+          <Unidad valor={valores.horas} etiqueta="Horas" primero={false} />
+          <Unidad valor={valores.minutos} etiqueta="Min" primero={false} />
+          <Unidad valor={valores.segundos} etiqueta="Seg" primero={false} />
         </div>
-        <p className="max-w-md text-sm text-ink/70">{config.fecha.textoDisplay}</p>
+        <p className="max-w-md text-base text-text-secondary">{config.fecha.textoDisplay}</p>
       </Reveal>
     </Section>
   );

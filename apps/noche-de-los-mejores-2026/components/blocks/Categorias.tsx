@@ -6,26 +6,26 @@ import { Reveal } from '@/components/ui/Reveal';
 
 export function Categorias() {
   return (
-    <Section id="categorias" bg="light">
+    <Section id="categorias" bg="primary">
       <Reveal className="mx-auto max-w-3xl text-center">
         <SectionTitle>Categorías de reconocimiento</SectionTitle>
         <Rule className="mx-auto my-6" />
-        <p className="text-ink/70">
+        <p className="text-lg text-text-secondary">
           Diez reconocimientos exaltan distintas formas de construir empresa, gremio y ciudad en Santander.
         </p>
       </Reveal>
 
-      <div className="mx-auto mt-14 grid max-w-4xl grid-cols-1 gap-x-12 md:grid-cols-2">
+      <div className="mx-auto mt-16 grid max-w-[1150px] grid-cols-1 gap-x-16 gap-y-2 md:grid-cols-2">
         {config.categorias.map((categoria, index) => (
           <Reveal
             key={categoria.nombre}
             delay={(index % 5) * 60}
-            className="flex items-start gap-4 border-b border-ink/10 py-5"
+            className="flex items-start gap-5 border-b border-gold/20 py-7"
           >
-            <span className="font-display text-sm text-accent">{String(index + 1).padStart(2, '0')}</span>
-            <div className="flex flex-col gap-1.5">
-              <span className="font-display text-lg leading-snug">{categoria.nombre}</span>
-              <p className="text-sm leading-relaxed text-ink/70">{categoria.descripcion}</p>
+            <span className="font-display text-base text-gold">{String(index + 1).padStart(2, '0')}</span>
+            <div className="flex flex-col gap-2">
+              <span className="font-display text-2xl leading-snug">{categoria.nombre}</span>
+              <p className="text-base leading-relaxed text-text-secondary">{categoria.descripcion}</p>
             </div>
           </Reveal>
         ))}

@@ -8,7 +8,7 @@ interface SectionTitleProps {
 
 export function SectionTitle({ children, as: Tag = 'h2', className = '' }: SectionTitleProps) {
   return (
-    <Tag className={`font-display text-3xl leading-tight md:text-4xl lg:text-5xl ${className}`}>
+    <Tag className={`font-display text-[clamp(2.4rem,1.6rem+2.2vw,4rem)] leading-[1.05] ${className}`}>
       {children}
     </Tag>
   );

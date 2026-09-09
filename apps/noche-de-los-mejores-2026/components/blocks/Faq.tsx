@@ -38,13 +38,13 @@ export function Faq() {
   const [abierta, setAbierta] = useState<number | null>(0);
 
   return (
-    <Section id="faq" bg="light-alt">
+    <Section id="faq" bg="primary">
       <Reveal className="mx-auto max-w-2xl text-center">
         <SectionTitle>Preguntas frecuentes</SectionTitle>
         <Rule className="mx-auto my-6" />
       </Reveal>
 
-      <div className="mx-auto mt-12 max-w-2xl divide-y divide-ink/10">
+      <div className="mx-auto mt-12 max-w-3xl divide-y divide-gold/20">
         {PREGUNTAS.map((item, index) => {
           const estaAbierta = abierta === index;
           const panelId = `faq-panel-${index}`;
@@ -59,10 +59,10 @@ export function Faq() {
                   aria-expanded={estaAbierta}
                   aria-controls={panelId}
                   onClick={() => setAbierta(estaAbierta ? null : index)}
-                  className="flex w-full items-center justify-between gap-4 py-5 text-left font-display text-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  className="flex w-full items-center justify-between gap-4 py-7 text-left font-display text-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
                 >
                   {item.pregunta}
-                  <span aria-hidden="true" className="shrink-0 text-accent">
+                  <span aria-hidden="true" className="shrink-0 text-gold">
                     {estaAbierta ? '−' : '+'}
                   </span>
                 </button>
@@ -72,7 +72,7 @@ export function Faq() {
                 role="region"
                 aria-labelledby={buttonId}
                 hidden={!estaAbierta}
-                className="pb-5 text-sm leading-relaxed text-ink/70"
+                className="pb-7 text-base leading-relaxed text-text-secondary"
               >
                 {item.respuesta}
               </div>
