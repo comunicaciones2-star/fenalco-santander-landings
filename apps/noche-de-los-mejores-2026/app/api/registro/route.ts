@@ -78,28 +78,30 @@ function isRateLimited(ip: string): boolean {
 async function sendViaResend(data: RegistroInput, material: Material): Promise<void> {
   const { Resend } = await import('resend');
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const etiquetaModalidad = data.modalidad === 'postulacion' ? 'Postulación' : 'Patrocinio';
+  const esInteres = data.modalidad === 'interes';
+  const etiquetaModalidad =
+    data.modalidad === 'postulacion' ? 'Postulación' : data.modalidad === 'patrocinio' ? 'Patrocinio' : 'Interés en asistir';
   const etiquetaMaterial = `${material.estado}${material.logo ? ' · logo ✓' : ' · logo ✗'}${material.video ? ' · video ✓' : ''}`;
 
   const result = await resend.emails.send({
     from: process.env.LEADS_FROM_EMAIL ?? 'onboarding@resend.dev',
     to: process.env.LEADS_TO_EMAIL ?? '',
-    subject: `Nuevo lead · La Noche de los Mejores 2026 · ${etiquetaModalidad} · ${data.empresa}`,
+    subject: `Nuevo lead · La Noche de los Mejores 2026 · ${etiquetaModalidad} · ${data.empresa || data.nombre}`,
     html: `
       <h2>Nuevo lead — La Noche de los Mejores 2026 (${etiquetaModalidad})</h2>
       <ul>
         <li><strong>Nombre:</strong> ${data.nombre} ${data.apellido}</li>
-        <li><strong>Empresa:</strong> ${data.empresa}</li>
-        <li><strong>NIT:</strong> ${data.nit || '—'}</li>
-        <li><strong>Cargo:</strong> ${data.cargo}</li>
         <li><strong>Correo:</strong> ${data.email}</li>
         <li><strong>Celular:</strong> ${data.telefono}</li>
-        <li><strong>Sector:</strong> ${data.sector || '—'}</li>
-        <li><strong>Ciudad:</strong> ${data.ciudad || '—'}</li>
-        <li><strong>Afiliado a Fenalco:</strong> ${data.esAfiliado === 'si' ? 'Sí' : 'No'}</li>
+        ${data.empresa ? `<li><strong>Empresa:</strong> ${data.empresa}</li>` : ''}
+        ${!esInteres ? `<li><strong>NIT:</strong> ${data.nit || '—'}</li>` : ''}
+        ${!esInteres ? `<li><strong>Cargo:</strong> ${data.cargo || '—'}</li>` : ''}
+        ${!esInteres ? `<li><strong>Sector:</strong> ${data.sector || '—'}</li>` : ''}
+        ${!esInteres ? `<li><strong>Ciudad:</strong> ${data.ciudad || '—'}</li>` : ''}
+        ${!esInteres ? `<li><strong>Afiliado a Fenalco:</strong> ${data.esAfiliado === 'si' ? 'Sí' : 'No'}</li>` : ''}
         ${data.modalidad === 'postulacion' ? `<li><strong>Categoría:</strong> ${data.categoriaPostulacion}</li>` : ''}
         <li><strong>Mensaje:</strong> ${data.mensaje || '—'}</li>
-        <li><strong>Material promocional:</strong> ${etiquetaMaterial}</li>
+        ${!esInteres ? `<li><strong>Material promocional:</strong> ${etiquetaMaterial}</li>` : ''}
         <li><strong>Origen:</strong> ${data.origen || '—'} · UTM: ${[data.utm_source, data.utm_medium, data.utm_campaign, data.utm_content].filter(Boolean).join(' / ') || '—'}</li>
       </ul>
     `,
@@ -255,9 +257,13 @@ export async function POST(request: NextRequest) {
         }) || algunoEntregado;
     }
 
+    // "interes" (quiero asistir) es un lead simple que el equipo comercial evalúa a
+    // mano — no crea Inscrito ni pasa por fenalco-crm. Va solo por Resend (arriba).
+    // No confundir con un fallo de integración: process.env.CRM_API_BASE_URL puede
+    // estar configurado y aun así no llamarse para esta modalidad, a propósito.
     let registroId: string | null = null;
-    const enviarACrm = data.modalidad === 'postulacion' ? sendPostulacionACrm : sendPatrocinioACrm;
-    if (process.env.CRM_API_BASE_URL) {
+    if (data.modalidad !== 'interes' && process.env.CRM_API_BASE_URL) {
+      const enviarACrm = data.modalidad === 'postulacion' ? sendPostulacionACrm : sendPatrocinioACrm;
       registroId = await enviarACrm(data, material).catch((err) => {
         console.error('[registro] fallo envío a fenalco-crm', err);
         return null;
@@ -267,8 +273,10 @@ export async function POST(request: NextRequest) {
 
     // El enlace de material solo tiene sentido si el registro quedó identificado
     // en el CRM: es lo que permite al PATCH posterior (/api/registro/material)
-    // saber qué registro actualizar.
-    if (registroId && process.env.RESEND_API_KEY) {
+    // saber qué registro actualizar. registroId siempre es null para 'interes'
+    // (arriba), así que data.modalidad ya queda acotado a 'postulacion'|'patrocinio'
+    // aquí — lo necesita signMaterialToken, que no admite 'interes'.
+    if (registroId && data.modalidad !== 'interes' && process.env.RESEND_API_KEY) {
       const token = signMaterialToken({
         modalidad: data.modalidad,
         nit: data.nit,

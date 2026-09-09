@@ -21,19 +21,22 @@ export const registroSchema = z.object({
   apellido: z.string().trim().min(2, 'Ingresa tu apellido').max(120),
   email: z.string().trim().email('Ingresa un correo válido'),
   telefono: z.string().trim().min(7, 'Ingresa un número de celular válido').max(20),
-  empresa: z.string().trim().min(2, 'Ingresa el nombre de tu empresa').max(160),
+  // Empresa/NIT/Cargo/¿Afiliado?: obligatorios para postulación y patrocinio, NO para
+  // "quiero asistir" (lead simple para quien no fue invitado — sin trámite comercial,
+  // no pasa por fenalco-crm). Ver superRefine abajo.
+  empresa: z.string().trim().max(160).optional().or(z.literal('')),
   nit: z
     .string()
     .trim()
-    .min(1, 'Ingresa el NIT de tu empresa')
     .max(20)
-    .transform(normalizarNit)
-    .refine((v) => v.length >= 5, 'Ingresa un NIT válido'),
-  cargo: z.string().trim().min(2, 'Ingresa tu cargo').max(120),
+    .optional()
+    .or(z.literal(''))
+    .transform((v) => (v ? normalizarNit(v) : '')),
+  cargo: z.string().trim().max(120).optional().or(z.literal('')),
   sector: z.string().trim().max(120).optional().or(z.literal('')),
   ciudad: z.string().trim().max(120).optional().or(z.literal('')),
-  esAfiliado: z.enum(['si', 'no'], { error: 'Indica si tu empresa está afiliada a Fenalco' }),
-  modalidad: z.enum(['postulacion', 'patrocinio'], { error: 'Selecciona una modalidad' }),
+  esAfiliado: z.enum(['si', 'no']).optional(),
+  modalidad: z.enum(['postulacion', 'patrocinio', 'interes'], { error: 'Selecciona una modalidad' }),
   categoriaPostulacion: z.string().trim().max(160).optional().or(z.literal('')),
   // Solo obligatoria cuando categoriaPostulacion es una categoría a nombre personal
   // (ver superRefine abajo). Se normaliza a solo dígitos, igual que el NIT.
@@ -62,9 +65,12 @@ export const registroSchema = z.object({
   aceptaHabeasData: z.literal(true, {
     error: 'Debes autorizar el tratamiento de datos personales',
   }),
-  aceptaUsoMaterial: z.literal(true, {
-    error: 'Debes autorizar el uso del logotipo y el material audiovisual',
-  }),
+  // Obligatorio (true) solo para postulación/patrocinio, que sí piden logotipo —
+  // "quiero asistir" no tiene sección de material, no tiene sentido exigirlo. No se
+  // puede usar z.literal(true) aquí porque el checkbox, cuando ni se renderiza,
+  // manda `false` (no undefined) — z.literal(true).optional() seguiría rechazando
+  // ese `false`. La obligatoriedad real vive en el superRefine de abajo.
+  aceptaUsoMaterial: z.boolean().optional(),
   // Material promocional: opcional a nivel de submit (no bloquea el envío del formulario).
   logoKey: z.string().trim().max(500).optional().or(z.literal('')),
   logoFilename: z.string().trim().max(255).optional().or(z.literal('')),
@@ -87,6 +93,31 @@ export const registroSchema = z.object({
   utm_campaign: z.string().trim().max(160).optional().or(z.literal('')),
   utm_content: z.string().trim().max(160).optional().or(z.literal('')),
 }).superRefine((data, ctx) => {
+  // Empresa/NIT/Cargo/¿Afiliado?/autorización de material: obligatorios para
+  // postulación y patrocinio (ambos son trámites comerciales sobre una empresa),
+  // no para "quiero asistir" (lead simple, ver arriba).
+  if (data.modalidad === 'postulacion' || data.modalidad === 'patrocinio') {
+    if (!data.empresa || data.empresa.length < 2) {
+      ctx.addIssue({ code: 'custom', message: 'Ingresa el nombre de tu empresa', path: ['empresa'] });
+    }
+    if (!data.nit || data.nit.length < 5) {
+      ctx.addIssue({ code: 'custom', message: 'Ingresa un NIT válido', path: ['nit'] });
+    }
+    if (!data.cargo || data.cargo.length < 2) {
+      ctx.addIssue({ code: 'custom', message: 'Ingresa tu cargo', path: ['cargo'] });
+    }
+    if (!data.esAfiliado) {
+      ctx.addIssue({ code: 'custom', message: 'Indica si tu empresa está afiliada a Fenalco', path: ['esAfiliado'] });
+    }
+    if (data.aceptaUsoMaterial !== true) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Debes autorizar el uso del logotipo y el material audiovisual',
+        path: ['aceptaUsoMaterial'],
+      });
+    }
+  }
+
   if (data.modalidad !== 'postulacion') return;
 
   if (!data.categoriaPostulacion) {

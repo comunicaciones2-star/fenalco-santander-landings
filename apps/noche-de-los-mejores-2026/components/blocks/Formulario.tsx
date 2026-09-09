@@ -11,7 +11,7 @@ import { Reveal } from '@/components/ui/Reveal';
 import { FileUpload } from '@/components/ui/FileUpload';
 import type { Modalidad as ModalidadArchivo } from '@/lib/upload-rules';
 
-type Modalidad = 'postulacion' | 'patrocinio';
+type Modalidad = 'postulacion' | 'patrocinio' | 'interes';
 type FormStatus = 'idle' | 'sending' | 'success' | 'error';
 
 interface LogoInfo {
@@ -40,7 +40,9 @@ function subscribeNoop(): () => void {
 
 function getModalidadFromUrl(): Modalidad | null {
   const modalidadUrl = new URLSearchParams(window.location.search).get('modalidad');
-  return modalidadUrl === 'postulacion' || modalidadUrl === 'patrocinio' ? modalidadUrl : null;
+  return modalidadUrl === 'postulacion' || modalidadUrl === 'patrocinio' || modalidadUrl === 'interes'
+    ? modalidadUrl
+    : null;
 }
 
 function getModalidadFromUrlServerSnapshot(): Modalidad | null {
@@ -53,6 +55,9 @@ export function Formulario() {
   const [modalidadManual, setModalidadManual] = useState<Modalidad | null>(null);
   const modalidad = modalidadManual ?? modalidadUrl ?? 'postulacion';
   const modalidadFijada = modalidadManual === null && modalidadUrl !== null;
+  // Empresa/NIT/Cargo/¿Afiliado?/material: solo aplican a postulación y patrocinio,
+  // ambos trámites comerciales sobre una empresa — "quiero asistir" es un lead simple.
+  const requiereDatosComerciales = modalidad !== 'interes';
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [nit, setNit] = useState('');
@@ -113,7 +118,9 @@ export function Formulario() {
       cargo: String(form.get('cargo') ?? ''),
       sector: String(form.get('sector') ?? ''),
       ciudad: String(form.get('ciudad') ?? ''),
-      esAfiliado: String(form.get('esAfiliado') ?? ''),
+      // '' -> undefined: esAfiliado es z.enum(['si','no']).optional() (ver recibioPremioAnterior
+      // más abajo, mismo motivo) — no se renderiza para 'interes'.
+      esAfiliado: String(form.get('esAfiliado') ?? '') || undefined,
       modalidad,
       categoriaPostulacion: String(form.get('categoriaPostulacion') ?? ''),
       cedula: String(form.get('cedula') ?? ''),
@@ -229,24 +236,34 @@ export function Formulario() {
             <Field label="Apellido" name="apellido" required autoComplete="family-name" />
             <Field label="Correo electrónico" name="email" type="email" required autoComplete="email" />
             <Field label="Celular" name="telefono" type="tel" required autoComplete="tel" />
-            <Field label="Empresa" name="empresa" required autoComplete="organization" />
-            <Field label="NIT" name="nit" required onChange={(e) => setNit(e.target.value)} />
-            <Field label="Cargo" name="cargo" required autoComplete="organization-title" />
-            <Field label="Sector" name="sector" />
-            <Field label="Ciudad" name="ciudad" autoComplete="address-level2" />
+            <Field
+              label="Empresa"
+              name="empresa"
+              required={requiereDatosComerciales}
+              autoComplete="organization"
+            />
 
-            <div>
-              <label htmlFor="esAfiliado" className="mb-1.5 block text-sm font-medium">
-                ¿Tu empresa está afiliada a Fenalco?
-              </label>
-              <select id="esAfiliado" name="esAfiliado" required defaultValue="" className="input-field">
-                <option value="" disabled>
-                  Selecciona una opción
-                </option>
-                <option value="si">Sí</option>
-                <option value="no">No</option>
-              </select>
-            </div>
+            {requiereDatosComerciales && (
+              <>
+                <Field label="NIT" name="nit" required onChange={(e) => setNit(e.target.value)} />
+                <Field label="Cargo" name="cargo" required autoComplete="organization-title" />
+                <Field label="Sector" name="sector" />
+                <Field label="Ciudad" name="ciudad" autoComplete="address-level2" />
+
+                <div>
+                  <label htmlFor="esAfiliado" className="mb-1.5 block text-sm font-medium">
+                    ¿Tu empresa está afiliada a Fenalco?
+                  </label>
+                  <select id="esAfiliado" name="esAfiliado" required defaultValue="" className="input-field">
+                    <option value="" disabled>
+                      Selecciona una opción
+                    </option>
+                    <option value="si">Sí</option>
+                    <option value="no">No</option>
+                  </select>
+                </div>
+              </>
+            )}
 
             {modalidad === 'postulacion' && (
               <div>
@@ -342,74 +359,76 @@ export function Formulario() {
 
             <div className="md:col-span-2">
               <label htmlFor="mensaje" className="mb-1.5 block text-sm font-medium">
-                Mensaje (opcional)
+                {modalidad === 'interes' ? '¿Por qué quieres asistir? (opcional)' : 'Mensaje (opcional)'}
               </label>
               <textarea id="mensaje" name="mensaje" rows={3} className="input-field" />
             </div>
 
-            <div className="bg-surface-light p-6 md:col-span-2 md:p-8">
-              <Rule className="w-6" />
-              <h3 className="mt-4 font-display text-xl">Material promocional</h3>
-              <div className="mt-3 space-y-3 text-sm leading-relaxed text-ink/70">
-                <p>
-                  Los postulantes y patrocinadores que no entreguen su logotipo no podrán aparecer en las
-                  piezas de comunicación, redes sociales ni impactos de marca del evento.
-                </p>
-                <p>
-                  El logotipo es obligatorio para figurar en el material promocional. El video de
-                  postulación es opcional, pero fortalece la sustentación ante el jurado.
-                </p>
-                <p className="text-sm text-ink/70">
-                  Especificaciones · Logotipo: vectorial .ai, .eps, .pdf o .png con fondo transparente en
-                  alta resolución. Video: vertical 1080 x 1920 px, máximo 1 minuto.
-                </p>
-              </div>
+            {requiereDatosComerciales && (
+              <div className="bg-surface-light p-6 md:col-span-2 md:p-8">
+                <Rule className="w-6" />
+                <h3 className="mt-4 font-display text-xl">Material promocional</h3>
+                <div className="mt-3 space-y-3 text-sm leading-relaxed text-ink/70">
+                  <p>
+                    Los postulantes y patrocinadores que no entreguen su logotipo no podrán aparecer en las
+                    piezas de comunicación, redes sociales ni impactos de marca del evento.
+                  </p>
+                  <p>
+                    El logotipo es obligatorio para figurar en el material promocional. El video de
+                    postulación es opcional, pero fortalece la sustentación ante el jurado.
+                  </p>
+                  <p className="text-sm text-ink/70">
+                    Especificaciones · Logotipo: vectorial .ai, .eps, .pdf o .png con fondo transparente en
+                    alta resolución. Video: vertical 1080 x 1920 px, máximo 1 minuto.
+                  </p>
+                </div>
 
-              <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <div>
-                  <p className="mb-1.5 text-sm font-medium">Logotipo de la empresa</p>
-                  <FileUpload
-                    tipo="logo"
-                    modalidad={toModalidadArchivo(modalidad)}
-                    nit={nit}
-                    required
-                    disabled={!nit.trim()}
-                    onUploaded={handleLogoUploaded}
-                    onCleared={() => setLogoInfo(null)}
-                  />
-                  {!nit.trim() && (
-                    <p className="mt-1.5 text-sm text-ink/70">Ingresa el NIT para habilitar la carga</p>
+                <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
+                  <div>
+                    <p className="mb-1.5 text-sm font-medium">Logotipo de la empresa</p>
+                    <FileUpload
+                      tipo="logo"
+                      modalidad={toModalidadArchivo(modalidad)}
+                      nit={nit}
+                      required
+                      disabled={!nit.trim()}
+                      onUploaded={handleLogoUploaded}
+                      onCleared={() => setLogoInfo(null)}
+                    />
+                    {!nit.trim() && (
+                      <p className="mt-1.5 text-sm text-ink/70">Ingresa el NIT para habilitar la carga</p>
+                    )}
+                  </div>
+
+                  {modalidad === 'postulacion' && (
+                    <div>
+                      <p className="mb-1.5 text-sm font-medium">Video de postulación (opcional)</p>
+                      <FileUpload
+                        tipo="video"
+                        modalidad={toModalidadArchivo(modalidad)}
+                        nit={nit}
+                        disabled={!nit.trim()}
+                        onUploaded={handleVideoUploaded}
+                        onCleared={() => setVideoInfo(null)}
+                      />
+                    </div>
                   )}
                 </div>
 
                 {modalidad === 'postulacion' && (
-                  <div>
-                    <p className="mb-1.5 text-sm font-medium">Video de postulación (opcional)</p>
-                    <FileUpload
-                      tipo="video"
-                      modalidad={toModalidadArchivo(modalidad)}
-                      nit={nit}
-                      disabled={!nit.trim()}
-                      onUploaded={handleVideoUploaded}
-                      onCleared={() => setVideoInfo(null)}
-                    />
+                  <div className="mt-5">
+                    <label htmlFor="videoUrl" className="mb-1.5 block text-sm font-medium">
+                      Enlace alterno al video
+                    </label>
+                    <input id="videoUrl" name="videoUrl" type="url" className="input-field" />
+                    <p className="mt-1.5 text-sm text-ink/70">
+                      Si el archivo pesa demasiado o la carga falla, pega aquí el enlace (Drive, WeTransfer).
+                      Verifica que tenga permiso de acceso público.
+                    </p>
                   </div>
                 )}
               </div>
-
-              {modalidad === 'postulacion' && (
-                <div className="mt-5">
-                  <label htmlFor="videoUrl" className="mb-1.5 block text-sm font-medium">
-                    Enlace alterno al video
-                  </label>
-                  <input id="videoUrl" name="videoUrl" type="url" className="input-field" />
-                  <p className="mt-1.5 text-sm text-ink/70">
-                    Si el archivo pesa demasiado o la carga falla, pega aquí el enlace (Drive, WeTransfer).
-                    Verifica que tenga permiso de acceso público.
-                  </p>
-                </div>
-              )}
-            </div>
+            )}
 
             <div className="flex items-start gap-3 md:col-span-2">
               <input
@@ -424,21 +443,23 @@ export function Formulario() {
               </label>
             </div>
 
-            <div className="flex items-start gap-3 md:col-span-2">
-              <input
-                type="checkbox"
-                id="aceptaUsoMaterial"
-                name="aceptaUsoMaterial"
-                required
-                className="mt-1 h-4 w-4 shrink-0 accent-cta"
-              />
-              <label htmlFor="aceptaUsoMaterial" className="text-sm text-ink/75">
-                Autorizo a Fenalco Santander a usar el logotipo, el material audiovisual y la información
-                de mi empresa en piezas de comunicación, material impreso, digital y redes sociales
-                asociadas a La Noche de los Mejores 2026, y declaro que cuento con los derechos sobre el
-                material entregado.
-              </label>
-            </div>
+            {requiereDatosComerciales && (
+              <div className="flex items-start gap-3 md:col-span-2">
+                <input
+                  type="checkbox"
+                  id="aceptaUsoMaterial"
+                  name="aceptaUsoMaterial"
+                  required
+                  className="mt-1 h-4 w-4 shrink-0 accent-cta"
+                />
+                <label htmlFor="aceptaUsoMaterial" className="text-sm text-ink/75">
+                  Autorizo a Fenalco Santander a usar el logotipo, el material audiovisual y la información
+                  de mi empresa en piezas de comunicación, material impreso, digital y redes sociales
+                  asociadas a La Noche de los Mejores 2026, y declaro que cuento con los derechos sobre el
+                  material entregado.
+                </label>
+              </div>
+            )}
 
             {status === 'error' && errorMessage && (
               <p role="alert" className="border border-borgona/40 bg-borgona/5 px-4 py-3 text-sm text-borgona md:col-span-2">

@@ -186,6 +186,12 @@ export const config: EventConfig = {
     modalidades: [
       { id: 'postulacion', label: 'Quiero postularme' },
       { id: 'patrocinio', label: 'Quiero patrocinar' },
+      // Lead simple para quien no fue invitado y quiere ser considerado como asistente
+      // — no crea Invitacion ni pasa por el sistema de tarjeta física/llamadas, es
+      // solo un interés que el equipo comercial evalúa manualmente (decisión Jhon,
+      // 08-sep-2026). Por eso tampoco pasa por fenalco-crm: solo llega por correo
+      // (ver sendViaResend en app/api/registro/route.ts).
+      { id: 'interes', label: 'Quiero asistir' },
     ],
     destinoEmail: '', // TODO PENDIENTE — usa LEADS_TO_EMAIL en .env.local
     mensajeExito: 'Recibimos tu postulación. El equipo de Fenalco Santander te contactará.',
