@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore, type ChangeEvent, type FormEvent, type InputHTMLAttributes } from 'react';
 import { config } from '@/content/event.config';
+import { Award, Handshake, Ticket, Check } from 'lucide-react';
 import { registroSchema, CATEGORIAS_NOMBRE_PERSONAL } from '@/lib/schemas/registro';
 import { useTrackingParams } from '@/hooks/useTrackingParams';
 import { Section } from '@/components/ui/Section';
@@ -13,6 +14,13 @@ import type { Modalidad as ModalidadArchivo } from '@/lib/upload-rules';
 
 type Modalidad = 'postulacion' | 'patrocinio' | 'interes';
 type FormStatus = 'idle' | 'sending' | 'success' | 'error';
+
+const SUBMIT_LABELS: Record<Modalidad, string> = {
+  postulacion: 'Enviar postulación',
+  patrocinio: 'Solicitar patrocinio',
+  interes: 'Confirmar asistencia',
+};
+const MODALIDAD_ICONS = { postulacion: Award, patrocinio: Handshake, interes: Ticket };
 
 interface LogoInfo {
   key: string;
@@ -213,21 +221,28 @@ export function Formulario() {
 
             {!modalidadFijada && (
               <fieldset className="md:col-span-2">
-                <legend className="mb-2 text-sm font-medium">¿Qué quieres hacer?</legend>
-                <div className="flex flex-wrap gap-4">
-                  {config.formulario.modalidades.map((opcion) => (
-                    <label key={opcion.id} className="flex items-center gap-2 text-sm">
+                <legend className="mb-4 font-display text-2xl text-ivory">¿Qué quieres hacer?</legend>
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                  {config.formulario.modalidades.map((opcion) => {
+                    const Icon = MODALIDAD_ICONS[opcion.id as Modalidad];
+                    return (
+                    <label key={opcion.id} className="relative min-w-0 cursor-pointer">
                       <input
                         type="radio"
                         name="modalidad-selector"
                         value={opcion.id}
                         checked={modalidad === opcion.id}
                         onChange={() => setModalidadManual(opcion.id as Modalidad)}
-                        className="h-4 w-4 accent-gold"
+                        className="peer sr-only"
                       />
-                      {opcion.label}
+                      <span className="flex min-h-20 items-center justify-center gap-3 border border-gold/40 bg-surface-elevated px-5 py-4 text-center text-base font-semibold text-ivory transition-colors hover:border-gold peer-checked:border-gold peer-checked:bg-gold peer-checked:text-surface-primary peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-gold motion-reduce:transition-none">
+                        <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
+                        {opcion.label}
+                        {modalidad === opcion.id && <Check className="h-4 w-4 shrink-0" aria-hidden="true" />}
+                      </span>
                     </label>
-                  ))}
+                    );
+                  })}
                 </div>
               </fieldset>
             )}
@@ -472,10 +487,10 @@ export function Formulario() {
             <button
               type="submit"
               disabled={status === 'sending'}
-              aria-label={config.formulario.modalidades.find((m) => m.id === modalidad)?.label ?? 'Enviar'}
+              aria-label={status === 'sending' ? 'Enviando…' : SUBMIT_LABELS[modalidad]}
               className="btn-cta-gold mt-2 disabled:opacity-60 md:col-span-2"
             >
-              {status === 'sending' ? 'Enviando…' : config.formulario.modalidades.find((m) => m.id === modalidad)?.label}
+              {status === 'sending' ? 'Enviando…' : SUBMIT_LABELS[modalidad]}
             </button>
           </form>
         )}

@@ -1,7 +1,7 @@
+import Image from 'next/image';
 import { config } from '@/content/event.config';
 import { Section } from '@/components/ui/Section';
 import { SectionTitle } from '@/components/ui/SectionTitle';
-import { OgivalDivider } from '@/components/ui/OgivalDivider';
 import { Reveal } from '@/components/ui/Reveal';
 
 export function Contacto() {
@@ -10,7 +10,15 @@ export function Contacto() {
   return (
     <Section id="contacto" bg="secondary">
       <Reveal className="mx-auto flex max-w-xl flex-col items-center gap-7 text-center">
-        <OgivalDivider className="h-12 w-24 text-gold/60" />
+        <Image
+          src="/logos/Sticker - NDLM 2024.png"
+          alt=""
+          aria-hidden="true"
+          width={411}
+          height={523}
+          sizes="96px"
+          className="h-auto w-24"
+        />
 
         <SectionTitle>¿Tienes preguntas?</SectionTitle>
 
