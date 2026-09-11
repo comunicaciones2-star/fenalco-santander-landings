@@ -15,6 +15,21 @@ import type { Modalidad as ModalidadArchivo } from '@/lib/upload-rules';
 type Modalidad = 'postulacion' | 'patrocinio' | 'interes';
 type FormStatus = 'idle' | 'sending' | 'success' | 'error';
 
+const ENCABEZADOS: Record<Modalidad, { titulo: string; descripcion: string }> = {
+  postulacion: {
+    titulo: 'Postúlate',
+    descripcion: 'Haz parte de los reconocimientos que exaltan la excelencia, la trayectoria y el liderazgo empresarial en Santander.',
+  },
+  patrocinio: {
+    titulo: 'Sé patrocinador',
+    descripcion: 'Vincula tu marca a La Noche de los Mejores y acompáñanos a reconocer la excelencia, la trayectoria y el liderazgo empresarial en Santander.',
+  },
+  interes: {
+    titulo: 'Quiero asistir',
+    descripcion: 'Registra tu interés en asistir a La Noche de los Mejores y comparte una noche que celebra la excelencia empresarial en Santander.',
+  },
+};
+
 const SUBMIT_LABELS: Record<Modalidad, string> = {
   postulacion: 'Enviar postulación',
   patrocinio: 'Solicitar patrocinio',
@@ -193,11 +208,10 @@ export function Formulario() {
   return (
     <Section id="postulacion" bg="primary">
       <Reveal className="mx-auto max-w-2xl text-center">
-        <SectionTitle>Postúlate</SectionTitle>
+        <SectionTitle>{ENCABEZADOS[modalidad].titulo}</SectionTitle>
         <Rule className="mx-auto my-6" />
         <p className="text-text-secondary">
-          Haz parte de los reconocimientos que exaltan la excelencia, la trayectoria y el liderazgo
-          empresarial en Santander.
+          {ENCABEZADOS[modalidad].descripcion}
         </p>
       </Reveal>
 
