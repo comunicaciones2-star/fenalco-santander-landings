@@ -296,7 +296,7 @@ export const config = {
     intro:
       'El aforo del Gran Salón es limitado y el ingreso es exclusivo para asistentes registrados. Completa el formulario y recibirás tu confirmación por correo electrónico.',
     bullets: [
-      'Acceso a la rueda de negocios y a la agenda académica',
+      'Acceso a ver la muestra comercial y a la agenda académica',
       'Contacto directo con empresas, marcas e instituciones de la región',
       'Sin costo — cupos limitados por aforo',
     ],
