@@ -5,7 +5,7 @@
     {
       "source": "/",
       "has": [{ "type": "host", "value": "vendeconventaja.fenalcosantander.com.co" }],
-      "destination": "/vende-con-ventaja.html"
+      "destination": "/vende-con-ventaja"
     },
     {
       "source": "/api/vende-con-ventaja/:tipo",
