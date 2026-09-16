@@ -3,6 +3,11 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/",
+      "has": [{ "type": "host", "value": "vendeconventaja.fenalcosantander.com.co" }],
+      "destination": "/vende-con-ventaja.html"
+    },
+    {
       "source": "/api/vende-con-ventaja/:tipo",
       "destination": "https://fenalco-crm-sfmo.onrender.com/api/vende-con-ventaja/:tipo"
     },
