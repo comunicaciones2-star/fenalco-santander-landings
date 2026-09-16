@@ -3,6 +3,10 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/api/vende-con-ventaja/:tipo",
+      "destination": "https://fenalco-crm-sfmo.onrender.com/api/vende-con-ventaja/:tipo"
+    },
+    {
       "source": "/junta/:path*",
       "destination": "https://fenalco-crm-sfmo.onrender.com/junta/:path*"
     },
