@@ -99,6 +99,45 @@ async function sendACrm(data: LeadInput): Promise<string | null> {
   return result.id;
 }
 
+// interestType !== 'participar' (patrocinio/expositor/alianza/comercial): estos
+// leads van al modelo Patrocinador, no a Inscrito — así aparecen en la pestaña
+// "Patrocinadores" del CRM (con badge "Web") en vez de mezclarse como un
+// registrado más de la rueda de negocios. Requiere que el evento tenga
+// slugPatrocinadores/formularioPatrocinadorConfig sembrados en fenalco-crm
+// (scripts/seed-conexiones-bga-patrocinadores.js). Reutiliza CRM_EVENT_SLUG si
+// CRM_SPONSOR_SLUG no está definido, porque ambos scripts de seed usan el mismo
+// valor de slug (son campos distintos en Evento, sin colisión).
+async function sendAPatrocinador(data: LeadInput): Promise<string | null> {
+  const baseUrl = process.env.CRM_API_BASE_URL;
+  const apiKey = process.env.CRM_API_KEY;
+  const slug = process.env.CRM_SPONSOR_SLUG || process.env.CRM_EVENT_SLUG;
+  if (!baseUrl || !apiKey || !slug) return null;
+
+  const response = await fetch(`${baseUrl}/api/public-forms/patrocinadores/${slug}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey },
+    body: JSON.stringify({
+      esEmpresa: true,
+      razonSocial: data.company,
+      nit: data.nit,
+      contactoNombre: data.name,
+      contactoCargo: data.role || undefined,
+      contactoEmail: data.email,
+      contactoTelefono: data.phone || undefined,
+      nivelInteres: TIPO_INTERES_LABEL[data.interestType],
+      consentimiento: { autorizado: data.privacyAccepted },
+    }),
+  });
+
+  if (!response.ok) {
+    const body = await response.text().catch(() => '');
+    throw new Error(`fenalco-crm (patrocinadores) respondió ${response.status}: ${body}`);
+  }
+
+  const result = (await response.json()) as { id: string };
+  return result.id;
+}
+
 export async function POST(request: NextRequest) {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
 
@@ -145,7 +184,8 @@ export async function POST(request: NextRequest) {
     }
 
     if (process.env.CRM_API_BASE_URL) {
-      const registroId = await sendACrm(data).catch((err) => {
+      const esParticipante = data.interestType === 'participar';
+      const registroId = await (esParticipante ? sendACrm(data) : sendAPatrocinador(data)).catch((err) => {
         console.error('[leads] fallo envío a fenalco-crm', err);
         return null;
       });
