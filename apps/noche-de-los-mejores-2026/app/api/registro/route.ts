@@ -176,6 +176,47 @@ async function sendPostulacionACrm(data: RegistroInput, material: Material): Pro
   return result.id;
 }
 
+// Quiero asistir → POST /api/public-forms/:slug/asistentes (Inscrito con origen='lead',
+// estadoComercial='lead': no reserva cupo ni habilita check-in; el equipo comercial lo
+// evalúa a mano). Mismo slug de evento que la postulación (CRM_EVENT_SLUG) y mismo
+// contrato de identidad/habeas data. En el CRM aparece en la pestaña "Asistentes".
+// No se usa /:slug/interesados: habilitarlo en el evento cambia también el flujo de
+// postulación (modo "doble formulario" de otro programa) — ver routes/publicForms.js.
+async function sendAsistenteACrm(data: RegistroInput): Promise<string | null> {
+  const baseUrl = process.env.CRM_API_BASE_URL;
+  const apiKey = process.env.CRM_API_KEY;
+  const slug = process.env.CRM_EVENT_SLUG;
+  if (!baseUrl || !apiKey || !slug) return null;
+
+  const response = await fetch(`${baseUrl}/api/public-forms/${slug}/asistentes`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey },
+    body: JSON.stringify({
+      nombre: data.nombre,
+      apellido: data.apellido,
+      email: data.email,
+      telefono: data.telefono,
+      empresa: data.empresa || undefined,
+      respuestas: {
+        mensaje: data.mensaje,
+        utm_source: data.utm_source,
+        utm_medium: data.utm_medium,
+        utm_campaign: data.utm_campaign,
+        utm_content: data.utm_content,
+      },
+      consentimientos: [{ clave: 'tratamiento_datos', aceptado: data.aceptaHabeasData }],
+    }),
+  });
+
+  if (!response.ok) {
+    const body = await response.text().catch(() => '');
+    throw new Error(`fenalco-crm (asistentes) respondió ${response.status}: ${body}`);
+  }
+
+  const result = (await response.json()) as { id: string };
+  return result.id;
+}
+
 // Patrocinio → POST /api/public-forms/patrocinadores/:slug (modelo Patrocinador, contrato
 // DISTINTO al de inscripciones — ver mismo archivo backend). Usa CRM_SPONSOR_SLUG, que es
 // un slug de patrocinadores independiente del slug de inscripciones.
@@ -257,12 +298,17 @@ export async function POST(request: NextRequest) {
         }) || algunoEntregado;
     }
 
-    // "interes" (quiero asistir) es un lead simple que el equipo comercial evalúa a
-    // mano — no crea Inscrito ni pasa por fenalco-crm. Va solo por Resend (arriba).
-    // No confundir con un fallo de integración: process.env.CRM_API_BASE_URL puede
-    // estar configurado y aun así no llamarse para esta modalidad, a propósito.
+    // "interes" (quiero asistir) queda como Inscrito lead en fenalco-crm (pestaña
+    // "Asistentes") además del correo al equipo por Resend (arriba). No lleva material,
+    // así que su id no se usa para el enlace de material de abajo.
     let registroId: string | null = null;
-    if (data.modalidad !== 'interes' && process.env.CRM_API_BASE_URL) {
+    if (data.modalidad === 'interes' && process.env.CRM_API_BASE_URL) {
+      const asistenteId = await sendAsistenteACrm(data).catch((err) => {
+        console.error('[registro] fallo envío de asistente a fenalco-crm', err);
+        return null;
+      });
+      algunoEntregado = algunoEntregado || asistenteId !== null;
+    } else if (data.modalidad !== 'interes' && process.env.CRM_API_BASE_URL) {
       const enviarACrm = data.modalidad === 'postulacion' ? sendPostulacionACrm : sendPatrocinioACrm;
       registroId = await enviarACrm(data, material).catch((err) => {
         console.error('[registro] fallo envío a fenalco-crm', err);
@@ -274,7 +320,7 @@ export async function POST(request: NextRequest) {
     // El enlace de material solo tiene sentido si el registro quedó identificado
     // en el CRM: es lo que permite al PATCH posterior (/api/registro/material)
     // saber qué registro actualizar. registroId siempre es null para 'interes'
-    // (arriba), así que data.modalidad ya queda acotado a 'postulacion'|'patrocinio'
+    // (su id de asistente queda en asistenteId, arriba), así que data.modalidad ya queda acotado a 'postulacion'|'patrocinio'
     // aquí — lo necesita signMaterialToken, que no admite 'interes'.
     if (registroId && data.modalidad !== 'interes' && process.env.RESEND_API_KEY) {
       const token = signMaterialToken({
