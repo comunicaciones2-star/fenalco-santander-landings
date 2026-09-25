@@ -22,8 +22,8 @@ export const registroSchema = z.object({
   email: z.string().trim().email('Ingresa un correo válido'),
   telefono: z.string().trim().min(7, 'Ingresa un número de celular válido').max(20),
   // Empresa/NIT/Cargo/¿Afiliado?: obligatorios para postulación y patrocinio, NO para
-  // "quiero asistir" (lead simple para quien no fue invitado — sin trámite comercial,
-  // no pasa por fenalco-crm). Ver superRefine abajo.
+  // "quiero asistir" (lead simple para quien no fue invitado — sin trámite comercial;
+  // llega a fenalco-crm como Inscrito lead vía /asistentes). Ver superRefine abajo.
   empresa: z.string().trim().max(160).optional().or(z.literal('')),
   nit: z
     .string()
