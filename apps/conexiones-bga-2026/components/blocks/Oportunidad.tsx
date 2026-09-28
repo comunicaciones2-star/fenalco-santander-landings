@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Briefcase, GraduationCap, Store, UtensilsCrossed, Users, type LucideIcon } from 'lucide-react';
 import { config } from '@/content/conexiones';
 import { Section } from '@/components/ui/Section';
@@ -41,10 +42,20 @@ export function Oportunidad() {
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-soft">
           {oportunidad.panelistas.titulo}
         </p>
-        <ul className="mt-6 grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-6 grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-6">
           {oportunidad.panelistas.personas.map((persona) => (
-            <li key={persona.nombre}>
-              <p className="font-semibold text-navy">{persona.nombre}</p>
+            <li key={persona.nombre} className="flex flex-col items-center text-center">
+              <div className="relative h-20 w-20 overflow-hidden rounded-full border-2 border-green sm:h-24 sm:w-24">
+                <Image
+                  src={persona.foto}
+                  alt={persona.nombre}
+                  fill
+                  sizes="(min-width: 640px) 96px, 80px"
+                  className="object-cover"
+                  style={{ objectPosition: persona.fotoPosicion ?? 'center' }}
+                />
+              </div>
+              <p className="mt-3 font-semibold text-navy">{persona.nombre}</p>
               <p className="text-sm text-ink-soft">{persona.cargo}</p>
             </li>
           ))}

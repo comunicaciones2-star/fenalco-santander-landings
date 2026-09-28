@@ -31,6 +31,11 @@ export interface Paquete {
 export interface Panelista {
   readonly nombre: string;
   readonly cargo: string;
+  readonly foto: string;
+  // object-position CSS para centrar el rostro dentro del recorte circular —
+  // las fotos fuente vienen con encuadres muy distintos (retrato, cuerpo
+  // completo, paisaje), así que 'center' no siempre centra la cara.
+  readonly fotoPosicion?: string;
 }
 
 export const config = {
@@ -116,12 +121,12 @@ export const config = {
       titulo: 'Conferencistas confirmados',
       disclaimer: 'Sujeto a cambios.',
       personas: [
-        { nombre: 'Gio Sosa', cargo: 'CEO de La Gloriosa' },
-        { nombre: 'Cristian Espinosa', cargo: 'CEO de Vekior Joyeros' },
-        { nombre: 'Isabel Cristina Forero', cargo: 'CEO de Centro Comercial La Quinta' },
-        { nombre: 'Octavio Llamas', cargo: 'CEO de Vangelis Happiness Partners' },
-        { nombre: 'Liliana Caballero', cargo: 'Gerente de Hacienda Casablanca' },
-        { nombre: 'Dora Najm', cargo: 'CEO de Zate' },
+        { nombre: 'Gio Sosa', cargo: 'CEO de La Gloriosa', foto: '/images/panelistas/gio-sosa.png', fotoPosicion: '50% 25%' },
+        { nombre: 'Cristian Espinosa', cargo: 'CEO de Vekior Joyeros', foto: '/images/panelistas/cristian-espinosa.png', fotoPosicion: 'center 15%' },
+        { nombre: 'Isabel Cristina Forero', cargo: 'CEO de Centro Comercial La Quinta', foto: '/images/panelistas/isabel-cristina-forero-face.png' },
+        { nombre: 'Octavio Llamas', cargo: 'CEO de Vangelis Happiness Partners', foto: '/images/panelistas/octavio-llamas.png', fotoPosicion: 'center 30%' },
+        { nombre: 'Liliana Caballero', cargo: 'Gerente de Hacienda Casablanca', foto: '/images/panelistas/liliana-caballero-face.png' },
+        { nombre: 'Dora Najm', cargo: 'CEO de Zate', foto: '/images/panelistas/dora-najm.jpg', fotoPosicion: 'center 12%' },
       ] as readonly Panelista[],
     },
   },
