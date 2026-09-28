@@ -44,7 +44,6 @@ export interface EventConfig {
     readonly campos: readonly string[];
     readonly modalidades: ReadonlyArray<{ readonly id: string; readonly label: string }>;
     readonly destinoEmail: string;
-    readonly mensajeExito: string;
   };
   readonly seo: {
     readonly title: string;
@@ -189,12 +188,12 @@ export const config: EventConfig = {
       // Lead simple para quien no fue invitado y quiere ser considerado como asistente
       // — no crea Invitacion ni pasa por el sistema de tarjeta física/llamadas, es
       // solo un interés que el equipo comercial evalúa manualmente (decisión Jhon,
-      // 08-sep-2026). Por eso tampoco pasa por fenalco-crm: solo llega por correo
-      // (ver sendViaResend en app/api/registro/route.ts).
+      // 08-sep-2026). Desde feat/ndlm-asistentes-a-crm (25-sep-2026) sí llega a
+      // fenalco-crm como Inscrito lead (POST /:slug/asistentes, ver route.ts), además
+      // del correo por Resend — ya no es "solo correo".
       { id: 'interes', label: 'Quiero asistir' },
     ],
     destinoEmail: '', // TODO PENDIENTE — usa LEADS_TO_EMAIL en .env.local
-    mensajeExito: 'Recibimos tu postulación. El equipo de Fenalco Santander te contactará.',
   },
 
   seo: {
