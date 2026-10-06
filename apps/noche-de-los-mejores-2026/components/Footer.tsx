@@ -2,9 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { config } from '@/content/event.config';
 
-// TODO PENDIENTE: URL real de la política de tratamiento de datos de Fenalco Santander
-// (no se enlaza a una ruta inventada — ver reporte de entrega).
-const POLITICA_DATOS_HREF = 'https://www.fenalcosantander.com.co/';
+const POLITICA_DATOS_HREF = 'https://fenalcosantander.com.co/tratamiento-de-datos/';
 
 export function Footer() {
   const anio = new Date().getFullYear();

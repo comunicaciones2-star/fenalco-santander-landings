@@ -167,7 +167,23 @@ export function LeadForm({ variant = 'commercial' }: LeadFormProps) {
                 className="mt-1 h-4 w-4 shrink-0 accent-green"
               />
               <label htmlFor="privacyAccepted" className="text-sm text-ink-soft">
-                He leído y acepto la política de tratamiento de datos.
+                Autorizo a FENALCO Santander, NIT 890.201.284-7, para recolectar, almacenar, consultar,
+                actualizar, usar y conservar mis datos personales, así como contactarme, con el fin de
+                gestionar mi participación en el evento Conexiones BGA y mantenerme informado sobre futuras
+                actividades, eventos, capacitaciones, programas, servicios, beneficios, convocatorias y demás
+                iniciativas institucionales y comerciales de FENALCO Santander, incluyendo el envío de
+                información y material publicitario, promocional y comercial. Podré ejercer mis derechos de
+                consulta, actualización, rectificación, supresión y revocatoria a través de
+                habeasdata@fenalcosantander.com.co, 310 698 7208 o en Carrera 20 # 36 - 49, Bucaramanga,
+                Santander. Declaro conocer la Política de Tratamiento de Datos Personales disponible en{' '}
+                <a
+                  href="https://fenalcosantander.com.co/tratamiento-de-datos/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-green"
+                >
+                  https://fenalcosantander.com.co/tratamiento-de-datos/
+                </a>
               </label>
             </div>
 
