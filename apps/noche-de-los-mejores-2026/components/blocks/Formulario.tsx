@@ -35,6 +35,15 @@ const SUBMIT_LABELS: Record<Modalidad, string> = {
   patrocinio: 'Solicitar patrocinio',
   interes: 'Confirmar asistencia',
 };
+
+// Mensaje de éxito por modalidad — cada una tiene su propio trámite (postulación
+// evaluada por el jurado, patrocinio por el equipo comercial, asistencia es un
+// interés que aún no confirma cupo), así que no comparten el mismo texto.
+const MENSAJES_EXITO: Record<Modalidad, string> = {
+  postulacion: 'Recibimos tu postulación. El equipo de Fenalco Santander te contactará.',
+  interes: 'Registramos tu interés en asistir. El equipo de Fenalco Santander te contactará para confirmar tu cupo.',
+  patrocinio: 'Recibimos tu interés en patrocinar. Nuestro equipo comercial te contactará.',
+};
 const MODALIDAD_ICONS = { postulacion: Award, patrocinio: Handshake, interes: Ticket };
 
 interface LogoInfo {
@@ -223,7 +232,7 @@ export function Formulario() {
             aria-live="polite"
             className="scroll-mt-28 border border-gold/30 bg-surface-elevated p-8 text-center font-display text-lg"
           >
-            {config.formulario.mensajeExito}
+            {MENSAJES_EXITO[modalidad]}
           </p>
         ) : (
           <form onSubmit={handleSubmit} noValidate className="grid grid-cols-1 gap-6 md:grid-cols-2">
