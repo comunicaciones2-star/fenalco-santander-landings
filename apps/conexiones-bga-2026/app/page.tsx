@@ -1,6 +1,7 @@
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Hero } from '@/components/blocks/Hero';
+import { Programacion } from '@/components/blocks/Programacion';
 import { QueEs } from '@/components/blocks/QueEs';
 import { Oportunidad } from '@/components/blocks/Oportunidad';
 import { PorQueParticipar } from '@/components/blocks/PorQueParticipar';
@@ -18,6 +19,7 @@ export default function Home() {
       <Header />
       <main id="main-content" tabIndex={-1}>
         <Hero />
+        <Programacion />
         <QueEs />
         <Oportunidad />
         <PorQueParticipar />

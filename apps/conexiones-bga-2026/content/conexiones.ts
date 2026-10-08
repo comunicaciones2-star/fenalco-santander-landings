@@ -64,6 +64,7 @@ export const config = {
   },
 
   nav: [
+    { label: 'Programación', href: '#programacion' },
     { label: 'El evento', href: '#el-evento' },
     { label: 'Oportunidades', href: '#oportunidad' },
     { label: 'Patrocinio', href: '#patrocinio' },
@@ -73,6 +74,7 @@ export const config = {
 
   cta: {
     principal: { label: 'Quiero participar', href: '/inscripcion' } as CtaLink,
+    programacion: { label: 'Ver programación', href: '#programacion' } as CtaLink,
     secundario: { label: 'Conoce las oportunidades comerciales', href: '#oportunidad' } as CtaLink,
   },
 

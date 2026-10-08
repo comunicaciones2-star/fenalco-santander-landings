@@ -78,6 +78,9 @@ export function Hero() {
             <Button href={config.cta.principal.href} ariaLabel={config.cta.principal.label}>
               {config.cta.principal.label}
             </Button>
+            <Button href={config.cta.programacion.href} variant="ghost-dark" ariaLabel={config.cta.programacion.label}>
+              {config.cta.programacion.label}
+            </Button>
             <Button href={config.cta.secundario.href} variant="ghost-dark" ariaLabel={config.cta.secundario.label}>
               {config.cta.secundario.label}
             </Button>
