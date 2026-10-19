@@ -101,6 +101,7 @@ export default async function AdminPage({
               <thead className="border-b border-neutral-200 bg-neutral-100 text-xs uppercase tracking-wide text-neutral-500">
                 <tr>
                   <th className="px-4 py-2">Empresa</th>
+                  <th className="px-4 py-2">Contacto</th>
                   <th className="px-4 py-2">NIT</th>
                   <th className="px-4 py-2">Modalidad</th>
                   <th className="px-4 py-2">Categoría</th>
@@ -116,7 +117,7 @@ export default async function AdminPage({
                 ))}
                 {filtrados.length === 0 && (
                   <tr>
-                    <td colSpan={8} className="px-4 py-6 text-center text-neutral-500">
+                    <td colSpan={9} className="px-4 py-6 text-center text-neutral-500">
                       No hay registros con estos filtros.
                     </td>
                   </tr>
@@ -134,6 +135,7 @@ function FilaInventario({ item }: { item: MaterialInventoryItem }) {
   const estado = item.material?.estado ?? 'pendiente';
   return (
     <tr className="border-b border-neutral-100 last:border-0">
+      <td className="px-4 py-2">{item.empresa || '—'}</td>
       <td className="px-4 py-2">{item.nombre}</td>
       <td className="px-4 py-2">{item.nit ?? '—'}</td>
       <td className="px-4 py-2">{ETIQUETA_MODALIDAD[item.tipo]}</td>
