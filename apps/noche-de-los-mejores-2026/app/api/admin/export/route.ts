@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { fetchMaterialInventory } from '@/lib/materialInventory';
+import { coincideBusqueda, fetchMaterialInventory } from '@/lib/materialInventory';
 
 export const runtime = 'nodejs';
 
@@ -12,9 +12,10 @@ function csvEscape(valor: string): string {
 export async function GET(request: NextRequest) {
   const estado = request.nextUrl.searchParams.get('estado') ?? undefined;
   const modalidad = request.nextUrl.searchParams.get('modalidad') ?? undefined;
+  const q = request.nextUrl.searchParams.get('q') ?? '';
 
   try {
-    const items = await fetchMaterialInventory({ estado, tipo: modalidad });
+    const items = (await fetchMaterialInventory({ estado, tipo: modalidad })).filter((item) => coincideBusqueda(item, q));
 
     const encabezado = ['Empresa', 'Contacto', 'NIT', 'Modalidad', 'Categoría', 'Logo', 'Video', 'Estado'];
     const filas = items.map((item) => [
