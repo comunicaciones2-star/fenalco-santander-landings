@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { fetchMaterialInventory, type MaterialArchivo, type MaterialInventoryItem } from '@/lib/materialInventory';
+import { coincideBusqueda, fetchMaterialInventory, type MaterialArchivo, type MaterialInventoryItem } from '@/lib/materialInventory';
 
 export const metadata: Metadata = {
   title: 'Inventario de material · Admin NDLM 2026',
@@ -17,18 +17,19 @@ const ETIQUETA_ESTADO: Record<string, string> = {
   completo: 'Completo',
 };
 
-function coincideFiltros(item: MaterialInventoryItem, estado: string | null, tipo: string | null): boolean {
+function coincideFiltros(item: MaterialInventoryItem, estado: string | null, tipo: string | null, q: string): boolean {
   if (estado && (item.material?.estado ?? 'pendiente') !== estado) return false;
   if (tipo && item.tipo !== tipo) return false;
-  return true;
+  return coincideBusqueda(item, q);
 }
 
 export default async function AdminPage({
   searchParams,
 }: {
-  searchParams: Promise<{ estado?: string; modalidad?: string }>;
+  searchParams: Promise<{ estado?: string; modalidad?: string; q?: string }>;
 }) {
-  const { estado, modalidad } = await searchParams;
+  const { estado, modalidad, q } = await searchParams;
+  const busqueda = (q ?? '').trim().slice(0, 100);
   const estadoFiltro = ['pendiente', 'parcial', 'completo'].includes(estado ?? '') ? (estado as string) : null;
   const tipoFiltro = ['postulante', 'patrocinador'].includes(modalidad ?? '') ? (modalidad as string) : null;
 
@@ -42,11 +43,12 @@ export default async function AdminPage({
 
   const total = items.length;
   const completos = items.filter((item) => item.material?.estado === 'completo').length;
-  const filtrados = items.filter((item) => coincideFiltros(item, estadoFiltro, tipoFiltro));
+  const filtrados = items.filter((item) => coincideFiltros(item, estadoFiltro, tipoFiltro, busqueda));
 
   const queryExport = new URLSearchParams();
   if (estadoFiltro) queryExport.set('estado', estadoFiltro);
   if (tipoFiltro) queryExport.set('modalidad', tipoFiltro);
+  if (busqueda) queryExport.set('q', busqueda);
 
   return (
     <main className="min-h-screen bg-neutral-50 p-6 text-neutral-900 md:p-10">
@@ -58,7 +60,7 @@ export default async function AdminPage({
         <>
           <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
             <p className="text-sm text-neutral-600">
-              <strong>{completos}</strong> de <strong>{total}</strong> con material completo
+              <strong>{completos}</strong> de <strong>{total}</strong> con material completo · mostrando <strong>{filtrados.length}</strong>
             </p>
             <a
               href={`/api/admin/export?${queryExport.toString()}`}
@@ -69,6 +71,13 @@ export default async function AdminPage({
           </div>
 
           <form className="mt-4 flex flex-wrap gap-3 text-sm" action="/admin" method="get">
+            <input
+              type="search"
+              name="q"
+              defaultValue={busqueda}
+              placeholder="Buscar por empresa, contacto, NIT o categoría..."
+              className="w-full border border-neutral-300 bg-white px-3 py-1.5 sm:w-96"
+            />
             <select
               name="estado"
               defaultValue={estadoFiltro ?? ''}
@@ -94,6 +103,11 @@ export default async function AdminPage({
             >
               Filtrar
             </button>
+            {(busqueda || estadoFiltro || tipoFiltro) && (
+              <a href="/admin" className="px-2 py-1.5 text-neutral-600 underline">
+                Limpiar
+              </a>
+            )}
           </form>
 
           <div className="mt-6 overflow-x-auto border border-neutral-200 bg-white">

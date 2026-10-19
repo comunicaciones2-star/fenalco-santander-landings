@@ -62,3 +62,23 @@ export async function fetchMaterialInventory(params: FetchInventoryParams = {}):
   const data = (await response.json()) as { items: MaterialInventoryItem[] };
   return data.items;
 }
+
+function normalizarTexto(valor: string): string {
+  return valor
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// Búsqueda por empresa, contacto, NIT o categoría postulada: sin tildes ni
+// mayúsculas; el NIT también coincide ignorando puntos, guiones y espacios.
+export function coincideBusqueda(item: MaterialInventoryItem, consulta: string): boolean {
+  const q = normalizarTexto(consulta);
+  if (!q) return true;
+  const texto = normalizarTexto([item.empresa, item.nombre, item.nit, item.categoria].filter(Boolean).join(' '));
+  if (texto.includes(q)) return true;
+  const digitosQ = q.replace(/\D/g, '');
+  return digitosQ.length > 0 && (item.nit ?? '').replace(/\D/g, '').includes(digitosQ);
+}
