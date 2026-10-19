@@ -16,8 +16,9 @@ export async function GET(request: NextRequest) {
   try {
     const items = await fetchMaterialInventory({ estado, tipo: modalidad });
 
-    const encabezado = ['Empresa', 'NIT', 'Modalidad', 'Categoría', 'Logo', 'Video', 'Estado'];
+    const encabezado = ['Empresa', 'Contacto', 'NIT', 'Modalidad', 'Categoría', 'Logo', 'Video', 'Estado'];
     const filas = items.map((item) => [
+      item.empresa ?? '',
       item.nombre,
       item.nit ?? '',
       ETIQUETA_MODALIDAD[item.tipo] ?? item.tipo,

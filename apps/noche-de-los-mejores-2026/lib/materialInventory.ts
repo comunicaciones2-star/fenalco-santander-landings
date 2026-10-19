@@ -14,6 +14,7 @@ export interface MaterialInventoryItem {
   tipo: 'postulante' | 'patrocinador';
   id: string;
   nombre: string;
+  empresa?: string | null;
   nit: string | null;
   contactoEmail: string | null;
   categoria: string | null;
