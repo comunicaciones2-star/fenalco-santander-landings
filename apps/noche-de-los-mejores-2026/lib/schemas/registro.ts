@@ -21,9 +21,9 @@ export const registroSchema = z.object({
   apellido: z.string().trim().min(2, 'Ingresa tu apellido').max(120),
   email: z.string().trim().email('Ingresa un correo válido'),
   telefono: z.string().trim().min(7, 'Ingresa un número de celular válido').max(20),
-  // Empresa/NIT/Cargo/¿Afiliado?: obligatorios para postulación y patrocinio, NO para
-  // "quiero asistir" (lead simple para quien no fue invitado — sin trámite comercial;
-  // llega a fenalco-crm como Inscrito lead vía /asistentes). Ver superRefine abajo.
+  // Empresa/NIT/¿Afiliado?: obligatorios en las tres modalidades. Cargo solo en
+  // postulación y patrocinio. "Quiero asistir" sigue llegando a fenalco-crm como
+  // Inscrito lead vía /asistentes. Ver superRefine abajo.
   empresa: z.string().trim().max(160).optional().or(z.literal('')),
   nit: z
     .string()
@@ -93,21 +93,25 @@ export const registroSchema = z.object({
   utm_campaign: z.string().trim().max(160).optional().or(z.literal('')),
   utm_content: z.string().trim().max(160).optional().or(z.literal('')),
 }).superRefine((data, ctx) => {
-  // Empresa/NIT/Cargo/¿Afiliado?/autorización de material: obligatorios para
-  // postulación y patrocinio (ambos son trámites comerciales sobre una empresa),
-  // no para "quiero asistir" (lead simple, ver arriba).
+  // Empresa, NIT y ¿afiliado?: obligatorios en las tres modalidades. En "quiero
+  // asistir" sostienen la regla de acceso (evento reservado a afiliados, salvo los
+  // invitados de las empresas patrocinadoras) y permiten cruzar la empresa contra el
+  // Directorio del CRM en vez de confiar solo en lo que declara el formulario.
+  if (!data.empresa || data.empresa.length < 2) {
+    ctx.addIssue({ code: 'custom', message: 'Ingresa el nombre de tu empresa', path: ['empresa'] });
+  }
+  if (!data.nit || data.nit.length < 5) {
+    ctx.addIssue({ code: 'custom', message: 'Ingresa un NIT válido', path: ['nit'] });
+  }
+  if (!data.esAfiliado) {
+    ctx.addIssue({ code: 'custom', message: 'Indica si tu empresa está afiliada a Fenalco', path: ['esAfiliado'] });
+  }
+
+  // Cargo y autorización de uso de material: solo postulación y patrocinio, los dos
+  // trámites comerciales que entregan logotipo y video.
   if (data.modalidad === 'postulacion' || data.modalidad === 'patrocinio') {
-    if (!data.empresa || data.empresa.length < 2) {
-      ctx.addIssue({ code: 'custom', message: 'Ingresa el nombre de tu empresa', path: ['empresa'] });
-    }
-    if (!data.nit || data.nit.length < 5) {
-      ctx.addIssue({ code: 'custom', message: 'Ingresa un NIT válido', path: ['nit'] });
-    }
     if (!data.cargo || data.cargo.length < 2) {
       ctx.addIssue({ code: 'custom', message: 'Ingresa tu cargo', path: ['cargo'] });
-    }
-    if (!data.esAfiliado) {
-      ctx.addIssue({ code: 'custom', message: 'Indica si tu empresa está afiliada a Fenalco', path: ['esAfiliado'] });
     }
     if (data.aceptaUsoMaterial !== true) {
       ctx.addIssue({
