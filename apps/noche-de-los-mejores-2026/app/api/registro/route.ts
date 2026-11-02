@@ -93,14 +93,14 @@ async function sendViaResend(data: RegistroInput, material: Material): Promise<v
         <li><strong>Nombre:</strong> ${data.nombre} ${data.apellido}</li>
         <li><strong>Correo:</strong> ${data.email}</li>
         <li><strong>Celular:</strong> ${data.telefono}</li>
-        ${data.empresa ? `<li><strong>Empresa:</strong> ${data.empresa}</li>` : ''}
-        ${!esInteres ? `<li><strong>NIT:</strong> ${data.nit || '—'}</li>` : ''}
+        <li><strong>Empresa:</strong> ${data.empresa || '—'}</li>
+        <li><strong>NIT:</strong> ${data.nit || '—'}</li>
         ${!esInteres ? `<li><strong>Cargo:</strong> ${data.cargo || '—'}</li>` : ''}
         ${!esInteres ? `<li><strong>Sector:</strong> ${data.sector || '—'}</li>` : ''}
         ${!esInteres ? `<li><strong>Ciudad:</strong> ${data.ciudad || '—'}</li>` : ''}
-        ${!esInteres ? `<li><strong>Afiliado a Fenalco:</strong> ${data.esAfiliado === 'si' ? 'Sí' : 'No'}</li>` : ''}
+        <li><strong>Afiliado a Fenalco:</strong> ${data.esAfiliado === 'si' ? 'Sí' : 'No'}</li>
         ${data.modalidad === 'postulacion' ? `<li><strong>Categoría:</strong> ${data.categoriaPostulacion}</li>` : ''}
-        <li><strong>Mensaje:</strong> ${data.mensaje || '—'}</li>
+        ${!esInteres ? `<li><strong>Mensaje:</strong> ${data.mensaje || '—'}</li>` : ''}
         ${!esInteres ? `<li><strong>Material promocional:</strong> ${etiquetaMaterial}</li>` : ''}
         <li><strong>Origen:</strong> ${data.origen || '—'} · UTM: ${[data.utm_source, data.utm_medium, data.utm_campaign, data.utm_content].filter(Boolean).join(' / ') || '—'}</li>
       </ul>
@@ -198,7 +198,12 @@ async function sendAsistenteACrm(data: RegistroInput): Promise<string | null> {
       telefono: data.telefono,
       empresa: data.empresa || undefined,
       respuestas: {
-        mensaje: data.mensaje,
+        // nit y esAfiliado van en `respuestas`: el modelo Inscrito no tiene campo
+        // propio para ninguno de los dos (misma convención que la postulación).
+        // esAfiliado es lo que DECLARA el titular; la verificación real se hace en
+        // el CRM cruzando el NIT contra el Directorio.
+        nit: data.nit,
+        esAfiliado: data.esAfiliado === 'si' ? 'Si' : 'No',
         utm_source: data.utm_source,
         utm_medium: data.utm_medium,
         utm_campaign: data.utm_campaign,

@@ -87,12 +87,16 @@ export function Formulario() {
   const [modalidadManual, setModalidadManual] = useState<Modalidad | null>(null);
   const modalidad = modalidadManual ?? modalidadUrl ?? 'postulacion';
   const modalidadFijada = modalidadManual === null && modalidadUrl !== null;
-  // Empresa/NIT/Cargo/¿Afiliado?/material: solo aplican a postulación y patrocinio,
-  // ambos trámites comerciales sobre una empresa — "quiero asistir" es un lead simple.
+  // Cargo/Sector/Ciudad/material: solo aplican a postulación y patrocinio, ambos
+  // trámites comerciales sobre una empresa. Empresa, NIT y ¿afiliado? se piden en las
+  // tres modalidades: la asistencia está reservada a los afiliados de Fenalco Santander
+  // (y a los invitados de las empresas patrocinadoras), y sin NIT el CRM no puede cruzar
+  // la empresa contra el Directorio para verificar esa afiliación.
   const requiereDatosComerciales = modalidad !== 'interes';
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [nit, setNit] = useState('');
+  const [esAfiliado, setEsAfiliado] = useState('');
   const [categoriaPostulacion, setCategoriaPostulacion] = useState('');
   const requiereCedula = (CATEGORIAS_NOMBRE_PERSONAL as readonly string[]).includes(categoriaPostulacion);
   const [recibioPremioAnterior, setRecibioPremioAnterior] = useState('');
@@ -222,6 +226,14 @@ export function Formulario() {
         <p className="text-text-secondary">
           {ENCABEZADOS[modalidad].descripcion}
         </p>
+        {modalidad === 'interes' && (
+          <p className="mt-6 border border-gold/40 bg-surface-elevated px-6 py-4 text-left text-sm leading-relaxed text-text-secondary">
+            <strong className="text-ivory">La asistencia está reservada a los afiliados de Fenalco Santander.</strong>{' '}
+            Las empresas patrocinadoras del evento reciben entradas como parte de su vinculación, aunque no estén
+            afiliadas. Si no perteneces a ninguno de los dos grupos, puedes registrar tu interés y el equipo te
+            contactará para evaluar la disponibilidad de cupo.
+          </p>
+        )}
       </Reveal>
 
       <Reveal className="mx-auto mt-12 max-w-[920px]">
@@ -274,33 +286,49 @@ export function Formulario() {
             <Field label="Apellido" name="apellido" required autoComplete="family-name" />
             <Field label="Correo electrónico" name="email" type="email" required autoComplete="email" />
             <Field label="Celular" name="telefono" type="tel" required autoComplete="tel" />
-            <Field
-              label="Empresa"
-              name="empresa"
-              required={requiereDatosComerciales}
-              autoComplete="organization"
-            />
+            <Field label="Empresa" name="empresa" required autoComplete="organization" />
+            <Field label="NIT" name="nit" required onChange={(e) => setNit(e.target.value)} />
 
             {requiereDatosComerciales && (
               <>
-                <Field label="NIT" name="nit" required onChange={(e) => setNit(e.target.value)} />
                 <Field label="Cargo" name="cargo" required autoComplete="organization-title" />
                 <Field label="Sector" name="sector" />
                 <Field label="Ciudad" name="ciudad" autoComplete="address-level2" />
-
-                <div>
-                  <label htmlFor="esAfiliado" className="mb-2 block text-base font-medium">
-                    ¿Tu empresa está afiliada a Fenalco?
-                  </label>
-                  <select id="esAfiliado" name="esAfiliado" required defaultValue="" className="input-field">
-                    <option value="" disabled>
-                      Selecciona una opción
-                    </option>
-                    <option value="si">Sí</option>
-                    <option value="no">No</option>
-                  </select>
-                </div>
               </>
+            )}
+
+            <div>
+              <label htmlFor="esAfiliado" className="mb-2 block text-base font-medium">
+                ¿Tu empresa está afiliada a Fenalco?
+              </label>
+              <select
+                id="esAfiliado"
+                name="esAfiliado"
+                required
+                value={esAfiliado}
+                onChange={(e) => setEsAfiliado(e.target.value)}
+                className="input-field"
+              >
+                <option value="" disabled>
+                  Selecciona una opción
+                </option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+
+            {/* No bloquea el envío (decisión de producto): el no afiliado queda como
+                interés y Fenalco evalúa el cupo, pero se le advierte antes de enviar. */}
+            {modalidad === 'interes' && esAfiliado === 'no' && (
+              <div
+                role="status"
+                className="border border-gold/40 bg-surface-elevated px-5 py-4 text-sm leading-relaxed text-text-secondary md:col-span-2"
+              >
+                Puedes enviar tu registro, pero{' '}
+                <strong className="text-ivory">el acceso está reservado a los afiliados de Fenalco Santander</strong> y a
+                los invitados de las empresas patrocinadoras. Revisaremos tu caso y te contactaremos para confirmar si hay
+                cupo disponible.
+              </div>
             )}
 
             {modalidad === 'postulacion' && (
@@ -395,12 +423,16 @@ export function Formulario() {
               </>
             )}
 
-            <div className="md:col-span-2">
-              <label htmlFor="mensaje" className="mb-2 block text-base font-medium">
-                {modalidad === 'interes' ? '¿Por qué quieres asistir? (opcional)' : 'Mensaje (opcional)'}
-              </label>
-              <textarea id="mensaje" name="mensaje" rows={3} className="input-field" />
-            </div>
+            {/* "¿Por qué quieres asistir?" se retiró de la modalidad interés: no aportaba
+                a la gestión comercial ni a la verificación de afiliación. */}
+            {modalidad !== 'interes' && (
+              <div className="md:col-span-2">
+                <label htmlFor="mensaje" className="mb-2 block text-base font-medium">
+                  Mensaje (opcional)
+                </label>
+                <textarea id="mensaje" name="mensaje" rows={3} className="input-field" />
+              </div>
+            )}
 
             {requiereDatosComerciales && (
               <div className="border-t border-gold/20 pt-6 md:col-span-2">
