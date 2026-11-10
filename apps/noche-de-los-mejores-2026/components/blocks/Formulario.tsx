@@ -202,6 +202,15 @@ export function Formulario() {
       });
 
       if (!response.ok) {
+        // Correo ya registrado en el CRM: se muestra su mensaje y se conservan los campos.
+        if (response.status === 409) {
+          const body = (await response.json().catch(() => null)) as { error?: string; message?: string } | null;
+          if (body?.error === 'correo_repetido' && body.message) {
+            setStatus('error');
+            setErrorMessage(body.message);
+            return;
+          }
+        }
         setStatus('error');
         setErrorMessage('No pudimos enviar tu solicitud. Intenta de nuevo en unos minutos.');
         return;

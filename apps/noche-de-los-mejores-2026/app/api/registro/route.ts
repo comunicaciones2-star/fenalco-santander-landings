@@ -75,7 +75,14 @@ function isRateLimited(ip: string): boolean {
   return recent.length > RATE_LIMIT_MAX;
 }
 
-async function sendViaResend(data: RegistroInput, material: Material): Promise<void> {
+// El CRM rechaza (409 CORREO_YA_REGISTRADO) un "quiero asistir" cuyo correo ya existe.
+class CorreoRepetidoError extends Error {
+  constructor(public readonly userMessage: string) {
+    super('fenalco-crm (asistentes) respondió 409 CORREO_YA_REGISTRADO');
+  }
+}
+
+async function sendViaResend(data: RegistroInput, material: Material, subjectPrefix = ''): Promise<void> {
   const { Resend } = await import('resend');
   const resend = new Resend(process.env.RESEND_API_KEY);
   const esInteres = data.modalidad === 'interes';
@@ -86,7 +93,7 @@ async function sendViaResend(data: RegistroInput, material: Material): Promise<v
   const result = await resend.emails.send({
     from: process.env.LEADS_FROM_EMAIL ?? 'onboarding@resend.dev',
     to: process.env.LEADS_TO_EMAIL ?? '',
-    subject: `Nuevo lead · La Noche de los Mejores 2026 · ${etiquetaModalidad} · ${data.empresa || data.nombre}`,
+    subject: `${subjectPrefix}Nuevo lead · La Noche de los Mejores 2026 · ${etiquetaModalidad} · ${data.empresa || data.nombre}`,
     html: `
       <h2>Nuevo lead — La Noche de los Mejores 2026 (${etiquetaModalidad})</h2>
       <ul>
@@ -188,8 +195,11 @@ async function sendAsistenteACrm(data: RegistroInput): Promise<string | null> {
   const slug = process.env.CRM_EVENT_SLUG;
   if (!baseUrl || !apiKey || !slug) return null;
 
+  // Timeout corto: el aviso por Resend espera esta respuesta (define el asunto) y es el
+  // único respaldo de estos leads; un CRM colgado no debe retrasarlo ni impedirlo.
   const response = await fetch(`${baseUrl}/api/public-forms/${slug}/asistentes`, {
     method: 'POST',
+    signal: AbortSignal.timeout(5000),
     headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey },
     body: JSON.stringify({
       nombre: data.nombre,
@@ -210,6 +220,18 @@ async function sendAsistenteACrm(data: RegistroInput): Promise<string | null> {
 
   if (!response.ok) {
     const body = await response.text().catch(() => '');
+    if (response.status === 409) {
+      try {
+        const parsed = JSON.parse(body) as { code?: string; message?: string };
+        if (parsed.code === 'CORREO_YA_REGISTRADO') {
+          throw new CorreoRepetidoError(
+            parsed.message || 'Este correo ya está registrado. Usa otro correo para continuar.',
+          );
+        }
+      } catch (err) {
+        if (err instanceof CorreoRepetidoError) throw err;
+      }
+    }
     throw new Error(`fenalco-crm (asistentes) respondió ${response.status}: ${body}`);
   }
 
@@ -289,8 +311,23 @@ export async function POST(request: NextRequest) {
     // y que uno falle no debe impedir ni ocultar el resultado del otro.
     let algunoEntregado = false;
 
+    // Para "interes" el CRM va primero: su respuesta decide el asunto del aviso por Resend
+    // ([CORREO REPETIDO] si el correo ya existía) y si se muestra éxito o error al usuario.
+    let correoRepetido: CorreoRepetidoError | null = null;
+    let asistenteId: string | null = null;
+    if (data.modalidad === 'interes' && process.env.CRM_API_BASE_URL) {
+      asistenteId = await sendAsistenteACrm(data).catch((err) => {
+        if (err instanceof CorreoRepetidoError) {
+          correoRepetido = err;
+        } else {
+          console.error('[registro] fallo envío de asistente a fenalco-crm', err);
+        }
+        return null;
+      });
+    }
+
     if (process.env.RESEND_API_KEY) {
-      algunoEntregado = await sendViaResend(data, material)
+      algunoEntregado = await sendViaResend(data, material, correoRepetido ? '[CORREO REPETIDO] ' : '')
         .then(() => true)
         .catch((err) => {
           console.error('[registro] fallo envío Resend', err);
@@ -303,10 +340,6 @@ export async function POST(request: NextRequest) {
     // así que su id no se usa para el enlace de material de abajo.
     let registroId: string | null = null;
     if (data.modalidad === 'interes' && process.env.CRM_API_BASE_URL) {
-      const asistenteId = await sendAsistenteACrm(data).catch((err) => {
-        console.error('[registro] fallo envío de asistente a fenalco-crm', err);
-        return null;
-      });
       algunoEntregado = algunoEntregado || asistenteId !== null;
     } else if (data.modalidad !== 'interes' && process.env.CRM_API_BASE_URL) {
       const enviarACrm = data.modalidad === 'postulacion' ? sendPostulacionACrm : sendPatrocinioACrm;
@@ -331,6 +364,13 @@ export async function POST(request: NextRequest) {
       });
       await sendMaterialEmail({ nombre: data.nombre, email: data.email, modalidad: data.modalidad, token }).catch(
         (err) => console.error('[registro] fallo envío de correo de material', err),
+      );
+    }
+
+    if (correoRepetido) {
+      return NextResponse.json(
+        { ok: false, error: 'correo_repetido', message: (correoRepetido as CorreoRepetidoError).userMessage },
+        { status: 409 },
       );
     }
 
