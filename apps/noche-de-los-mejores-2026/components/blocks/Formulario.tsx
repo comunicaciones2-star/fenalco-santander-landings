@@ -206,24 +206,20 @@ export function Formulario() {
       });
 
       if (!response.ok) {
-        // Correo ya registrado en el CRM: se muestra su mensaje y se conservan los campos.
-        if (response.status === 409) {
-          const body = (await response.json().catch(() => null)) as { error?: string; message?: string } | null;
-          if (body?.error === 'correo_repetido' && body.message) {
-            setStatus('error');
-            setErrorMessage(body.message);
-            return;
-          }
-        }
+        // Se lee el motivo que entrega el servidor (409 correo repetido, 429, 400, 500...)
+        // y se deja el detalle en consola para diagnóstico; solo si no hay motivo se usa el genérico.
+        const body = (await response.json().catch(() => null)) as { error?: string; message?: string } | null;
+        console.error('[registro] el servidor rechazó el envío', { status: response.status, error: body?.error, message: body?.message });
         setStatus('error');
-        setErrorMessage('No pudimos enviar tu solicitud. Intenta de nuevo en unos minutos.');
+        setErrorMessage(body?.message || `No pudimos enviar tu solicitud (código ${response.status}). Intenta de nuevo en unos minutos.`);
         return;
       }
 
       setStatus('success');
-    } catch {
+    } catch (err) {
+      console.error('[registro] error de red al enviar el formulario', err);
       setStatus('error');
-      setErrorMessage('No pudimos enviar tu solicitud. Intenta de nuevo en unos minutos.');
+      setErrorMessage('No pudimos conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.');
     }
   };
 

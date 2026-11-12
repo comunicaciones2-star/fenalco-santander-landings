@@ -284,19 +284,19 @@ export async function POST(request: NextRequest) {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
 
   if (isRateLimited(ip)) {
-    return NextResponse.json({ ok: false, error: 'rate_limited' }, { status: 429 });
+    return NextResponse.json({ ok: false, error: 'rate_limited', message: 'Demasiados intentos seguidos. Espera un minuto y vuelve a enviar.' }, { status: 429 });
   }
 
   let body: unknown;
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ ok: false, error: 'invalid_json' }, { status: 400 });
+    return NextResponse.json({ ok: false, error: 'invalid_json', message: 'No se pudo leer el formulario. Recarga la página e inténtalo de nuevo.' }, { status: 400 });
   }
 
   const parsed = registroSchema.safeParse(body);
   if (!parsed.success) {
-    return NextResponse.json({ ok: false, errors: parsed.error.flatten() }, { status: 400 });
+    return NextResponse.json({ ok: false, error: 'validation', message: parsed.error.issues[0]?.message ?? 'Revisa los campos del formulario.', errors: parsed.error.flatten() }, { status: 400 });
   }
 
   const data = parsed.data;
@@ -308,7 +308,7 @@ export async function POST(request: NextRequest) {
   }
 
   if (Date.now() - data._ts < MIN_SUBMIT_MS) {
-    return NextResponse.json({ ok: false, error: 'too_fast' }, { status: 400 });
+    return NextResponse.json({ ok: false, error: 'too_fast', message: 'Enviaste el formulario demasiado rápido. Espera unos segundos y vuelve a enviar.' }, { status: 400 });
   }
 
   try {
@@ -390,6 +390,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error('[registro] error interno inesperado', error);
-    return NextResponse.json({ ok: false, error: 'server_error' }, { status: 500 });
+    return NextResponse.json({ ok: false, error: 'server_error', message: 'Error interno al procesar tu solicitud. Intenta de nuevo en unos minutos.' }, { status: 500 });
   }
 }
