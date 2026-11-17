@@ -367,6 +367,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Sin esto, un CRM que responde 2xx sin `id` (o sin RESEND_API_KEY) deja el correo
+    // de material sin enviar y sin ninguna huella en los logs.
+    if (data.modalidad !== 'interes' && !registroId) {
+      console.warn('[registro] correo de material omitido: sin registroId del CRM', {
+        modalidad: data.modalidad,
+        crmConfigurado: Boolean(process.env.CRM_API_BASE_URL),
+        resendConfigurado: Boolean(process.env.RESEND_API_KEY),
+      });
+    }
+
     if (correoRepetido) {
       return NextResponse.json(
         { ok: false, error: 'correo_repetido', message: (correoRepetido as CorreoRepetidoError).userMessage },

@@ -12,6 +12,9 @@ import { Reveal } from '@/components/ui/Reveal';
 type FormStatus = 'idle' | 'sending' | 'success' | 'error';
 type LeadFormVariant = 'commercial' | 'inscripcion';
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const GENERIC_ERROR = 'No pudimos procesar tu solicitud. Intenta de nuevo en unos minutos.';
+
 interface LeadFormProps {
   readonly variant?: LeadFormVariant;
 }
@@ -58,6 +61,14 @@ export function LeadForm({ variant = 'commercial' }: LeadFormProps) {
       _ts: renderedAt.current ?? Date.now(),
     };
 
+    // El form usa noValidate, así que el formato del correo se revisa aquí; antes
+    // el servidor lo rechazaba y el usuario solo veía el mensaje genérico.
+    if (!EMAIL_REGEX.test(payload.email)) {
+      setStatus('error');
+      setErrorMessage('Ingresa un correo válido, sin espacios (ej. nombre@empresa.com).');
+      return;
+    }
+
     const result = await submitLead(payload);
     if (result.ok) {
       setSubmittedName(payload.name);
@@ -65,11 +76,17 @@ export function LeadForm({ variant = 'commercial' }: LeadFormProps) {
       setStatus('success');
     } else {
       setStatus('error');
-      setErrorMessage(
-        result.error === 'too_fast' || result.error === 'rate_limited'
-          ? 'Intenta de nuevo en unos segundos.'
-          : 'No pudimos procesar tu solicitud. Intenta de nuevo en unos minutos.',
-      );
+      if (result.error === 'too_fast' || result.error === 'rate_limited') {
+        setErrorMessage('Intenta de nuevo en unos segundos.');
+      } else if (result.fieldErrors) {
+        const detalle = Object.values(result.fieldErrors)
+          .map((mensajes) => mensajes[0])
+          .filter(Boolean)
+          .join(' · ');
+        setErrorMessage(detalle || GENERIC_ERROR);
+      } else {
+        setErrorMessage(GENERIC_ERROR);
+      }
     }
   };
 
