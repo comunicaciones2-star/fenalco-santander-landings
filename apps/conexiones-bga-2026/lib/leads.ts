@@ -31,6 +31,14 @@ export interface LeadPayload {
 export interface SubmitLeadResult {
   readonly ok: boolean;
   readonly error?: string;
+  /** Mensajes de validación del servidor, por campo (respuesta 400 de /api/leads). */
+  readonly fieldErrors?: Readonly<Record<string, readonly string[]>>;
+}
+
+interface LeadResponseBody {
+  readonly ok?: boolean;
+  readonly error?: string;
+  readonly errors?: { readonly fieldErrors?: Record<string, string[]> };
 }
 
 export async function submitLead(payload: LeadPayload): Promise<SubmitLeadResult> {
@@ -41,10 +49,15 @@ export async function submitLead(payload: LeadPayload): Promise<SubmitLeadResult
       body: JSON.stringify(payload),
     });
 
-    const data = (await response.json().catch(() => null)) as { ok?: boolean; error?: string } | null;
+    const data = (await response.json().catch(() => null)) as LeadResponseBody | null;
 
     if (!response.ok || !data?.ok) {
-      return { ok: false, error: data?.error ?? 'server_error' };
+      const fieldErrors = data?.errors?.fieldErrors;
+      return {
+        ok: false,
+        error: data?.error ?? (fieldErrors ? 'validation_error' : 'server_error'),
+        fieldErrors,
+      };
     }
 
     return { ok: true };

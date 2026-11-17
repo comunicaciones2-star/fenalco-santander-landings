@@ -5,10 +5,12 @@ import { config } from '@/content/event.config';
 import { Award, Handshake, Ticket, Check } from 'lucide-react';
 import { registroSchema, CATEGORIAS_NOMBRE_PERSONAL } from '@/lib/schemas/registro';
 import { useTrackingParams } from '@/hooks/useTrackingParams';
+import { useCierreModalidad } from '@/hooks/useCierreModalidad';
 import { Section } from '@/components/ui/Section';
 import { SectionTitle } from '@/components/ui/SectionTitle';
 import { Rule } from '@/components/ui/Rule';
 import { Reveal } from '@/components/ui/Reveal';
+import { CierreAviso } from '@/components/ui/CierreAviso';
 import { FileUpload } from '@/components/ui/FileUpload';
 import type { Modalidad as ModalidadArchivo } from '@/lib/upload-rules';
 
@@ -36,9 +38,6 @@ const SUBMIT_LABELS: Record<Modalidad, string> = {
   interes: 'Confirmar asistencia',
 };
 
-// Mensaje de éxito por modalidad — cada una tiene su propio trámite (postulación
-// evaluada por el jurado, patrocinio por el equipo comercial, asistencia es un
-// interés que aún no confirma cupo), así que no comparten el mismo texto.
 const MENSAJES_EXITO: Record<Modalidad, string> = {
   postulacion: 'Recibimos tu postulación. El equipo de Fenalco Santander te contactará.',
   interes: 'Registramos tu interés en asistir. El equipo de Fenalco Santander te contactará para confirmar tu cupo.',
@@ -87,11 +86,13 @@ export function Formulario() {
   const [modalidadManual, setModalidadManual] = useState<Modalidad | null>(null);
   const modalidad = modalidadManual ?? modalidadUrl ?? 'postulacion';
   const modalidadFijada = modalidadManual === null && modalidadUrl !== null;
-  // Cargo/Sector/Ciudad/material: solo aplican a postulación y patrocinio, ambos
-  // trámites comerciales sobre una empresa. Empresa, NIT y ¿afiliado? se piden en las
-  // tres modalidades: la asistencia está reservada a los afiliados de Fenalco Santander
-  // (y a los invitados de las empresas patrocinadoras), y sin NIT el CRM no puede cruzar
-  // la empresa contra el Directorio para verificar esa afiliación.
+  
+  const cierrePostulacion = useCierreModalidad('postulacion');
+  
+  // Empresa/NIT/Cargo/¿Afiliado?/material: solo aplican a postulación y patrocinio,
+  // ambos trámites comerciales sobre una empresa — "quiero asistir" es un lead simple.
+  // Sin embargo, en las tres modalidades se pide NIT para cruzar la empresa contra el
+  // Directorio de Fenalco Santander y verificar afiliación (para asistencia).
   const requiereDatosComerciales = modalidad !== 'interes';
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -109,14 +110,22 @@ export function Formulario() {
     renderedAt.current = Date.now();
   }, []);
 
-  // La confirmación reemplaza un formulario largo por un mensaje corto; sin este
-  // scroll, la posición en píxeles del usuario cae sobre las secciones de más
-  // abajo (Sede, FAQ) y el mensaje de éxito queda fuera de vista.
   useEffect(() => {
     if (status === 'success') {
       successRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }, [status]);
+  
+  // Si viene por URL con postulación cerrada, mostrar aviso de cierre
+  if (modalidadFijada && modalidad === 'postulacion' && cierrePostulacion.cerrado) {
+    return (
+      <CierreAviso
+        titulo="Postulaciones cerradas"
+        descripcion="La convocatoria a las categorías de reconocimiento de La Noche de los Mejores 2026 ha finalizado. Agradecemos a todas las empresas y líderes que participaron en esta edición."
+        fondo="primary"
+      />
+    );
+  }
 
   const handleLogoUploaded = (key: string, meta: Record<string, unknown>) => {
     setLogoInfo({
@@ -140,6 +149,14 @@ export function Formulario() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    
+    // Validar que la postulación no esté cerrada en el momento del envío
+    if (modalidad === 'postulacion' && cierrePostulacion.cerrado) {
+      setStatus('error');
+      setErrorMessage('Las postulaciones ya están cerradas. No se puede enviar.');
+      return;
+    }
+    
     setStatus('sending');
     setErrorMessage(null);
 
@@ -154,8 +171,6 @@ export function Formulario() {
       cargo: String(form.get('cargo') ?? ''),
       sector: String(form.get('sector') ?? ''),
       ciudad: String(form.get('ciudad') ?? ''),
-      // '' -> undefined: esAfiliado es z.enum(['si','no']).optional() (ver recibioPremioAnterior
-      // más abajo, mismo motivo) — no se renderiza para 'interes'.
       esAfiliado: String(form.get('esAfiliado') ?? '') || undefined,
       modalidad,
       categoriaPostulacion: String(form.get('categoriaPostulacion') ?? ''),
@@ -163,9 +178,6 @@ export function Formulario() {
       aniosFundacion: String(form.get('aniosFundacion') ?? ''),
       paginaWeb: String(form.get('paginaWeb') ?? ''),
       numeroEmpleados: String(form.get('numeroEmpleados') ?? ''),
-      // '' -> undefined: recibioPremioAnterior es z.enum(['si','no']).optional(), y un
-      // '' literal fallaría la validación de enum antes de llegar al mensaje custom
-      // del superRefine ("indica si...").
       recibioPremioAnterior: String(form.get('recibioPremioAnterior') ?? '') || undefined,
       detallePremioAnterior: String(form.get('detallePremioAnterior') ?? ''),
       mensaje: String(form.get('mensaje') ?? ''),
@@ -206,8 +218,6 @@ export function Formulario() {
       });
 
       if (!response.ok) {
-        // Se lee el motivo que entrega el servidor (409 correo repetido, 429, 400, 500...)
-        // y se deja el detalle en consola para diagnóstico; solo si no hay motivo se usa el genérico.
         const body = (await response.json().catch(() => null)) as { error?: string; message?: string } | null;
         console.error('[registro] el servidor rechazó el envío', { status: response.status, error: body?.error, message: body?.message });
         setStatus('error');
@@ -253,7 +263,6 @@ export function Formulario() {
           </p>
         ) : (
           <form onSubmit={handleSubmit} noValidate className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {/* Honeypot: oculto por CSS, no display:none, para no delatarse ante bots simples. */}
             <div className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
               <label htmlFor="website">Sitio web</label>
               <input type="text" id="website" name="website" tabIndex={-1} autoComplete="off" />
@@ -265,6 +274,7 @@ export function Formulario() {
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                   {config.formulario.modalidades.map((opcion) => {
                     const Icon = MODALIDAD_ICONS[opcion.id as Modalidad];
+                    const isClosed = opcion.id === 'postulacion' && cierrePostulacion.cerrado;
                     return (
                     <label key={opcion.id} className="relative min-w-0 cursor-pointer">
                       <input
@@ -273,9 +283,14 @@ export function Formulario() {
                         value={opcion.id}
                         checked={modalidad === opcion.id}
                         onChange={() => setModalidadManual(opcion.id as Modalidad)}
+                        disabled={isClosed}
                         className="peer sr-only"
                       />
-                      <span className="flex min-h-20 items-center justify-center gap-3 border border-gold/40 bg-surface-elevated px-5 py-4 text-center text-base font-semibold text-ivory transition-colors hover:border-gold peer-checked:border-gold peer-checked:bg-gold peer-checked:text-surface-primary peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-gold motion-reduce:transition-none">
+                      <span className={`flex min-h-20 items-center justify-center gap-3 border border-gold/40 bg-surface-elevated px-5 py-4 text-center text-base font-semibold text-ivory transition-colors ${
+                        isClosed
+                          ? 'opacity-50 cursor-not-allowed'
+                          : 'hover:border-gold peer-checked:border-gold peer-checked:bg-gold peer-checked:text-surface-primary peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-gold'
+                      } motion-reduce:transition-none`}>
                         <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
                         {opcion.label}
                         {modalidad === opcion.id && <Check className="h-4 w-4 shrink-0" aria-hidden="true" />}
@@ -375,14 +390,11 @@ export function Formulario() {
                   className="input-field"
                 />
                 <p className="mt-1.5 text-sm text-text-secondary">
-                  Esta categoría se otorga a nombre personal. Necesitamos tu cédula para el acta de
-                  premiación.
+                  Esta categoría se otorga a nombre personal. Necesitamos tu cédula para el acta de premiación.
                 </p>
               </div>
             )}
 
-            {/* Preguntas del jurado para la sustentación — obligatorias en las 10
-                categorías por igual, independiente de cuál se haya elegido arriba. */}
             {modalidad === 'postulacion' && (
               <>
                 <Field label="¿Cuántos años tiene de fundada la empresa?" name="aniosFundacion" required inputMode="numeric" />

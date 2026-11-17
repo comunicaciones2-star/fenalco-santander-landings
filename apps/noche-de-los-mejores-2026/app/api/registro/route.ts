@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { registroSchema, type RegistroInput } from '@/lib/schemas/registro';
 import { signMaterialToken } from '@/lib/token';
 import { sendMaterialEmail } from '@/lib/materialEmail';
+import { config } from '@/content/event.config';
 
 export const runtime = 'nodejs';
 
@@ -73,6 +74,19 @@ function isRateLimited(ip: string): boolean {
   recent.push(now);
   requestsByIp.set(ip, recent);
   return recent.length > RATE_LIMIT_MAX;
+}
+
+function isPostulacionCerrada(): boolean {
+  const cierrePostulacion = config.cierres.find((c) => c.id === 'postulacion');
+  if (!cierrePostulacion) return false;
+
+  if (cierrePostulacion.cerrado) return true;
+
+  if (!cierrePostulacion.cierreFecha) return false;
+
+  const ahora = new Date();
+  const fechaCierre = new Date(cierrePostulacion.cierreFecha);
+  return ahora >= fechaCierre;
 }
 
 // El CRM rechaza (409 CORREO_YA_REGISTRADO) un "quiero asistir" cuyo correo ya existe.
@@ -311,6 +325,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: false, error: 'too_fast', message: 'Enviaste el formulario demasiado rápido. Espera unos segundos y vuelve a enviar.' }, { status: 400 });
   }
 
+  // Validar que las postulaciones no estén cerradas
+  if (data.modalidad === 'postulacion' && isPostulacionCerrada()) {
+    return NextResponse.json(
+      { ok: false, error: 'POSTULACIONES_CERRADAS', message: 'Las postulaciones a La Noche de los Mejores 2026 ya están cerradas.' },
+      { status: 410 },
+    );
+  }
+
   try {
     // Los canales son independientes: cada uno se intenta si está configurado,
     // y que uno falle no debe impedir ni ocultar el resultado del otro.
@@ -370,6 +392,16 @@ export async function POST(request: NextRequest) {
       await sendMaterialEmail({ nombre: data.nombre, email: data.email, modalidad: data.modalidad, token }).catch(
         (err) => console.error('[registro] fallo envío de correo de material', err),
       );
+    }
+
+    // Sin esto, un CRM que responde 2xx sin `id` (o sin RESEND_API_KEY) deja el correo
+    // de material sin enviar y sin ninguna huella en los logs.
+    if (data.modalidad !== 'interes' && !registroId) {
+      console.warn('[registro] correo de material omitido: sin registroId del CRM', {
+        modalidad: data.modalidad,
+        crmConfigurado: Boolean(process.env.CRM_API_BASE_URL),
+        resendConfigurado: Boolean(process.env.RESEND_API_KEY),
+      });
     }
 
     if (correoRepetido) {

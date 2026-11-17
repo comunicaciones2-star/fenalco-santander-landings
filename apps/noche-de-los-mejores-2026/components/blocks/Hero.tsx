@@ -1,11 +1,11 @@
 import Image from 'next/image';
 import { CalendarDays, MapPin } from 'lucide-react';
 import { config } from '@/content/event.config';
-import { Button } from '@/components/ui/Button';
 import { CompassRose } from '@/components/ui/CompassRose';
 import { StarField } from '@/components/ui/StarField';
 import { ConstellationLayer } from '@/components/ui/ConstellationLayer';
 import { HeroNebulaVideo } from '@/components/ui/HeroNebulaVideo';
+import { HeroCtaClientside } from './HeroCtaClientside';
 
 // Capas y z-index del Hero definidos en globals.css.
 const LOCKUP_SRC = '/logos/Logo NDLM 2026.svg';
@@ -62,25 +62,7 @@ export function Hero() {
             {config.hero.subtitulo}
           </p>
 
-          <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-3">
-            <Button href={config.cta.principal.href} ariaLabel={config.cta.principal.label} className="hero-action">
-              {config.cta.principal.label}
-            </Button>
-            <Button
-              href={config.cta.secundario.href}
-              variant="ghost"
-              ariaLabel={config.cta.secundario.label}
-              className="hero-action"
-            >
-              {config.cta.secundario.label}
-            </Button>
-            <a
-              href="?modalidad=interes#postulacion"
-              className="btn-ghost hero-action"
-            >
-              Quiero asistir
-            </a>
-          </div>
+          <HeroCtaClientside />
 
           <div className="mt-2 flex flex-col gap-4 border-t border-surface-light/15 pt-6 sm:flex-row sm:items-center sm:gap-10">
             <div>

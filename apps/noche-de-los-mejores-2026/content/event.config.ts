@@ -4,6 +4,13 @@ export interface CtaLink {
   readonly tipo?: 'ancla';
 }
 
+export interface ModalidadCierre {
+  readonly id: 'postulacion' | 'patrocinio' | 'asistentes';
+  readonly nombre: string;
+  readonly cierreFecha: string; // ISO 8601 / null para nunca cerrar
+  readonly cerrado: boolean;
+}
+
 export interface EventConfig {
   readonly slug: string;
   readonly nombre: string;
@@ -45,6 +52,7 @@ export interface EventConfig {
     readonly modalidades: ReadonlyArray<{ readonly id: string; readonly label: string }>;
     readonly destinoEmail: string;
   };
+  readonly cierres: ReadonlyArray<ModalidadCierre>;
   readonly seo: {
     readonly title: string;
     readonly description: string;
@@ -195,6 +203,27 @@ export const config: EventConfig = {
     ],
     destinoEmail: '', // TODO PENDIENTE — usa LEADS_TO_EMAIL en .env.local
   },
+
+  cierres: [
+    {
+      id: 'postulacion',
+      nombre: 'Postulación a Categorías',
+      cierreFecha: '2026-11-17T23:59:59-05:00',
+      cerrado: true,
+    },
+    {
+      id: 'patrocinio',
+      nombre: 'Patrocinios',
+      cierreFecha: '2026-11-21T23:59:59-05:00',
+      cerrado: false,
+    },
+    {
+      id: 'asistentes',
+      nombre: 'Registro de Asistentes',
+      cierreFecha: '2026-11-26T17:00:00-05:00',
+      cerrado: false,
+    },
+  ],
 
   seo: {
     title: 'La Noche de los Mejores 2026 | Fenalco Santander',
