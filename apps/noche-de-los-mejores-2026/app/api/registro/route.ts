@@ -114,14 +114,14 @@ async function sendViaResend(data: RegistroInput, material: Material, subjectPre
         <li><strong>Nombre:</strong> ${data.nombre} ${data.apellido}</li>
         <li><strong>Correo:</strong> ${data.email}</li>
         <li><strong>Celular:</strong> ${data.telefono}</li>
-        ${data.empresa ? `<li><strong>Empresa:</strong> ${data.empresa}</li>` : ''}
-        ${!esInteres ? `<li><strong>NIT:</strong> ${data.nit || '—'}</li>` : ''}
+        <li><strong>Empresa:</strong> ${data.empresa || '—'}</li>
+        <li><strong>NIT:</strong> ${data.nit || '—'}</li>
         ${!esInteres ? `<li><strong>Cargo:</strong> ${data.cargo || '—'}</li>` : ''}
         ${!esInteres ? `<li><strong>Sector:</strong> ${data.sector || '—'}</li>` : ''}
         ${!esInteres ? `<li><strong>Ciudad:</strong> ${data.ciudad || '—'}</li>` : ''}
-        ${!esInteres ? `<li><strong>Afiliado a Fenalco:</strong> ${data.esAfiliado === 'si' ? 'Sí' : 'No'}</li>` : ''}
+        <li><strong>Afiliado a Fenalco:</strong> ${data.esAfiliado === 'si' ? 'Sí' : 'No'}</li>
         ${data.modalidad === 'postulacion' ? `<li><strong>Categoría:</strong> ${data.categoriaPostulacion}</li>` : ''}
-        <li><strong>Mensaje:</strong> ${data.mensaje || '—'}</li>
+        ${!esInteres ? `<li><strong>Mensaje:</strong> ${data.mensaje || '—'}</li>` : ''}
         ${!esInteres ? `<li><strong>Material promocional:</strong> ${etiquetaMaterial}</li>` : ''}
         <li><strong>Origen:</strong> ${data.origen || '—'} · UTM: ${[data.utm_source, data.utm_medium, data.utm_campaign, data.utm_content].filter(Boolean).join(' / ') || '—'}</li>
       </ul>
@@ -222,7 +222,12 @@ async function sendAsistenteACrm(data: RegistroInput): Promise<string | null> {
       telefono: data.telefono,
       empresa: data.empresa || undefined,
       respuestas: {
-        mensaje: data.mensaje,
+        // nit y esAfiliado van en `respuestas`: el modelo Inscrito no tiene campo
+        // propio para ninguno de los dos (misma convención que la postulación).
+        // esAfiliado es lo que DECLARA el titular; la verificación real se hace en
+        // el CRM cruzando el NIT contra el Directorio.
+        nit: data.nit,
+        esAfiliado: data.esAfiliado === 'si' ? 'Si' : 'No',
         utm_source: data.utm_source,
         utm_medium: data.utm_medium,
         utm_campaign: data.utm_campaign,
@@ -293,19 +298,19 @@ export async function POST(request: NextRequest) {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
 
   if (isRateLimited(ip)) {
-    return NextResponse.json({ ok: false, error: 'rate_limited' }, { status: 429 });
+    return NextResponse.json({ ok: false, error: 'rate_limited', message: 'Demasiados intentos seguidos. Espera un minuto y vuelve a enviar.' }, { status: 429 });
   }
 
   let body: unknown;
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ ok: false, error: 'invalid_json' }, { status: 400 });
+    return NextResponse.json({ ok: false, error: 'invalid_json', message: 'No se pudo leer el formulario. Recarga la página e inténtalo de nuevo.' }, { status: 400 });
   }
 
   const parsed = registroSchema.safeParse(body);
   if (!parsed.success) {
-    return NextResponse.json({ ok: false, errors: parsed.error.flatten() }, { status: 400 });
+    return NextResponse.json({ ok: false, error: 'validation', message: parsed.error.issues[0]?.message ?? 'Revisa los campos del formulario.', errors: parsed.error.flatten() }, { status: 400 });
   }
 
   const data = parsed.data;
@@ -317,7 +322,7 @@ export async function POST(request: NextRequest) {
   }
 
   if (Date.now() - data._ts < MIN_SUBMIT_MS) {
-    return NextResponse.json({ ok: false, error: 'too_fast' }, { status: 400 });
+    return NextResponse.json({ ok: false, error: 'too_fast', message: 'Enviaste el formulario demasiado rápido. Espera unos segundos y vuelve a enviar.' }, { status: 400 });
   }
 
   // Validar que las postulaciones no estén cerradas
@@ -417,6 +422,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error('[registro] error interno inesperado', error);
-    return NextResponse.json({ ok: false, error: 'server_error' }, { status: 500 });
+    return NextResponse.json({ ok: false, error: 'server_error', message: 'Error interno al procesar tu solicitud. Intenta de nuevo en unos minutos.' }, { status: 500 });
   }
 }
