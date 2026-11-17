@@ -89,17 +89,6 @@ export function Formulario() {
   
   const cierrePostulacion = useCierreModalidad('postulacion');
   
-  // Si viene por URL con postulación cerrada, mostrar aviso de cierre
-  if (modalidadFijada && modalidad === 'postulacion' && cierrePostulacion.cerrado) {
-    return (
-      <CierreAviso
-        titulo="Las postulaciones a La Noche de los Mejores 2026 ya están cerradas"
-        descripcion="Gracias por tu interés. Te esperamos en la próxima edición."
-        fondo="primary"
-      />
-    );
-  }
-
   // Empresa/NIT/Cargo/¿Afiliado?/material: solo aplican a postulación y patrocinio,
   // ambos trámites comerciales sobre una empresa — "quiero asistir" es un lead simple.
   const requiereDatosComerciales = modalidad !== 'interes';
@@ -123,6 +112,17 @@ export function Formulario() {
       successRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }, [status]);
+  
+  // Si viene por URL con postulación cerrada, mostrar aviso de cierre
+  if (modalidadFijada && modalidad === 'postulacion' && cierrePostulacion.cerrado) {
+    return (
+      <CierreAviso
+        titulo="Postulaciones cerradas"
+        descripcion="La convocatoria a las categorías de reconocimiento de La Noche de los Mejores 2026 ha finalizado. Agradecemos a todas las empresas y líderes que participaron en esta edición."
+        fondo="primary"
+      />
+    );
+  }
 
   const handleLogoUploaded = (key: string, meta: Record<string, unknown>) => {
     setLogoInfo({
@@ -218,6 +218,14 @@ export function Formulario() {
         if (response.status === 409) {
           const body = (await response.json().catch(() => null)) as { error?: string; message?: string } | null;
           if (body?.error === 'correo_repetido' && body.message) {
+            setStatus('error');
+            setErrorMessage(body.message);
+            return;
+          }
+        }
+        if (response.status === 410) {
+          const body = (await response.json().catch(() => null)) as { error?: string; message?: string } | null;
+          if (body?.error === 'POSTULACIONES_CERRADAS' && body.message) {
             setStatus('error');
             setErrorMessage(body.message);
             return;

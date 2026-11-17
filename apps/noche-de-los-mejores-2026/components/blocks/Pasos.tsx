@@ -1,7 +1,10 @@
+'use client';
+
 import { Section } from '@/components/ui/Section';
 import { SectionTitle } from '@/components/ui/SectionTitle';
 import { Rule } from '@/components/ui/Rule';
 import { Reveal } from '@/components/ui/Reveal';
+import { useCierreModalidad } from '@/hooks/useCierreModalidad';
 
 // Bloque nuevo (kit): cronograma exacto pendiente del cliente — ver TODO PENDIENTE
 // en el reporte de entrega. La numeración se justifica porque es un proceso (§4).
@@ -29,6 +32,12 @@ const PASOS = [
 ] as const;
 
 export function Pasos() {
+  const { cerrado } = useCierreModalidad('postulacion');
+
+  if (cerrado) {
+    return null;
+  }
+
   return (
     <Section id="pasos" bg="secondary">
       <Reveal className="mx-auto max-w-2xl text-center">

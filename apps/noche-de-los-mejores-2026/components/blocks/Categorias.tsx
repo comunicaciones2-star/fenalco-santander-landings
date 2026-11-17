@@ -3,16 +3,8 @@ import { Section } from '@/components/ui/Section';
 import { SectionTitle } from '@/components/ui/SectionTitle';
 import { Rule } from '@/components/ui/Rule';
 import { Reveal } from '@/components/ui/Reveal';
-import { CierreAviso } from '@/components/ui/CierreAviso';
-import { useCierreModalidad } from '@/hooks/useCierreModalidad';
 
 export function Categorias() {
-  const { cerrado } = useCierreModalidad('postulacion');
-
-  if (cerrado) {
-    return null;
-  }
-
   return (
     <Section id="categorias" bg="primary">
       <Reveal className="mx-auto max-w-3xl text-center">
