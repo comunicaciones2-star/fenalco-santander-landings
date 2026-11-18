@@ -83,7 +83,7 @@ export const config: EventConfig = {
   },
 
   cta: {
-    principal: { label: 'Postúlate', href: '#postulacion', tipo: 'ancla' },
+    principal: { label: 'Quiero asistir', href: '?modalidad=interes#postulacion', tipo: 'ancla' },
     secundario: { label: 'Quiero patrocinar', href: '#patrocinio' },
     whatsapp: 'https://wa.me/573228491525',
   },
