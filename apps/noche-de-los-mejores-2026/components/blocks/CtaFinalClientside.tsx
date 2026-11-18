@@ -22,6 +22,13 @@ export function CtaFinalClientside() {
         </p>
         <div className="mt-2 flex flex-col gap-3 sm:flex-row">
           <Button
+            href={config.cta.principal.href}
+            ariaLabel={config.cta.principal.label}
+            className="!px-9 !py-4 !text-base"
+          >
+            {config.cta.principal.label}
+          </Button>
+          <Button
             href={config.cta.secundario.href}
             variant="ghost"
             ariaLabel={config.cta.secundario.label}
@@ -29,12 +36,6 @@ export function CtaFinalClientside() {
           >
             {config.cta.secundario.label}
           </Button>
-          <a
-            href="?modalidad=interes#postulacion"
-            className="btn-ghost !px-9 !py-4 !text-base"
-          >
-            Quiero asistir
-          </a>
         </div>
       </>
     );
